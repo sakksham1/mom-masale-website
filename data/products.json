@@ -1,5 +1,21 @@
 [
-{"name":"Turmeric Powder","category":"Ground Spices","sizes":["100g","200g","500g"],"image":"images/products/turmeric.jpg","amazon":"#"},
-{"name":"Red Chilli Powder","category":"Ground Spices","sizes":["100g","200g","500g"],"image":"images/products/chilli.jpg","amazon":"#"},
-{"name":"Garam Masala","category":"Blended Spices","sizes":["100g","200g"],"image":"images/products/garam.jpg","amazon":"#"}
+
+{"name":"Turmeric Powder",
+"category":"Ground Spices",
+"sizes":["100g","200g","500g"],
+"image":"images/products/turmeric.jpg",
+"amazon":"#"},
+
+{"name":"Red Chilli Powder",
+"category":"Ground Spices",
+"sizes":["100g","200g","500g"],
+"image":"images/products/chilli.jpg",
+"amazon":"#"},
+
+{"name":"Garam Masala",
+"category":"Blended Spices",
+"sizes":["100g","200g"],
+"image":"images/products/garam.jpg",
+"amazon":"#"}
+
 ]
