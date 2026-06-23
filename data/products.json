@@ -1,21 +1,202 @@
 [
-
-{"name":"Turmeric Powder",
-"category":"Ground Spices",
-"sizes":["100g","200g","500g"],
-"image":"images/products/turmeric.jpg",
-"amazon":"#"},
-
-{"name":"Red Chilli Powder",
-"category":"Ground Spices",
-"sizes":["100g","200g","500g"],
-"image":"images/products/chilli.jpg",
-"amazon":"#"},
-
-{"name":"Garam Masala",
-"category":"Blended Spices",
-"sizes":["100g","200g"],
-"image":"images/products/garam.jpg",
-"amazon":"#"}
-
+  {
+    "name":"Turmeric Powder",
+    "category":"Ground Spices",
+    "sizes":["10rs","100g","200g"],
+    "image":"images/products/turmeric.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Red Chilli Powder",
+    "category":"Ground Spices",
+    "sizes":["10rs","100g","200g"],
+    "image":"images/products/chilli.jpg",
+    "amazon":"#",
+    "featured": true
+  },
+  {
+    "name":"Coriander Powder",
+    "category":"Ground Spices",
+    "sizes":["10rs","100g","200g"],
+    "image":"images/products/coriander.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Kasuri Methi",
+    "category":"Ground Spices",
+    "sizes":["50g","100g"],
+    "image":"images/products/kasuri-methi.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Sabzi King Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","50g","200g"],
+    "image":"images/products/sabzi-king.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Amchur Powder",
+    "category":"Ground Spices",
+    "sizes":["10rs","200g"],
+    "image":"images/products/amchur.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Biryani Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","50g","200g"],
+    "image":"images/products/biryani.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Chai Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","50g","200g"],
+    "image":"images/products/chai.jpg",
+    "amazon":"#",
+    "featured": true
+  },
+  {
+    "name":"Chat Masala",
+    "category":"Seasoning",
+    "sizes":["10rs","50g","200g"],
+    "image":"images/products/chat.jpg",
+    "amazon":"#",
+    "featured": true
+  },
+  {
+    "name":"Chicken Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","200g"],
+    "image":"images/products/chicken.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Chhola Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","50g","200g"],
+    "image":"images/products/chhola.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Garam Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","50g","200g"],
+    "image":"images/products/garam.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Jaljeera Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","250g"],
+    "image":"images/products/jaljeera.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Kuch Bhi Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","200g"],
+    "image":"images/products/kuch-bhi.jpg",
+    "amazon":"#",
+    "featured": true
+  },
+  {
+    "name":"Matar Paneer Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","50g","200g"],
+    "image":"images/products/matar-paneer.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Meat Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","50g","200g"],
+    "image":"images/products/meat.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Pav Bhaji Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","200g"],
+    "image":"images/products/pav-bhaji.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Raita Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","50g","200g"],
+    "image":"images/products/raita.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Sambhar Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","200g"],
+    "image":"images/products/sambhar.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Shahi Paneer Masala",
+    "category":"Blended Spices",
+    "sizes":["10rs","50g","200g"],
+    "image":"images/products/shahi-paneer.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Fruit & Salad Masala",
+    "category":"Seasoning",
+    "sizes":["200g"],
+    "image":"images/products/fruit-salad.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Kachauri Masala",
+    "category":"Blended Spices",
+    "sizes":["50g","200g"],
+    "image":"images/products/kachauri.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Kalonji Bharwa Masala",
+    "category":"Blended Spices",
+    "sizes":["50g","200g"],
+    "image":"images/products/kalonji-bharwa.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Shahi Thandai",
+    "category":"Special Mix",
+    "sizes":["250g"],
+    "image":"images/products/shahi-thandai.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Gulab Jamun Mix",
+    "category":"Special Mix",
+    "sizes":["250g"],
+    "image":"images/products/gulab-jamun-mix.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Tawa Masala",
+    "category":"Blended Spices",
+    "sizes":["200g"],
+    "image":"images/products/tawa.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Dam Aloo Masala",
+    "category":"Blended Spices",
+    "sizes":["200g"],
+    "image":"images/products/dam-aloo.jpg",
+    "amazon":"#"
+  },
+  {
+    "name":"Dahi Bada Masala",
+    "category":"Special Mix",
+    "sizes":["200g"],
+    "image":"images/products/dahi-bada.jpg",
+    "amazon":"#"
+  }
 ]
