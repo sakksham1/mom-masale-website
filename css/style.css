@@ -358,6 +358,26 @@ nav a.active {
 
 .contact-item a:hover { text-decoration: underline; }
 
+.map-section{
+    margin-top: 2rem;
+    background: var(--white);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.map-section .section-title{
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+.map-section iframe{
+    display: block;
+    width: 100%;
+    border-radius: 8px;
+}
+
 /* ── ABOUT PAGE ── */
 .about-content {
     display: grid;
