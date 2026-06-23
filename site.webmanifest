@@ -2,7 +2,7 @@
     "name": "Mom Masale",
     "short_name": "Mom Masale",
     "description": "Pure Indian spices by Sakksham Enterprises, Unnao",
-    "start_url": "https://sakksham1.github.io/mom-masale-website/index.html",
+    "start_url": "/",
     "display": "browser",
     "background_color": "#fff8e7",
     "theme_color": "#7b1120",
