@@ -486,6 +486,32 @@ footer {
     opacity: 0.6;
 }
 
+/* ── SOCIAL ICONS ── */
+.footer-social {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.2s, color 0.2s;
+}
+
+.footer-social a:hover {
+    background: var(--gold);
+    color: #000;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
     .hamburger { display: block; }
