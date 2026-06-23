@@ -3,6 +3,7 @@
 <head>
     <title>Products – Mom Masale</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore Mom Masale's range of 30+ pure Indian spices — ground spices, blended masalas, and special mixes by Sakksham Enterprises, Unnao.">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -27,7 +28,25 @@
 </div>
 
 <div class="container products-page">
+    <div class="search-filter-bar">
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input
+                type="search"
+                id="product-search"
+                class="product-search"
+                placeholder="Search spices… e.g. Biryani, Turmeric"
+                aria-label="Search products"
+                autocomplete="off"
+            >
+            <button class="search-clear" id="search-clear" aria-label="Clear search" hidden>✕</button>
+        </div>
+    </div>
     <div id="filter-bar" class="filter-bar"></div>
+    <div id="no-results" class="no-results" hidden>
+        <p>😕 No products found for "<span id="no-results-term"></span>".</p>
+        <button class="btn btn-outline" onclick="document.getElementById('product-search').value=''; document.getElementById('product-search').dispatchEvent(new Event('input'));">Clear Search</button>
+    </div>
     <div id="products-container" class="grid"></div>
 </div>
 

@@ -33,12 +33,10 @@ if (slides.length) {
         dots[current].classList.add('active');
     }
 
-    // Auto-advance every 3 seconds
     let timer = setInterval(() => {
         goToSlide((current + 1) % slides.length);
     }, 3000);
 
-    // Dot click navigation
     dots.forEach(dot => {
         dot.addEventListener('click', () => {
             clearInterval(timer);
@@ -77,10 +75,45 @@ async function loadProducts() {
             const isProductsPage = c.closest('.products-page') !== null;
 
             if (isProductsPage) {
-                // Full product listing with filter bar
+                // ── PRODUCTS PAGE: filter bar + search ──
                 const categories = ['All', ...new Set(data.map(p => p.category))];
                 const filterBar = document.getElementById('filter-bar');
+                const searchInput = document.getElementById('product-search');
+                const searchClear = document.getElementById('search-clear');
+                const noResults = document.getElementById('no-results');
+                const noResultsTerm = document.getElementById('no-results-term');
 
+                let activeCategory = 'All';
+                let searchTerm = '';
+
+                function applyFilters() {
+                    let filtered = data;
+
+                    // Category filter
+                    if (activeCategory !== 'All') {
+                        filtered = filtered.filter(p => p.category === activeCategory);
+                    }
+
+                    // Search filter — match name or category
+                    if (searchTerm) {
+                        const q = searchTerm.toLowerCase();
+                        filtered = filtered.filter(p =>
+                            p.name.toLowerCase().includes(q) ||
+                            p.category.toLowerCase().includes(q)
+                        );
+                    }
+
+                    if (filtered.length === 0) {
+                        c.innerHTML = '';
+                        noResults.hidden = false;
+                        noResultsTerm.textContent = searchTerm || activeCategory;
+                    } else {
+                        noResults.hidden = true;
+                        c.innerHTML = renderCards(filtered);
+                    }
+                }
+
+                // Build filter buttons
                 if (filterBar) {
                     filterBar.innerHTML = categories.map(cat => `
                         <button class="filter-btn ${cat === 'All' ? 'active' : ''}" data-cat="${cat}">
@@ -93,16 +126,36 @@ async function loadProducts() {
                         if (!btn) return;
                         filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                         btn.classList.add('active');
-                        const selected = btn.dataset.cat;
-                        const filtered = selected === 'All' ? data : data.filter(p => p.category === selected);
-                        c.innerHTML = renderCards(filtered);
+                        activeCategory = btn.dataset.cat;
+                        applyFilters();
                     });
                 }
 
-                c.innerHTML = renderCards(data);
+                // Search input handler
+                if (searchInput) {
+                    searchInput.addEventListener('input', () => {
+                        searchTerm = searchInput.value.trim();
+                        searchClear.hidden = !searchTerm;
+                        applyFilters();
+                    });
+                }
+
+                // Clear button
+                if (searchClear) {
+                    searchClear.addEventListener('click', () => {
+                        searchInput.value = '';
+                        searchTerm = '';
+                        searchClear.hidden = true;
+                        searchInput.focus();
+                        applyFilters();
+                    });
+                }
+
+                // Initial render
+                applyFilters();
 
             } else {
-                // Homepage — show only first 4 products
+                // Homepage — featured products only
                 const featured = data.filter(p => p.featured);
                 c.innerHTML = renderCards(featured);
             }
