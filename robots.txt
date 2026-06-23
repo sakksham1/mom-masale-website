@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sakksham1.github.io/mom-masale-website/sitemap.xml
