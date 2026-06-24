@@ -969,3 +969,13 @@ footer {
 @media (max-width: 768px) {
     .back-to-top { bottom: 20px; left: 16px; }
 }
+
+/* ── NAV OVERLAY ── */
+.nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+}
+
+.nav-overlay.active { display: block; }

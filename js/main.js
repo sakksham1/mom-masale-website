@@ -15,6 +15,20 @@ if (hamburger && nav) {
     hamburger.addEventListener('click', () => nav.classList.toggle('active'));
     nav.querySelectorAll('a').forEach(a => {
         a.addEventListener('click', () => nav.classList.remove('active'));
+        const overlay = document.getElementById('nav-overlay');
+    overlay.addEventListener('click', () => {
+        nav.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+
+    hamburger.addEventListener('click', () => {
+        overlay.classList.toggle('active');
+    });
+
+    nav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => overlay.classList.remove('active'));
+    });
+       
     });
 }
 
