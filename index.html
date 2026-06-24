@@ -4,6 +4,7 @@
     <title>Mom Masale – Pure Indian Spices by Sakksham Enterprises, Unnao</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+    <link rel="preload" as="image" href="images/hero/hero1.jpg">
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -18,7 +19,8 @@
     <meta property="og:image" content="https://mommasale.com/images/hero/hero1.jpg">
     <meta property="og:url" content="https://mommasale.com/">
     <meta property="og:type" content="website">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="css/style.css"></noscript>
 </head>
 
 <a class="wa-float"
@@ -189,6 +191,6 @@
     <div class="footer-bottom">© A brand of Sakksham Enterprises, Shuklaganj, Unnao</div>
 </footer>
 
-<script src="js/main.js"></script>
+<script src="js/main.js" defer></script>
 </body>
 </html>
