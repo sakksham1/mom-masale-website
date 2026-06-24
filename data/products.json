@@ -113,7 +113,7 @@
   {
     "name":"Jaljeera Masala",
     "category":"Blended Spices",
-    "sizes":["10rs","250g"],
+    "sizes":["10rs","50g","250g"],
     "image":"images/products/jaljeera.jpg",
     "amazon":"#",
     "flipkart": "#",
@@ -122,7 +122,7 @@
   {
     "name":"Kuch Bhi Masala",
     "category":"Blended Spices",
-    "sizes":["10rs","200g"],
+    "sizes":["10rs","50g","200g"],
     "image":"images/products/kuch-bhi.jpg",
     "amazon":"#",
     "flipkart": "#",
