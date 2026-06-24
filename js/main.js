@@ -31,6 +31,27 @@ if (slides.length) {
         current = index;
         slides[current].classList.add('active');
         dots[current].classList.add('active');
+
+        // ── TOUCH / SWIPE SUPPORT ──
+    const sliderEl = document.querySelector('.hero-slider');
+    if (sliderEl) {
+        let startX = 0;
+        sliderEl.addEventListener('touchstart', e => {
+            startX = e.touches[0].clientX;
+        }, { passive: true });
+        sliderEl.addEventListener('touchend', e => {
+            const diff = startX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) {
+                clearInterval(timer);
+                goToSlide(diff > 0
+                    ? (current + 1) % slides.length
+                    : (current - 1 + slides.length) % slides.length
+                );
+                timer = setInterval(() => goToSlide((current + 1) % slides.length), 3000);
+            }
+        }, { passive: true });
+    }
+
     }
 
     let timer = setInterval(() => {
@@ -58,8 +79,10 @@ async function loadProducts() {
 
         const renderCards = (items) => items.map(p => `
             <div class="card" data-category="${p.category}">
-                <img src="${p.image}" alt="${p.name}"
-                     onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(p.name)}'">
+                <div class="card-image">
+                     <img src="${p.image}" alt="${p.name}"
+                         onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(p.name)}'">
+            </div>
                 <div class="card-body">
                     <span class="card-category">${p.category}</span>
                     <h3>${p.name}</h3>
