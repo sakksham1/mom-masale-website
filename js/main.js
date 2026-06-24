@@ -78,21 +78,28 @@ async function loadProducts() {
         const data = await fetch('data/products.json').then(r => r.json());
 
         const renderCards = (items) => items.map(p => `
-            <div class="card" data-category="${p.category}">
-                <div class="card-image">
-                     <img src="${p.image}" alt="${p.name}"
-                         onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(p.name)}'">
+    <div class="card" data-category="${p.category}">
+        <div class="card-image">
+            <img src="${p.image}" alt="${p.name}"
+                onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(p.name)}'">
+        </div>
+        <div class="card-body">
+            <span class="card-category">${p.category}</span>
+            <h3>${p.name}</h3>
+            <div class="card-sizes">
+                ${p.sizes.map(s => `<span class="size-tag">${s}</span>`).join('')}
             </div>
-                <div class="card-body">
-                    <span class="card-category">${p.category}</span>
-                    <h3>${p.name}</h3>
-                    <div class="card-sizes">
-                        ${p.sizes.map(s => `<span class="size-tag">${s}</span>`).join('')}
-                    </div>
-                    <a class="btn" href="${p.amazon}" target="_blank" rel="noopener">Buy on Amazon</a>
+            <div class="buy-dropdown">
+                <button class="btn buy-toggle">Buy Now ▴</button>
+                <div class="buy-links">
+                    <a href="${p.amazon}" target="_blank" rel="noopener">🛒 Amazon</a>
+                    <a href="${p.flipkart}" target="_blank" rel="noopener">🛍 Flipkart</a>
+                    <a href="${p.meesho}" target="_blank" rel="noopener">🏷 Meesho</a>
                 </div>
             </div>
-        `).join('');
+        </div>
+    </div>
+`).join('');
 
         containers.forEach(c => {
             const isProductsPage = c.closest('.products-page') !== null;
@@ -184,12 +191,26 @@ async function loadProducts() {
             }
         });
 
+        // ── BUY DROPDOWN TOGGLE ──
+        document.addEventListener('click', e => {
+            const toggle = e.target.closest('.buy-toggle');
+            document.querySelectorAll('.buy-dropdown.open').forEach(d => {
+                if (d !== toggle?.closest('.buy-dropdown')) d.classList.remove('open');
+            });
+            if (toggle) {
+                toggle.closest('.buy-dropdown').classList.toggle('open');
+                toggle.textContent = toggle.closest('.buy-dropdown').classList.contains('open') ? 'Buy Now ▾' : 'Buy Now ▴';
+                e.stopPropagation();
+            }
+        });
+
     } catch (e) {
         document.querySelectorAll('#products-container').forEach(c => {
             c.innerHTML = '<p style="color:#888;padding:1rem">Could not load products. Make sure you\'re using Live Server.</p>';
         });
     }
 }
+
 
 loadProducts();
 
