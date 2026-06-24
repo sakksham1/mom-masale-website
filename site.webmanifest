@@ -3,7 +3,7 @@
     "short_name": "Mom Masale",
     "description": "Pure Indian spices by Sakksham Enterprises, Unnao",
     "start_url": "/",
-    "display": "browser",
+    "display": "standalone",
     "background_color": "#fff8e7",
     "theme_color": "#7b1120",
     "icons": [
