@@ -979,3 +979,8 @@ footer {
 }
 
 .nav-overlay.active { display: block; }
+
+.honeypot{
+    position:absolute;
+    left:-9999px;
+}

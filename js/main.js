@@ -214,6 +214,12 @@ const bulkForm = document.getElementById('bulk-form');
 if (bulkForm) {
     bulkForm.addEventListener('submit', async function (e) {
         e.preventDefault();
+        const honeypot = document.getElementById('website');
+
+        if (honeypot && honeypot.value.trim() !== '') {
+        return;
+    }
+    
         let valid = true;
 
         bulkForm.querySelectorAll('.field-error').forEach(el => el.classList.remove('show'));
@@ -254,7 +260,8 @@ if (bulkForm) {
                     name: document.getElementById('field-name').value.trim(),
                     business: document.getElementById('field-business').value.trim(),
                     phone: document.getElementById('field-phone').value.trim(),
-                    requirement: document.getElementById('field-requirement').value.trim()
+                    requirement: document.getElementById('field-requirement').value.trim(),
+                    website: document.getElementById('website').value,
                 })
             });
 
