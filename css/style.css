@@ -917,6 +917,7 @@ footer {
     display: block;
     padding: 10px 14px;
     align-items: center;
+    text-align: center;
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--brown);
