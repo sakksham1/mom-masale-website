@@ -15,6 +15,10 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: Arial, sans-serif;
     background: var(--cream);
@@ -60,6 +64,27 @@ nav a {
     border-radius: 20px;
     transition: background 0.2s, color 0.2s;
     font-size: 0.97rem;
+    position: relative;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 14px;
+    right: 14px;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+}
+
+nav a:hover::after {
+    transform: scaleX(1);
+}
+
+nav a.active::after {
+    transform: scaleX(1);
 }
 
 nav a:hover { background: rgba(255,255,255,0.13); color: var(--white); }
@@ -186,7 +211,13 @@ nav a.active {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    transition: transform 0.3s ease;
 }
+
+.card-image:hover img {
+    transform: scale(1.06);
+}
+
 @keyframes shimmer {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
@@ -223,8 +254,14 @@ nav a.active {
     padding: 2px 9px;
     border-radius: 12px;
     border: 1px solid #e0d0b0;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    cursor: default;
 }
-
+.size-tag:hover {
+    background: var(--maroon);
+    border-color: var(--maroon);
+    color: var(--white);
+}
 
 
 /* ── BUTTONS ── */
@@ -498,10 +535,16 @@ footer {
     text-decoration: none;
     font-size: 0.9rem;
     margin-bottom: 5px;
-    transition: color 0.2s;
+    transition: color 0.2s, padding-left 0.2s, border-color 0.2s;
+    border-left: 2px solid transparent;
+    padding-left: 0;
 }
 
-.footer-links a:hover { color: var(--gold); }
+.footer-links a:hover {
+    color: var(--gold);
+    border-left-color: var(--gold);
+    padding-left: 6px;
+}
 
 .footer-bottom {
     max-width: 1200px;
