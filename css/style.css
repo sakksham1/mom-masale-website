@@ -55,7 +55,8 @@ header {
     text-decoration: none;
 }
 
-.logo span { color: var(--gold); }
+.logo span { color: var(--gold); 
+}
 
 nav { display: flex; gap: 8px; align-items: center; }
 
@@ -1131,4 +1132,42 @@ footer {
     overflow: hidden;
     opacity: 0;
     pointer-events: none;
+}
+/* ── MARQUEE TICKER ── */
+.marquee-strip {
+    background: var(--maroon);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.marquee-track {
+    display: inline-block;
+    animation: marquee 25s linear infinite;
+}
+
+.marquee-track span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0 28px;
+}
+
+.marquee-track span.dot {
+    color: white;
+    padding: 0;
+    font-size: 0.7rem;
+}
+
+@keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.marquee-strip:hover .marquee-track {
+    animation-play-state: paused;
 }
