@@ -406,3 +406,48 @@ if (statNums.length) {
         createParticle(e.clientX, e.clientY);
     });
 })();
+// ── TAP BURST (mobile) ──
+(function() {
+    if (!window.matchMedia('(pointer: coarse)').matches) return; // touch only
+
+    const symbols = ['✦', '✶', '❋', '🌿', '✦', '✶'];
+
+    function burst(x, y) {
+        const count = 6;
+        for (let i = 0; i < count; i++) {
+            const el = document.createElement('span');
+            el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            const angle = (360 / count) * i;
+            const dist = Math.random() * 40 + 20;
+            const rad = (angle * Math.PI) / 180;
+            const tx = Math.cos(rad) * dist;
+            const ty = Math.sin(rad) * dist;
+            el.style.cssText = `
+                position: fixed;
+                pointer-events: none;
+                z-index: 9999;
+                font-size: ${Math.random() * 8 + 8}px;
+                color: ${Math.random() > 0.5 ? '#d4a017' : '#7b1120'};
+                left: ${x}px;
+                top: ${y}px;
+                transform: translate(-50%, -50%);
+                opacity: 1;
+                transition: opacity 0.5s ease, transform 0.5s ease;
+                user-select: none;
+            `;
+            document.body.appendChild(el);
+
+            setTimeout(() => {
+                el.style.opacity = '0';
+                el.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0.4)`;
+            }, 30);
+
+            setTimeout(() => el.remove(), 550);
+        }
+    }
+
+    document.addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        burst(t.clientX, t.clientY);
+    }, { passive: true });
+})();
