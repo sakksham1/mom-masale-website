@@ -10,25 +10,27 @@ document.querySelectorAll('nav a').forEach(a => {
 // ── HAMBURGER MENU ──
 const hamburger = document.getElementById('hamburger');
 const nav = document.getElementById('nav-menu');
+const overlay = document.getElementById('nav-overlay');
 
 if (hamburger && nav) {
-    hamburger.addEventListener('click', () => nav.classList.toggle('active'));
-    nav.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => nav.classList.remove('active'));
-        const overlay = document.getElementById('nav-overlay');
+    hamburger.addEventListener('click', () => {
+        nav.classList.toggle('active');
+        overlay.classList.toggle('active');
+        hamburger.classList.toggle('open');
+    });
+
     overlay.addEventListener('click', () => {
         nav.classList.remove('active');
         overlay.classList.remove('active');
-    });
-
-    hamburger.addEventListener('click', () => {
-        overlay.classList.toggle('active');
+        hamburger.classList.remove('open');
     });
 
     nav.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => overlay.classList.remove('active'));
-    });
-       
+        a.addEventListener('click', () => {
+            nav.classList.remove('active');
+            overlay.classList.remove('active');
+            hamburger.classList.remove('open');
+        });
     });
 }
 

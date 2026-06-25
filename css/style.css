@@ -28,11 +28,14 @@ body {
 
 /* ── HEADER / NAV ── */
 header {
-    background: var(--maroon);
+    background: rgba(123, 17, 32, 0.85);
     position: sticky;
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(212, 160, 23, 0.25);
 }
 
 .navbar {
@@ -94,6 +97,7 @@ nav a.active {
     color: #000;
 }
 
+/* ── HAMBURGER ANIMATION ── */
 .hamburger {
     display: none;
     background: none;
@@ -102,6 +106,42 @@ nav a.active {
     font-size: 2rem;
     cursor: pointer;
     line-height: 1;
+    width: 36px;
+    height: 36px;
+    position: relative;
+    transition: transform 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.hamburger .bar {
+    display: block;
+    width: 24px;
+    height: 2.5px;
+    background: var(--white);
+    border-radius: 3px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: transform 0.3s ease, opacity 0.3s ease, top 0.3s ease;
+}
+
+.hamburger .bar:nth-child(1) { top: 8px; }
+.hamburger .bar:nth-child(2) { top: 17px; }
+.hamburger .bar:nth-child(3) { top: 26px; }
+
+/* X state */
+.hamburger.open .bar:nth-child(1) {
+    top: 17px;
+    transform: translateX(-50%) rotate(45deg);
+}
+.hamburger.open .bar:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-60%);
+}
+.hamburger.open .bar:nth-child(3) {
+    top: 17px;
+    transform: translateX(-50%) rotate(-45deg);
 }
 
 /* ── PAGE BANNER (inner pages) ── */
@@ -601,7 +641,9 @@ footer {
         top: 64px;
         left: 0;
         width: 100%;
-        background: var(--maroon-dark);
+        background: rgba(123, 17, 32, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         flex-direction: column;
         align-items: center;
         padding: 16px 0;
@@ -1053,11 +1095,10 @@ footer {
     position: fixed;
     inset: 0;
     z-index: 999;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.25);
 }
 
-.nav-overlay.active { display: block; }
-
-.honeypot{
-    position:absolute;
-    left:-9999px;
+.nav-overlay.active { display: block; 
 }
