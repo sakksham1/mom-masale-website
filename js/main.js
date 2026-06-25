@@ -328,3 +328,81 @@ function observeCards() {
 
     document.querySelectorAll('.card').forEach(card => observer.observe(card));
 }
+// ── STAT COUNTER ANIMATION ──
+const statNums = document.querySelectorAll('.stat-num');
+
+if (statNums.length) {
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            const text = el.textContent.trim();
+            const num = parseFloat(text);
+            if (isNaN(num)) return;
+            const suffix = text.replace(num, '');
+            let start = 0;
+            const duration = 1500;
+            const step = 16;
+            const increment = num / (duration / step);
+            el.textContent = '0' + suffix;
+            const timer = setInterval(() => {
+                start += increment;
+                if (start >= num) {
+                    el.textContent = text;
+                    clearInterval(timer);
+                } else {
+                    el.textContent = Math.floor(start) + suffix;
+                }
+            }, step);
+            counterObserver.unobserve(el);
+        });
+    }, { threshold: 0.6 });
+
+    statNums.forEach(el => counterObserver.observe(el));
+}
+// ── CURSOR SPICE TRAIL ──
+(function() {
+    if (window.matchMedia('(pointer: coarse)').matches) return; // skip on touch devices
+
+    const particles = [];
+    const symbols = ['✦', '🌿', '✶', '❋', '✦', '✶'];
+    let lastX = 0, lastY = 0;
+
+    function createParticle(x, y) {
+        const el = document.createElement('span');
+        el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        el.style.cssText = `
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: ${Math.random() * 10 + 8}px;
+            color: ${Math.random() > 0.5 ? '#d4a017' : '#7b1120'};
+            left: ${x}px;
+            top: ${y}px;
+            transform: translate(-50%, -50%);
+            opacity: 1;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            user-select: none;
+        `;
+        document.body.appendChild(el);
+
+        setTimeout(() => {
+            el.style.opacity = '0';
+            el.style.transform = `translate(-50%, -120%) scale(0.5)`;
+        }, 50);
+
+        setTimeout(() => {
+            el.remove();
+        }, 650);
+    }
+
+    document.addEventListener('mousemove', (e) => {
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 18) return; // throttle by distance
+        lastX = e.clientX;
+        lastY = e.clientY;
+        createParticle(e.clientX, e.clientY);
+    });
+})();
