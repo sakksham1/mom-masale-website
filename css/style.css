@@ -188,6 +188,13 @@ nav a.active {
     display: flex;
     flex-direction: column;
     transition: transform 0.2s, box-shadow 0.2s;
+    opacity: 0;
+    transform: translateY(24px);
+}
+.card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.2s;
 }
 
 .card:hover {
@@ -1003,6 +1010,25 @@ footer {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s, transform 0.3s;
+    overflow: visible;
+}
+.back-to-top svg {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 52px;
+    height: 52px;
+    transform: rotate(-90deg);
+    pointer-events: none;
+}
+
+.progress-ring {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 0 150;
+    transition: stroke-dasharray 0.1s linear;
 }
 
 .back-to-top.visible {

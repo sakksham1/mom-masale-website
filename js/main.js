@@ -135,6 +135,7 @@ async function loadProducts() {
                     } else {
                         noResults.hidden = true;
                         c.innerHTML = renderCards(filtered);
+                        observeCards();
                     }
                 }
 
@@ -178,12 +179,14 @@ async function loadProducts() {
 
                 // Initial render
                 applyFilters();
+                observeCards();
 
             } else {
                 // Homepage — featured products only
                 const featured = data.filter(p => p.featured);
                 c.innerHTML = renderCards(featured);
-            }
+                observeCards();
+}
         });
 
         // ── BUY DROPDOWN TOGGLE ──
@@ -279,11 +282,39 @@ if (bulkForm) {
 
 // ── BACK TO TOP ──
 const backToTop = document.getElementById('back-to-top');
+const progressRing = document.querySelector('.progress-ring');
+
 if (backToTop) {
     window.addEventListener('scroll', () => {
-        backToTop.classList.toggle('visible', window.scrollY > 400);
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = Math.min(scrollTop / docHeight, 1);
+        const circumference = 2 * Math.PI * 23;
+
+        backToTop.classList.toggle('visible', scrollTop > 400);
+
+        if (progressRing) {
+            progressRing.style.strokeDasharray = `${progress * circumference} ${circumference}`;
+        }
     });
+
     backToTop.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+}
+
+// ── CARD ENTRANCE ANIMATION ──
+function observeCards() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, i * 80);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card').forEach(card => observer.observe(card));
 }
