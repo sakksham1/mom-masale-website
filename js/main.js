@@ -12,25 +12,33 @@ const hamburger = document.getElementById('hamburger');
 const nav = document.getElementById('nav-menu');
 const overlay = document.getElementById('nav-overlay');
 
+function closeNav() {
+    nav.style.opacity = '0';
+    nav.style.transform = 'translateY(-10px)';
+    setTimeout(() => {
+        nav.classList.remove('active');
+        nav.style.opacity = '';
+        nav.style.transform = '';
+    }, 400);
+    overlay.classList.remove('active');
+    hamburger.classList.remove('open');
+}
+
 if (hamburger && nav) {
     hamburger.addEventListener('click', () => {
-        nav.classList.toggle('active');
-        overlay.classList.toggle('active');
-        hamburger.classList.toggle('open');
+        if (nav.classList.contains('active')) {
+            closeNav();
+        } else {
+            nav.classList.add('active');
+            overlay.classList.add('active');
+            hamburger.classList.add('open');
+        }
     });
 
-    overlay.addEventListener('click', () => {
-        nav.classList.remove('active');
-        overlay.classList.remove('active');
-        hamburger.classList.remove('open');
-    });
+    overlay.addEventListener('click', () => closeNav());
 
     nav.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => {
-            nav.classList.remove('active');
-            overlay.classList.remove('active');
-            hamburger.classList.remove('open');
-        });
+        a.addEventListener('click', () => closeNav());
     });
 }
 

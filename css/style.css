@@ -28,7 +28,7 @@ body {
 
 /* ── HEADER / NAV ── */
 header {
-    background: rgba(123, 17, 32, 0.85);
+    background: rgba(123, 17, 32, 0.95);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -505,7 +505,10 @@ nav a.active {
 }
 
 .about-highlight {
-    background: var(--maroon);
+    background: rgba(123, 17, 32, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 160, 23, 0.25);
     color: var(--white);
     border-radius: var(--radius);
     padding: 2rem;
@@ -529,6 +532,13 @@ nav a.active {
     background: rgba(255,255,255,0.1);
     border-radius: 8px;
     padding: 1rem 0.5rem;
+    transition: transform 0.25s ease, background 0.25s ease;
+    cursor: default;
+}
+
+.stat:hover {
+    transform: translateY(-6px);
+    background: rgba(212, 160, 23, 0.25);
 }
 
 .stat-num {
@@ -636,22 +646,31 @@ footer {
     .hamburger { display: block; }
 
     nav {
-        display: none;
-        position: absolute;
-        top: 64px;
-        left: 0;
-        width: 100%;
-        background: rgba(123, 17, 32, 0.85);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        flex-direction: column;
-        align-items: center;
-        padding: 16px 0;
-        gap: 4px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    background: rgba(123, 17, 32, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+    gap: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+}
 
-    nav.active { display: flex; }
+    nav.active {
+    display: flex;
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
 
     nav a { width: 80%; text-align: center; }
 
@@ -1101,4 +1120,14 @@ footer {
 }
 
 .nav-overlay.active { display: block; 
+}
+
+.honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
 }
