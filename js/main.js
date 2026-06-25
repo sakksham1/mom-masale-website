@@ -74,7 +74,8 @@ async function loadProducts() {
         const renderCards = (items) => items.map(p => `
     <div class="card" data-category="${p.category}">
         <div class="card-image">
-            <img src="${p.image}" alt="${p.name}"
+            <img src="${p.image}" alt="${p.name}" loading="lazy" width="400" height="400"
+                onload="this.closest('.card-image').style.animation='none'"
                 onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(p.name)}'">
         </div>
         <div class="card-body">
