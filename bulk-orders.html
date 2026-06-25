@@ -47,6 +47,7 @@
 <div class="nav-overlay" id="nav-overlay"></div>
 
 <div class="page-banner">
+    <canvas class="banner-canvas" aria-hidden="true"></canvas>
     <h2>Bulk Orders</h2>
     <p>Get in touch for wholesale and trade enquiries.</p>
 </div>
@@ -176,6 +177,44 @@
         <circle class="progress-ring" cx="26" cy="26" r="23"/>
     </svg>
 </button>
+
 <script src="js/main.js" defer></script>
+<script>
+window.addEventListener('load', function() {
+    const canvas = document.querySelector('.banner-canvas');
+    if (!canvas) return;
+    const banner = canvas.parentElement;
+    const dpr = window.devicePixelRatio || 1;
+    const W = banner.offsetWidth;
+    const H = banner.offsetHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const particles = Array.from({length: 80}, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 0.8 + 0.2,
+        opacity: Math.random() * 0.4 + 0.1,
+        speed: Math.random() * 0.4 + 0.1,
+        drift: (Math.random() - 0.5) * 0.4
+    }));
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(212,160,23,${p.opacity})`;
+            ctx.fill();
+            p.y -= p.speed;
+            p.x += p.drift;
+            if (p.y < -5) { p.y = H + 5; p.x = Math.random() * W; }
+        });
+        requestAnimationFrame(draw);
+    }
+    draw();
+});
+</script>
 </body>
 </html>

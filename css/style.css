@@ -106,11 +106,13 @@ nav a.active {
 
 /* ── PAGE BANNER (inner pages) ── */
 .page-banner {
+    position: relative;
     background: linear-gradient(135deg, var(--maroon-dark) 60%, var(--maroon));
     color: var(--white);
     padding: 48px 24px 40px;
     text-align: center;
     border-bottom: 4px solid var(--gold);
+    overflow: hidden;
 }
 
 .page-banner h2 {
