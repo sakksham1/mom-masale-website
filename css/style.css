@@ -344,6 +344,7 @@ nav a.active {
     box-shadow: var(--shadow);
     padding: 2rem;
     max-width: 600px;
+    margin: 0 auto;
 }
 
 .form-group {
