@@ -1,3 +1,25 @@
+// ── DARK MODE ──
+const themeToggle = document.getElementById('theme-toggle');
+const toggleIcon = themeToggle?.querySelector('.toggle-icon');
+const toggleLabel = themeToggle?.querySelector('.toggle-label');
+
+function setTheme(dark) {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    if (toggleIcon) toggleIcon.textContent = dark ? '🌙' : '☀️';
+    if (toggleLabel) toggleLabel.textContent = dark ? 'Dark' : 'Light';
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+}
+
+const savedTheme = localStorage.getItem('theme');
+setTheme(savedTheme === 'dark');
+
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        setTheme(!isDark);
+    });
+}
+
 // ── ACTIVE NAV LINK ──
 const currentPage = location.pathname.split('/').pop() || 'index.html';
 document.querySelectorAll('nav a').forEach(a => {
