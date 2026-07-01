@@ -151,12 +151,13 @@ async function loadProducts() {
                         filtered = filtered.filter(p => p.category === activeCategory);
                     }
 
-                    // Search filter — match name or category
+                    // Search filter — match name, category, or alias
                     if (searchTerm) {
                         const q = searchTerm.toLowerCase();
                         filtered = filtered.filter(p =>
                             p.name.toLowerCase().includes(q) ||
-                            p.category.toLowerCase().includes(q)
+                            p.category.toLowerCase().includes(q) ||
+                            (p.aliases && p.aliases.some(a => a.toLowerCase().includes(q)))
                         );
                     }
 

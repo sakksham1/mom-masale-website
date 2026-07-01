@@ -6,7 +6,8 @@
     "image":"images/products/turmeric.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["haldi"]
   },
   {
     "name":"Red Chilli Powder",
@@ -16,7 +17,8 @@
     "amazon":"#",
     "flipkart": "#",
     "meesho": "#",
-    "featured": true
+    "featured": true,
+    "aliases": ["lal mirch", "mirchi"]
   },
   {
     "name":"Coriander Powder",
@@ -25,7 +27,8 @@
     "image":"images/products/coriander.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["dhania", "dhaniya"]
   },
   {
     "name":"Kasuri Methi",
@@ -34,7 +37,8 @@
     "image":"images/products/kasuri-methi.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["kasoori"]
   },
   {
     "name":"Sabzi King Masala",
@@ -43,7 +47,8 @@
     "image":"images/products/sabzi-king.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["sabji", "sabji king"]
   },
   {
     "name":"Amchur Powder",
@@ -52,7 +57,8 @@
     "image":"images/products/amchur.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["aamchur", "dry mango"]
   },
   {
     "name":"Biryani Masala",
@@ -61,7 +67,8 @@
     "image":"images/products/biryani.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["biriyani"]
   },
   {
     "name":"Chai Masala",
@@ -71,16 +78,18 @@
     "amazon":"#",
     "flipkart": "#",
     "meesho": "#",
+    "aliases": ["chay","chaa", "tea"],
     "featured": true
   },
   {
-    "name":"Chat Masala",
+    "name":"Chaat Masala",
     "category":"Seasoning",
     "sizes":["10rs","50g","200g"],
-    "image":"images/products/chat.jpg",
+    "image":"images/products/chaat.jpg",
     "amazon":"#",
     "flipkart": "#",
     "meesho": "#",
+    "aliases": ["chat"],
     "featured": true
   },
   {
@@ -99,7 +108,8 @@
     "image":"images/products/chhola.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["chola", "chana", "chole"]
   },
   {
     "name":"Garam Masala",
@@ -145,7 +155,8 @@
     "image":"images/products/meat.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["mutton"]
   },
   {
     "name":"Pav Bhaji Masala",
@@ -154,7 +165,8 @@
     "image":"images/products/pav-bhaji.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["pao bhaji"]
   },
   {
     "name":"Raita Masala",
@@ -181,7 +193,8 @@
     "image":"images/products/shahi-paneer.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["shaahi"]
   },
   {
     "name":"Fruit & Salad Masala",
@@ -199,7 +212,8 @@
     "image":"images/products/kachauri.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["kachaudi", "kachodi"]
   },
   {
     "name":"Kalonji Bharwa Masala",
@@ -208,7 +222,8 @@
     "image":"images/products/kalonji-bharwa.jpg",
     "amazon":"#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": ["kalaunji", "bharva"]
   },
   {
     "name":"Shahi Thandai",
