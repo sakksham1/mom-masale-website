@@ -139,6 +139,9 @@ async function loadProducts() {
                 const searchClear = document.getElementById('search-clear');
                 const noResults = document.getElementById('no-results');
                 const noResultsTerm = document.getElementById('no-results-term');
+                const scopeHint = document.getElementById('search-scope-hint');
+                const scopeCategory = document.getElementById('scope-category');
+                const scopeReset = document.getElementById('scope-reset');
 
                 let activeCategory = 'All';
                 let searchTerm = '';
@@ -161,6 +164,16 @@ async function loadProducts() {
                         );
                     }
 
+                    // Show a reminder whenever category filter + search are both active
+                    if (scopeHint) {
+                        if (activeCategory !== 'All' && searchTerm) {
+                            scopeCategory.textContent = activeCategory;
+                            scopeHint.hidden = false;
+                        } else {
+                            scopeHint.hidden = true;
+                        }
+                    }
+
                     if (filtered.length === 0) {
                         c.innerHTML = '';
                         noResults.hidden = false;
@@ -172,6 +185,15 @@ async function loadProducts() {
                     }
                 }
 
+                if (scopeReset) {
+                    scopeReset.addEventListener('click', () => {
+                        activeCategory = 'All';
+                        filterBar.querySelectorAll('.filter-btn').forEach(b => {
+                            b.classList.toggle('active', b.dataset.cat === 'All');
+                        });
+                        applyFilters();
+                    });
+                }
                 // Build filter buttons
                 if (filterBar) {
                     filterBar.innerHTML = categories.map(cat => `
