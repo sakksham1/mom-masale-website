@@ -38,6 +38,9 @@
 [data-theme="dark"] .contact-card h3 {
     color: var(--gold);
 }
+[data-theme="dark"] .contact-item a {
+    color: var(--gold);
+}
 [data-theme="dark"] .buy-links {
     background: rgba(26, 37, 64, 0.98);
     border-color: var(--gold);
@@ -528,7 +531,7 @@ nav a.active {
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     margin-top: 1rem;
-    align-items: start;
+    align-items: stretch;
 }
 
 .about-text p {
@@ -563,12 +566,24 @@ nav a.active {
     color: var(--white);
     border-radius: var(--radius);
     padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .about-highlight h3 {
     color: var(--gold);
     margin-bottom: 1rem;
     font-size: 1.2rem;
+    text-align: center;
+}
+.highlight-text {
+    opacity: 0.9;
+    font-size: 1.08rem;
+    line-height: 1.7;
+}
+.highlight-text-gap {
+    margin-top: 1.2rem;
 }
 
 .stat-row {
@@ -1438,3 +1453,35 @@ footer {
     padding: 0;
 }
 [data-theme="dark"] .scope-reset-btn { color: var(--gold); }
+
+/* ── ABOUT VALUE ART ── */
+.value-art {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex: 1;
+    align-content: center;
+}
+.value-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold);
+    text-align: center;
+}
+.value-icon svg {
+    width: 50px;
+    height: 50px;
+}
+.value-icon span {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 0.3px;
+}
+
+@media (max-width: 480px) {
+    .value-art { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+    .value-icon svg { width: 64px; height: 64px; }
+}
