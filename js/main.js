@@ -473,3 +473,24 @@ if (statNums.length) {
         burst(t.clientX, t.clientY);
     }, { passive: true });
 })();
+
+// ── EVENT GALLERY TAP TOGGLE (mobile) ──
+(function() {
+    const gallery = document.querySelector('.event-gallery');
+    if (!gallery) return;
+    if (!window.matchMedia('(pointer: coarse)').matches) return; // touch only
+
+    gallery.addEventListener('click', (e) => {
+        const item = e.target.closest('.event-item');
+        gallery.querySelectorAll('.event-item.active').forEach(el => {
+            if (el !== item) el.classList.remove('active');
+        });
+        if (item) item.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.event-gallery')) {
+            gallery.querySelectorAll('.event-item.active').forEach(el => el.classList.remove('active'));
+        }
+    });
+})();
