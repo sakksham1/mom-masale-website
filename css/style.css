@@ -767,6 +767,17 @@ footer {
     background: var(--maroon);
     color: var(--white);
 }
+[data-theme="dark"] .filter-btn {
+    background: var(--cream);
+    color: var(--maroon);
+    border-color: var(--gold);
+}
+[data-theme="dark"] .filter-btn:hover,
+[data-theme="dark"] .filter-btn.active {
+    background: var(--maroon);
+    color: var(--white);
+    border-color: var(--maroon);
+}
 
 /* ── HERO SLIDER ── */
 .hero-slider {
