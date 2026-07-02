@@ -63,7 +63,159 @@ if (hamburger && nav) {
         a.addEventListener('click', () => closeNav());
     });
 }
+// ── CART ICON (injected into navbar) ──
+const navbarEl = document.querySelector('.navbar');
+if (navbarEl) {
+    const cartBtn = document.createElement('button');
+    cartBtn.className = 'cart-toggle';
+    cartBtn.id = 'cart-toggle';
+    cartBtn.setAttribute('aria-label', 'View cart');
+    cartBtn.innerHTML = `🛒<span class="cart-badge" id="cart-badge" hidden>0</span>`;
+    const hamburgerEl = document.getElementById('hamburger');
+    navbarEl.insertBefore(cartBtn, hamburgerEl);
+}
 
+function updateCartBadge() {
+    const badge = document.getElementById('cart-badge');
+    if (!badge) return;
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    badge.textContent = totalQty;
+    badge.hidden = totalQty === 0;
+}
+
+updateCartBadge();
+// ── CART DRAWER ──
+function buildCartDrawer() {
+    if (document.getElementById('cart-drawer')) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'cart-overlay';
+    overlay.id = 'cart-overlay';
+
+    const drawer = document.createElement('div');
+    drawer.className = 'cart-drawer';
+    drawer.id = 'cart-drawer';
+    drawer.innerHTML = `
+        <div class="cart-drawer-header">
+            <h3>Your Cart</h3>
+            <button class="cart-close" id="cart-close" aria-label="Close cart">✕</button>
+        </div>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-footer" id="cart-footer">
+            <button class="btn btn-outline cart-clear-btn" id="cart-clear-btn">Clear Cart</button>
+            <button class="btn cart-checkout-btn" id="cart-checkout-btn">Checkout via WhatsApp</button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(drawer);
+
+    overlay.addEventListener('click', closeCart);
+    document.getElementById('cart-close').addEventListener('click', closeCart);
+}
+
+function openCart() {
+    buildCartDrawer();
+    renderCartItems();
+    document.getElementById('cart-drawer').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+    const drawer = document.getElementById('cart-drawer');
+    const overlay = document.getElementById('cart-overlay');
+    if (drawer) drawer.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        const drawer = document.getElementById('cart-drawer');
+        if (drawer && drawer.classList.contains('open')) closeCart();
+    }
+});
+
+function renderCartItems() {
+    const container = document.getElementById('cart-items');
+    if (!container) return;
+    const cart = getCart();
+
+    const footer = document.getElementById('cart-footer');
+    if (cart.length === 0) {
+        container.innerHTML = `<p class="cart-empty">Your cart is empty.</p>`;
+        if (footer) footer.hidden = true;
+        return;
+    }
+    if (footer) footer.hidden = false;
+
+    container.innerHTML = cart.map((item, i) => `
+        <div class="cart-item">
+            <div class="cart-item-info">
+                <span class="cart-item-name">${item.name}</span>
+                <span class="cart-item-size">${item.size}</span>
+            </div>
+            <div class="cart-item-controls">
+                <button class="qty-btn" data-action="dec" data-index="${i}">−</button>
+                <span class="qty-value">${item.qty}</span>
+                <button class="qty-btn" data-action="inc" data-index="${i}">+</button>
+                <button class="cart-remove" data-index="${i}" aria-label="Remove item">🗑</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function buildWhatsAppMessage(cart) {
+    const lines = cart.map(item => `- ${item.name} (${item.size}) x${item.qty}`);
+    const message = `Hi, I'd like to order:\n${lines.join('\n')}\n\nPlease confirm availability & price.`;
+    return encodeURIComponent(message);
+}
+
+document.addEventListener('click', e => {
+    if (e.target.closest('#cart-clear-btn')) {
+        if (confirm('Clear all items from your cart?')) {
+            saveCart([]);
+            updateCartBadge();
+            renderCartItems();
+        }
+    }
+
+    if (e.target.closest('#cart-checkout-btn')) {
+        const cart = getCart();
+        if (cart.length === 0) return;
+        const msg = buildWhatsAppMessage(cart);
+        window.open(`https://wa.me/917905391434?text=${msg}`, '_blank', 'noopener');
+    }
+});
+
+document.addEventListener('click', e => {
+    const cartToggleBtn = e.target.closest('#cart-toggle');
+    if (cartToggleBtn) openCart();
+
+    const qtyBtn = e.target.closest('.qty-btn');
+    if (qtyBtn) {
+        const cart = getCart();
+        const idx = parseInt(qtyBtn.dataset.index);
+        if (qtyBtn.dataset.action === 'inc') cart[idx].qty += 1;
+        if (qtyBtn.dataset.action === 'dec') {
+            cart[idx].qty -= 1;
+            if (cart[idx].qty <= 0) cart.splice(idx, 1);
+        }
+        saveCart(cart);
+        updateCartBadge();
+        renderCartItems();
+    }
+
+    const removeBtn = e.target.closest('.cart-remove');
+    if (removeBtn) {
+        const cart = getCart();
+        cart.splice(parseInt(removeBtn.dataset.index), 1);
+        saveCart(cart);
+        updateCartBadge();
+        renderCartItems();
+    }
+});
 // ── HERO SLIDER ──
 const slides = document.querySelectorAll('.slide');
 const dots = document.querySelectorAll('.dot');
@@ -122,6 +274,15 @@ async function loadProducts() {
                     <a href="${p.amazon}" target="_blank" rel="noopener">🛒 Amazon</a>
                     <a href="${p.flipkart}" target="_blank" rel="noopener">🛍 Flipkart</a>
                     <a href="${p.meesho}" target="_blank" rel="noopener">🏷 Meesho</a>
+                </div>
+            </div>
+            <div class="purchase-row">
+                <div class="coming-soon-badge">Available Soon</div>
+                <div class="add-to-cart-block">
+                    <select class="size-select" aria-label="Select size">
+                        ${p.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}
+                    </select>
+                    <button class="btn btn-outline add-to-cart-btn" data-name="${p.name}">Add to Cart</button>
                 </div>
             </div>
         </div>
@@ -266,6 +427,33 @@ async function loadProducts() {
 
 
 loadProducts();
+
+// ── CART ──
+function getCart() {
+    return JSON.parse(localStorage.getItem('cart') || '[]');
+}
+function saveCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+function addToCart(name, size) {
+    const cart = getCart();
+    const existing = cart.find(i => i.name === name && i.size === size);
+    if (existing) {
+        existing.qty += 1;
+    } else {
+        cart.push({ name, size, qty: 1 });
+    }
+    saveCart(cart);
+    updateCartBadge();
+}
+
+document.addEventListener('click', e => {
+    const addBtn = e.target.closest('.add-to-cart-btn');
+    if (!addBtn) return;
+    const card = addBtn.closest('.card');
+    const sizeSelect = card.querySelector('.size-select');
+    addToCart(addBtn.dataset.name, sizeSelect.value);
+});
 
 // ── BULK ORDER FORM ──
 const bulkForm = document.getElementById('bulk-form');
