@@ -1777,6 +1777,9 @@ footer {
 }
 .cart-item-name { font-weight: 600; font-size: 0.95rem; }
 .cart-item-size { font-size: 0.8rem; color: var(--text-light); }
+.cart-item-subtotal { font-size: 0.82rem; font-weight: 700; color: var(--maroon); margin-top: 2px; }
+
+[data-theme="dark"] .cart-item-subtotal { color: var(--gold); }
 
 .cart-item-controls {
     display: flex;

@@ -187,6 +187,7 @@ function renderCartItems() {
             <div class="cart-item-info">
                 <span class="cart-item-name">${item.name}</span>
                 <span class="cart-item-size">${item.size}${item.price ? ` · ₹${item.price} each` : ''}</span>
+                ${item.price ? `<span class="cart-item-subtotal">₹${item.price * item.qty}</span>` : ''}
             </div>
             <div class="cart-item-controls">
                 <button class="qty-btn" data-action="dec" data-index="${i}">−</button>
