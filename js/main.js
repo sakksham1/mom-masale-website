@@ -64,24 +64,21 @@ if (hamburger && nav) {
     });
 }
 // ── CART ICON (injected into navbar) ──
-const navbarEl = document.querySelector('.navbar');
-if (navbarEl) {
-    const cartBtn = document.createElement('button');
-    cartBtn.className = 'cart-toggle';
-    cartBtn.id = 'cart-toggle';
-    cartBtn.setAttribute('aria-label', 'View cart');
-    cartBtn.innerHTML = `🛒<span class="cart-badge" id="cart-badge" hidden>0</span>`;
-    const hamburgerEl = document.getElementById('hamburger');
-    navbarEl.insertBefore(cartBtn, hamburgerEl);
-}
+const cartPill = document.createElement('button');
+cartPill.className = 'cart-toggle';
+cartPill.id = 'cart-toggle';
+cartPill.setAttribute('aria-label', 'View cart');
+cartPill.innerHTML = `🛒 <span class="cart-badge" id="cart-badge">0</span>`;
+document.body.appendChild(cartPill);
 
 function updateCartBadge() {
+    const pill = document.getElementById('cart-toggle');
     const badge = document.getElementById('cart-badge');
-    if (!badge) return;
+    if (!pill || !badge) return;
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
     badge.textContent = totalQty;
-    badge.hidden = totalQty === 0;
+    pill.classList.toggle('visible', totalQty > 0);
 }
 
 updateCartBadge();
