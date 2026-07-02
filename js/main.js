@@ -123,6 +123,7 @@ function buildCartDrawer() {
         </div>
         <div class="cart-items" id="cart-items"></div>
         <div class="cart-footer" id="cart-footer">
+         <div class="cart-total" id="cart-total"></div>
             <button class="btn btn-outline cart-clear-btn" id="cart-clear-btn">Clear Cart</button>
             <button class="btn cart-checkout-btn" id="cart-checkout-btn">Checkout via WhatsApp</button>
         </div>
@@ -174,7 +175,7 @@ function renderCartItems() {
         <div class="cart-item">
             <div class="cart-item-info">
                 <span class="cart-item-name">${item.name}</span>
-                <span class="cart-item-size">${item.size}</span>
+                <span class="cart-item-size">${item.size}${item.price ? ` · ₹${item.price} each` : ''}</span>
             </div>
             <div class="cart-item-controls">
                 <button class="qty-btn" data-action="dec" data-index="${i}">−</button>
@@ -184,11 +185,15 @@ function renderCartItems() {
             </div>
         </div>
     `).join('');
+    const total = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
+const totalEl = document.getElementById('cart-total');
+if (totalEl) totalEl.textContent = total ? `Total: ₹${total}` : '';
 }
 
 function buildWhatsAppMessage(cart) {
-    const lines = cart.map(item => `- ${item.name} (${item.size}) x${item.qty}`);
-    const message = `Hi, I'd like to order:\n${lines.join('\n')}\n\nPlease confirm availability & price.`;
+    const lines = cart.map(item => `- ${item.name} (${item.size}) x${item.qty}${item.price ? ` = ₹${item.price * item.qty}` : ''}`);
+    const total = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
+    const message = `Hi, I'd like to order:\n${lines.join('\n')}${total ? `\n\nTotal: ₹${total}` : ''}\n\nPlease confirm availability & price.`;
     return encodeURIComponent(message);
 }
 
@@ -290,10 +295,7 @@ async function loadProducts() {
         <div class="card-body">
             <span class="card-category">${p.category}</span>
             <h3>${p.name}</h3>
-            <span class="card-sizes-label">Available in</span>
-            <div class="card-sizes">
-                ${p.sizes.map(s => `<span class="size-tag">${s}</span>`).join('')}
-            </div>
+            
             <div class="buy-dropdown">
                 <button class="btn buy-toggle">Buy Now ▴</button>
                 <div class="buy-links">
@@ -304,25 +306,23 @@ async function loadProducts() {
             </div>
             <div class="purchase-row">
                 <div class="coming-soon-badge">Available Soon on ecom platforms</div>
-                <div class="add-to-cart-block">
-                <div class="size-dropdown" data-selected="${p.sizes[0]}">
-                    <button type="button" class="size-dropdown-toggle">
-                        <span class="size-dropdown-value">${p.sizes[0]}</span>
-                        <svg class="size-dropdown-chevron" viewBox="0 0 10 6" width="10" height="6"><path d="M1 5l4-4 4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                    <ul class="size-dropdown-list">
-                        ${p.sizes.map(s => `<li class="size-dropdown-option" data-size="${s}">${s}</li>`).join('')}
-                    </ul>
-                </div>
-                <div class="cart-action">
-                    <button type="button" class="btn add-to-cart-btn" data-name="${p.name}">Add to Cart</button>
-                    <div class="card-qty-stepper" hidden>
-                        <button type="button" class="card-qty-btn" data-action="dec">−</button>
-                        <span class="card-qty-value">1</span>
-                        <button type="button" class="card-qty-btn" data-action="inc">+</button>
+                    <div class="product-controls">
+                        <div class="size-chip-row" data-selected="${p.sizes[0]}" data-selected-price="${p.prices?.[p.sizes[0]] || ''}">
+                            ${p.sizes.map((s, i) => `<button type="button" class="size-chip${i === 0 ? ' active' : ''}" data-size="${s}" data-price="${p.prices?.[s] || ''}">${s}</button>`).join('')}
+                        </div>
+                        <div class="add-to-cart-block">
+                            <span class="selected-price">${p.prices?.[p.sizes[0]] ? `₹${p.prices[p.sizes[0]]}` : ''}</span>
+                            <div class="cart-action">
+                                <button type="button" class="btn add-to-cart-btn" data-name="${p.name}">Add to Cart</button>
+                                <div class="card-qty-stepper" hidden>
+                                    <button type="button" class="card-qty-btn" data-action="dec">−</button>
+                                    <span class="card-qty-value">1</span>
+                                    <button type="button" class="card-qty-btn" data-action="inc">+</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
             <div class="other-size-note" hidden></div>
             </div>
         </div>
@@ -475,13 +475,13 @@ function getCart() {
 function saveCart(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
-function addToCart(name, size) {
+function addToCart(name, size, price) {
     const cart = getCart();
     const existing = cart.find(i => i.name === name && i.size === size);
     if (existing) {
         existing.qty += 1;
     } else {
-        cart.push({ name, size, qty: 1 });
+        cart.push({ name, size, qty: 1, price: price || 0 });
     }
     saveCart(cart);
     updateCartBadge();
@@ -502,7 +502,7 @@ function syncCardUI(card) {
     const addBtn = card.querySelector('.add-to-cart-btn');
     if (!addBtn) return;
     const name = addBtn.dataset.name;
-    const sizeDropdown = card.querySelector('.size-dropdown');
+    const sizeDropdown = card.querySelector('.size-chip-row');
     const selectedSize = sizeDropdown.dataset.selected;
     const cart = getCart();
     const currentItem = cart.find(i => i.name === name && i.size === selectedSize);
@@ -538,8 +538,8 @@ document.addEventListener('click', e => {
     const addBtn = e.target.closest('.add-to-cart-btn');
     if (!addBtn) return;
     const card = addBtn.closest('.card');
-    const sizeDropdown = card.querySelector('.size-dropdown');
-    addToCart(addBtn.dataset.name, sizeDropdown.dataset.selected);
+    const sizeDropdown = card.querySelector('.size-chip-row');
+    addToCart(addBtn.dataset.name, sizeDropdown.dataset.selected, Number(sizeDropdown.dataset.selectedPrice) || 0);
     syncCardUI(card);
 });
 
@@ -548,31 +548,24 @@ document.addEventListener('click', e => {
     if (!cardQtyBtn) return;
     const card = cardQtyBtn.closest('.card');
     const name = card.querySelector('.add-to-cart-btn').dataset.name;
-    const size = card.querySelector('.size-dropdown').dataset.selected;
-    if (cardQtyBtn.dataset.action === 'inc') addToCart(name, size);
+    const size = card.querySelector('.size-chip-row').dataset.selected;
+    if (cardQtyBtn.dataset.action === 'inc') addToCart(name, size, Number(card.querySelector('.size-chip-row').dataset.selectedPrice) || 0);
     if (cardQtyBtn.dataset.action === 'dec') { decrementCartItem(name, size); updateCartBadge(); }
     syncCardUI(card);
     if (document.getElementById('cart-drawer')?.classList.contains('open')) renderCartItems();
 });
 document.addEventListener('click', e => {
-    const toggle = e.target.closest('.size-dropdown-toggle');
-    document.querySelectorAll('.size-dropdown.open').forEach(d => {
-        if (d !== toggle?.closest('.size-dropdown')) d.classList.remove('open');
-    });
-    if (toggle) {
-        toggle.closest('.size-dropdown').classList.toggle('open');
-        e.stopPropagation();
-        return;
-    }
-
-    const option = e.target.closest('.size-dropdown-option');
-    if (option) {
-        const dropdown = option.closest('.size-dropdown');
-        dropdown.dataset.selected = option.dataset.size;
-        dropdown.querySelector('.size-dropdown-value').textContent = option.dataset.size;
-        dropdown.classList.remove('open');
-        syncCardUI(dropdown.closest('.card'));
-    }
+    const chip = e.target.closest('.size-chip');
+    if (!chip) return;
+    const row = chip.closest('.size-chip-row');
+    row.querySelectorAll('.size-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    row.dataset.selected = chip.dataset.size;
+    row.dataset.selectedPrice = chip.dataset.price;
+    const card = row.closest('.card');
+    const priceEl = card.querySelector('.selected-price');
+    if (priceEl) priceEl.textContent = chip.dataset.price ? `₹${chip.dataset.price}` : '';
+    syncCardUI(card);
 });
 
 // ── BULK ORDER FORM ──

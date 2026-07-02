@@ -1,273 +1,607 @@
 [
   {
-    "name":"Turmeric Powder",
-    "category":"Ground Spices",
-    "sizes":["10rs","100g","200g"],
-    "image":"images/products/turmeric.jpg",
-    "amazon":"#",
+    "name": "Turmeric Powder",
+    "category": "Ground Spices",
+    "sizes": [
+      "5rs",
+      "10rs",
+      "100g",
+      "200g",
+      "500g",
+      "1kg"
+    ],
+    "prices": {
+      "5rs": 5,
+      "10rs": 10,
+      "100g": 40,
+      "200g": 89,
+      "500g": 230,
+      "1kg": 370
+    },
+    "image": "images/products/turmeric.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "aliases": ["haldi"]
+    "aliases": [
+      "haldi"
+    ]
   },
   {
-    "name":"Red Chilli Powder",
-    "category":"Ground Spices",
-    "sizes":["10rs","100g","200g"],
-    "image":"images/products/chilli.jpg",
-    "amazon":"#",
+    "name": "Red Chilli Powder",
+    "category": "Ground Spices",
+    "sizes": [
+      "5rs",
+      "10rs",
+      "100g",
+      "200g",
+      "500g",
+      "1kg"
+    ],
+    "prices": {
+      "5rs": 5,
+      "10rs": 10,
+      "100g": 65,
+      "200g": 104,
+      "500g": 315,
+      "1kg": 620
+    },
+    "image": "images/products/chilli.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
     "featured": true,
-    "aliases": ["lal mirch", "mirchi"]
+    "aliases": [
+      "lal mirch",
+      "mirchi"
+    ]
   },
   {
-    "name":"Coriander Powder",
-    "category":"Ground Spices",
-    "sizes":["10rs","100g","200g"],
-    "image":"images/products/coriander.jpg",
-    "amazon":"#",
+    "name": "Coriander Powder",
+    "category": "Ground Spices",
+    "sizes": [
+      "5rs",
+      "10rs",
+      "100g",
+      "200g",
+      "500g",
+      "1kg"
+    ],
+    "prices": {
+      "5rs": 5,
+      "10rs": 10,
+      "100g": 40,
+      "200g": 68,
+      "500g": 185,
+      "1kg": 350
+    },
+    "image": "images/products/coriander.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "aliases": ["dhania", "dhaniya"]
+    "aliases": [
+      "dhania",
+      "dhaniya"
+    ]
   },
   {
-    "name":"Kasuri Methi",
-    "category":"Ground Spices",
-    "sizes":["50g","100g"],
-    "image":"images/products/kasuri-methi.jpg",
-    "amazon":"#",
+    "name": "Kasuri Methi",
+    "category": "Ground Spices",
+    "sizes": [
+      "50g",
+      "100g"
+    ],
+    "image": "images/products/kasuri-methi.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "aliases": ["kasoori"]
+    "aliases": [
+      "kasoori"
+    ],
+    "prices": {
+      "50g": 40,
+      "100g": 75
+    }
   },
   {
-    "name":"Sabzi King Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/sabzi-king.jpg",
-    "amazon":"#",
+    "name": "Sabzi King Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "5rs",
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/sabzi-king.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "aliases": ["sabji", "sabji king"]
+    "aliases": [
+      "sabji",
+      "sabji king"
+    ],
+    "prices": {
+      "5rs": 5,
+      "10rs": 10,
+      "50g": 35,
+      "100g": 65,
+      "200g": 110
+    }
   },
   {
-    "name":"Amchur Powder",
-    "category":"Ground Spices",
-    "sizes":["10rs","200g"],
-    "image":"images/products/amchur.jpg",
-    "amazon":"#",
+    "name": "Amchur Powder",
+    "category": "Ground Spices",
+    "sizes": [
+      "10rs",
+      "50g",
+      "100g",
+      "200g",
+      "500g",
+      "1kg"
+    ],
+    "image": "images/products/amchur.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "aliases": ["aamchur", "dry mango"]
+    "aliases": [
+      "aamchur",
+      "dry mango"
+    ],
+    "prices": {
+      "10rs": 10,
+      "50g": 25,
+      "100g": 49,
+      "200g": 79,
+      "500g": 180,
+      "1kg": 350
+    }
   },
   {
-    "name":"Biryani Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/biryani.jpg",
-    "amazon":"#",
+    "name": "Biryani Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/biryani.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "aliases": ["biriyani"]
+    "aliases": [
+      "biriyani"
+    ],
+    "prices": {
+      "10rs": 10,
+      "50g": 63,
+      "100g": 95,
+      "200g": 205
+    }
   },
   {
-    "name":"Chai Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/chai.jpg",
-    "amazon":"#",
+    "name": "Chai Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/chai.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "aliases": ["chay","chaa", "tea"],
-    "featured": true
+    "aliases": [
+      "chay",
+      "chaa",
+      "tea"
+    ],
+    "featured": true,
+    "prices": {
+      "10rs": 10,
+      "50g": 50,
+      "100g": 100,
+      "200g": 200
+    }
   },
   {
-    "name":"Chaat Masala",
-    "category":"Seasoning",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/chaat.jpg",
-    "amazon":"#",
+    "name": "Chaat Masala",
+    "category": "Seasoning",
+    "sizes": [
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/chaat.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "aliases": ["chat"],
-    "featured": true
+    "aliases": [
+      "chat"
+    ],
+    "featured": true,
+    "prices": {
+      "10rs": 10,
+      "50g": 35,
+      "100g": 65,
+      "200g": 110
+    }
   },
   {
-    "name":"Chicken Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","200g"],
-    "image":"images/products/chicken.jpg",
-    "amazon":"#",
-    "flipkart": "#",
-    "meesho": "#"
-  },
-  {
-    "name":"Chhola Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/chhola.jpg",
-    "amazon":"#",
-    "flipkart": "#",
-    "meesho": "#",
-    "aliases": ["chola", "chana", "chole"]
-  },
-  {
-    "name":"Garam Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/garam.jpg",
-    "amazon":"#",
-    "flipkart": "#",
-    "meesho": "#"
-  },
-  {
-    "name":"Jaljeera Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","250g"],
-    "image":"images/products/jaljeera.jpg",
-    "amazon":"#",
-    "flipkart": "#",
-    "meesho": "#"
-  },
-  {
-    "name":"Kuch Bhi Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/kuch-bhi.jpg",
-    "amazon":"#",
+    "name": "Chicken Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/chicken.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "featured": true
+    "prices": {
+      "10rs": 10,
+      "50g": 45,
+      "100g": 58,
+      "200g": 180
+    }
   },
   {
-    "name":"Matar Paneer Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/matar-paneer.jpg",
-    "amazon":"#",
-    "flipkart": "#",
-    "meesho": "#"
-  },
-  {
-    "name":"Meat Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/meat.jpg",
-    "amazon":"#",
-    "flipkart": "#",
-    "meesho": "#",
-    "aliases": ["mutton"]
-  },
-  {
-    "name":"Pav Bhaji Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","200g"],
-    "image":"images/products/pav-bhaji.jpg",
-    "amazon":"#",
+    "name": "Chhola Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "5rs",
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/chhola.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "aliases": ["pao bhaji"]
+    "aliases": [
+      "chola",
+      "chana",
+      "chole"
+    ],
+    "prices": {
+      "5rs": 5,
+      "10rs": 10,
+      "50g": 55,
+      "100g": 82,
+      "200g": 119
+    }
   },
   {
-    "name":"Raita Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/raita.jpg",
-    "amazon":"#",
-    "flipkart": "#",
-    "meesho": "#"
-  },
-  {
-    "name":"Sambhar Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/sambhar.jpg",
-    "amazon":"#",
-    "flipkart": "#",
-    "meesho": "#"
-  },
-  {
-    "name":"Shahi Paneer Masala",
-    "category":"Blended Spices",
-    "sizes":["10rs","50g","200g"],
-    "image":"images/products/shahi-paneer.jpg",
-    "amazon":"#",
-    "flipkart": "#",
-    "meesho": "#",
-    "aliases": ["shaahi"]
-  },
-  {
-    "name":"Fruit & Salad Masala",
-    "category":"Seasoning",
-    "sizes":["200g"],
-    "image":"images/products/fruit-salad.jpg",
-    "amazon":"#",
-    "flipkart": "#",
-    "meesho": "#"
-  },
-  {
-    "name":"Kachauri Masala",
-    "category":"Blended Spices",
-    "sizes":["50g","200g"],
-    "image":"images/products/kachauri.jpg",
-    "amazon":"#",
+    "name": "Garam Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "5rs",
+      "10rs",
+      "50g",
+      "100g",
+      "200g",
+      "500g",
+      "1kg"
+    ],
+    "image": "images/products/garam.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "aliases": ["kachaudi", "kachodi"]
+    "prices": {
+      "5rs": 5,
+      "10rs": 10,
+      "50g": 55,
+      "100g": 100,
+      "200g": 170,
+      "500g": 340,
+      "1kg": 660
+    }
   },
   {
-    "name":"Kalonji Bharwa Masala",
-    "category":"Blended Spices",
-    "sizes":["50g","200g"],
-    "image":"images/products/kalonji-bharwa.jpg",
-    "amazon":"#",
+    "name": "Jaljeera Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "10rs",
+      "50g",
+      "100g",
+      "250g"
+    ],
+    "image": "images/products/jaljeera.jpg",
+    "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "aliases": ["kalaunji", "bharva"]
+    "prices": {
+      "10rs": 10,
+      "50g": 28,
+      "100g": 53,
+      "250g": 148
+    }
   },
   {
-    "name":"Shahi Thandai",
-    "category":"Special Mix",
-    "sizes":["250g"],
-    "image":"images/products/shahi-thandai.jpg",
-    "amazon":"#",
+    "name": "Kuch Bhi Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "10rs",
+      "200g"
+    ],
+    "image": "images/products/kuch-bhi.jpg",
+    "amazon": "#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "featured": true,
+    "prices": {
+      "10rs": 10,
+      "200g": 120
+    }
   },
   {
-    "name":"Gulab Jamun Mix",
-    "category":"Special Mix",
-    "sizes":["250g"],
-    "image":"images/products/gulab-jamun-mix.jpg",
-    "amazon":"#",
+    "name": "Matar Paneer Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/matar-paneer.jpg",
+    "amazon": "#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "prices": {
+      "10rs": 10,
+      "50g": 51,
+      "100g": 95,
+      "200g": 110
+    }
   },
   {
-    "name":"Tawa Masala",
-    "category":"Blended Spices",
-    "sizes":["200g"],
-    "image":"images/products/tawa.jpg",
-    "amazon":"#",
+    "name": "Meat Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "5rs",
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/meat.jpg",
+    "amazon": "#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": [
+      "mutton"
+    ],
+    "prices": {
+      "5rs": 5,
+      "10rs": 10,
+      "50g": 55,
+      "100g": 82,
+      "200g": 209
+    }
   },
   {
-    "name":"Dam Aloo Masala",
-    "category":"Blended Spices",
-    "sizes":["200g"],
-    "image":"images/products/dam-aloo.jpg",
-    "amazon":"#",
+    "name": "Pav Bhaji Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/pav-bhaji.jpg",
+    "amazon": "#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "aliases": [
+      "pao bhaji"
+    ],
+    "prices": {
+      "10rs": 10,
+      "50g": 41,
+      "100g": 80,
+      "200g": 105
+    }
   },
   {
-    "name":"Dahi Bada Masala",
-    "category":"Special Mix",
-    "sizes":["200g"],
-    "image":"images/products/dahi-bada.jpg",
-    "amazon":"#",
+    "name": "Raita Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/raita.jpg",
+    "amazon": "#",
     "flipkart": "#",
-    "meesho": "#"
+    "meesho": "#",
+    "prices": {
+      "10rs": 10,
+      "50g": 40,
+      "100g": 70,
+      "200g": 130
+    }
+  },
+  {
+    "name": "Sambhar Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/sambhar.jpg",
+    "amazon": "#",
+    "flipkart": "#",
+    "meesho": "#",
+    "prices": {
+      "10rs": 10,
+      "50g": 45,
+      "100g": 72,
+      "200g": 115
+    }
+  },
+  {
+    "name": "Shahi Paneer Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "10rs",
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/shahi-paneer.jpg",
+    "amazon": "#",
+    "flipkart": "#",
+    "meesho": "#",
+    "aliases": [
+      "shaahi"
+    ],
+    "prices": {
+      "10rs": 10,
+      "50g": 63,
+      "100g": 115,
+      "200g": 210
+    }
+  },
+  {
+    "name": "Fruit & Salad Masala",
+    "category": "Seasoning",
+    "sizes": [
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/fruit-salad.jpg",
+    "amazon": "#",
+    "flipkart": "#",
+    "meesho": "#",
+    "prices": {
+      "100g": 44,
+      "200g": 85
+    }
+  },
+  {
+    "name": "Kachauri Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/kachauri.jpg",
+    "amazon": "#",
+    "flipkart": "#",
+    "meesho": "#",
+    "aliases": [
+      "kachaudi",
+      "kachodi"
+    ],
+    "prices": {
+      "50g": 36,
+      "100g": 69,
+      "200g": 110
+    }
+  },
+  {
+    "name": "Kalonji Bharwa Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "50g",
+      "100g",
+      "200g"
+    ],
+    "image": "images/products/kalonji-bharwa.jpg",
+    "amazon": "#",
+    "flipkart": "#",
+    "meesho": "#",
+    "aliases": [
+      "kalaunji",
+      "bharva"
+    ],
+    "prices": {
+      "50g": 63,
+      "100g": 97,
+      "200g": 175
+    }
+  },
+  {
+    "name": "Shahi Thandai",
+    "category": "Special Mix",
+    "sizes": [
+      "100g",
+      "250g"
+    ],
+    "image": "images/products/shahi-thandai.jpg",
+    "amazon": "#",
+    "flipkart": "#",
+    "meesho": "#",
+    "prices": {
+      "100g": 110,
+      "250g": 260
+    }
+  },
+  {
+    "name": "Gulab Jamun Mix",
+    "category": "Special Mix",
+    "sizes": [
+      "250g"
+    ],
+    "image": "images/products/gulab-jamun-mix.jpg",
+    "amazon": "#",
+    "flipkart": "#",
+    "meesho": "#",
+    "prices": {
+      "250g": 95
+    }
+  },
+  {
+    "name": "Tawa Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "200g"
+    ],
+    "image": "images/products/tawa.jpg",
+    "amazon": "#",
+    "flipkart": "#",
+    "meesho": "#",
+    "prices": {
+      "200g": 170
+    }
+  },
+  {
+    "name": "Dam Aloo Masala",
+    "category": "Blended Spices",
+    "sizes": [
+      "50g",
+      "100g"
+    ],
+    "image": "images/products/dam-aloo.jpg",
+    "amazon": "#",
+    "flipkart": "#",
+    "meesho": "#",
+    "prices": {
+      "50g": 51,
+      "100g": 98
+    }
+  },
+  {
+    "name": "Dahi Bada Masala",
+    "category": "Special Mix",
+    "sizes": [
+      "200g"
+    ],
+    "image": "images/products/dahi-bada.jpg",
+    "amazon": "#",
+    "flipkart": "#",
+    "meesho": "#",
+    "prices": {
+      "200g": 125
+    }
   }
 ]
