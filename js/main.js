@@ -82,6 +82,29 @@ function updateCartBadge() {
 }
 
 updateCartBadge();
+function pulseCartPill(type) {
+    const pill = document.getElementById('cart-toggle');
+    if (!pill) return;
+    pill.classList.remove('pill-pop-add', 'pill-pop-remove');
+    void pill.offsetWidth; // force reflow so animation restarts if triggered rapidly
+    pill.classList.add(type === 'remove' ? 'pill-pop-remove' : 'pill-pop-add');
+}
+
+function showCartToast(message) {
+    let toast = document.getElementById('cart-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'cart-toast';
+        toast.className = 'cart-toast';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.classList.remove('show');
+    void toast.offsetWidth;
+    toast.classList.add('show');
+    clearTimeout(toast._hideTimer);
+    toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 1600);
+}
 // ── CART DRAWER ──
 function buildCartDrawer() {
     if (document.getElementById('cart-drawer')) return;
@@ -175,6 +198,7 @@ document.addEventListener('click', e => {
             saveCart([]);
             updateCartBadge();
             renderCartItems();
+            syncAllCardUI();
         }
     }
 
@@ -202,6 +226,8 @@ document.addEventListener('click', e => {
         saveCart(cart);
         updateCartBadge();
         renderCartItems();
+        syncAllCardUI();
+        pulseCartPill(qtyBtn.dataset.action === 'inc' ? 'add' : 'remove');
     }
 
     const removeBtn = e.target.closest('.cart-remove');
@@ -211,6 +237,8 @@ document.addEventListener('click', e => {
         saveCart(cart);
         updateCartBadge();
         renderCartItems();
+        syncAllCardUI(dropdown.closest('.card'));
+        pulseCartPill('remove');
     }
 });
 // ── HERO SLIDER ──
@@ -277,17 +305,25 @@ async function loadProducts() {
             <div class="purchase-row">
                 <div class="coming-soon-badge">Available Soon on ecom platforms</div>
                 <div class="add-to-cart-block">
-                    <div class="size-dropdown" data-selected="${p.sizes[0]}">
-                        <button type="button" class="size-dropdown-toggle">
-                            <span class="size-dropdown-value">${p.sizes[0]}</span>
-                            <svg class="size-dropdown-chevron" viewBox="0 0 10 6" width="10" height="6"><path d="M1 5l4-4 4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </button>
-                        <ul class="size-dropdown-list">
-                            ${p.sizes.map(s => `<li class="size-dropdown-option" data-size="${s}">${s}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <button class="btn btn-outline add-to-cart-btn" data-name="${p.name}">Add to Cart</button>
+                <div class="size-dropdown" data-selected="${p.sizes[0]}">
+                    <button type="button" class="size-dropdown-toggle">
+                        <span class="size-dropdown-value">${p.sizes[0]}</span>
+                        <svg class="size-dropdown-chevron" viewBox="0 0 10 6" width="10" height="6"><path d="M1 5l4-4 4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <ul class="size-dropdown-list">
+                        ${p.sizes.map(s => `<li class="size-dropdown-option" data-size="${s}">${s}</li>`).join('')}
+                    </ul>
                 </div>
+                <div class="cart-action">
+                    <button type="button" class="btn add-to-cart-btn" data-name="${p.name}">Add to Cart</button>
+                    <div class="card-qty-stepper" hidden>
+                        <button type="button" class="card-qty-btn" data-action="dec">−</button>
+                        <span class="card-qty-value">1</span>
+                        <button type="button" class="card-qty-btn" data-action="inc">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="other-size-note" hidden></div>
             </div>
         </div>
     </div>
@@ -449,6 +485,53 @@ function addToCart(name, size) {
     }
     saveCart(cart);
     updateCartBadge();
+    pulseCartPill('add');
+    showCartToast(`${name} added to cart`);
+}
+function decrementCartItem(name, size) {
+    const cart = getCart();
+    const idx = cart.findIndex(i => i.name === name && i.size === size);
+    if (idx === -1) return;
+    cart[idx].qty -= 1;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    saveCart(cart);
+    pulseCartPill('remove');
+}
+
+function syncCardUI(card) {
+    const addBtn = card.querySelector('.add-to-cart-btn');
+    if (!addBtn) return;
+    const name = addBtn.dataset.name;
+    const sizeDropdown = card.querySelector('.size-dropdown');
+    const selectedSize = sizeDropdown.dataset.selected;
+    const cart = getCart();
+    const currentItem = cart.find(i => i.name === name && i.size === selectedSize);
+    const stepper = card.querySelector('.card-qty-stepper');
+    const qtyValue = card.querySelector('.card-qty-value');
+
+    if (currentItem) {
+        addBtn.hidden = true;
+        stepper.hidden = false;
+        qtyValue.textContent = currentItem.qty;
+    } else {
+        addBtn.hidden = false;
+        stepper.hidden = true;
+    }
+
+    const note = card.querySelector('.other-size-note');
+    const otherItems = cart.filter(i => i.name === name && i.size !== selectedSize);
+    if (note) {
+        if (otherItems.length > 0) {
+            note.textContent = `Also in cart: ${otherItems.map(i => `${i.size} ×${i.qty}`).join(', ')}`;
+            note.hidden = false;
+        } else {
+            note.hidden = true;
+        }
+    }
+}
+
+function syncAllCardUI() {
+    document.querySelectorAll('.card').forEach(syncCardUI);
 }
 
 document.addEventListener('click', e => {
@@ -457,6 +540,19 @@ document.addEventListener('click', e => {
     const card = addBtn.closest('.card');
     const sizeDropdown = card.querySelector('.size-dropdown');
     addToCart(addBtn.dataset.name, sizeDropdown.dataset.selected);
+    syncCardUI(card);
+});
+
+document.addEventListener('click', e => {
+    const cardQtyBtn = e.target.closest('.card-qty-btn');
+    if (!cardQtyBtn) return;
+    const card = cardQtyBtn.closest('.card');
+    const name = card.querySelector('.add-to-cart-btn').dataset.name;
+    const size = card.querySelector('.size-dropdown').dataset.selected;
+    if (cardQtyBtn.dataset.action === 'inc') addToCart(name, size);
+    if (cardQtyBtn.dataset.action === 'dec') { decrementCartItem(name, size); updateCartBadge(); }
+    syncCardUI(card);
+    if (document.getElementById('cart-drawer')?.classList.contains('open')) renderCartItems();
 });
 document.addEventListener('click', e => {
     const toggle = e.target.closest('.size-dropdown-toggle');
@@ -475,6 +571,7 @@ document.addEventListener('click', e => {
         dropdown.dataset.selected = option.dataset.size;
         dropdown.querySelector('.size-dropdown-value').textContent = option.dataset.size;
         dropdown.classList.remove('open');
+        syncCardUI(dropdown.closest('.card'));
     }
 });
 
@@ -583,6 +680,7 @@ function observeCards() {
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.card').forEach(card => observer.observe(card));
+    syncAllCardUI();
 }
 // ── STAT COUNTER ANIMATION ──
 const statNums = document.querySelectorAll('.stat-num');
