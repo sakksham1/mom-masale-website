@@ -1504,19 +1504,47 @@ footer {
     z-index: 998;
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: var(--maroon);
-    color: var(--white);
-    border: none;
+    gap: 9px;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    color: var(--maroon);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: 30px;
-    padding: 0.7rem 1.3rem;
+    padding: 0.65rem 1.3rem;
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    box-shadow:
+        0 8px 28px rgba(123, 17, 32, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        inset 0 -1px 6px rgba(123, 17, 32, 0.06);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s;
+    transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s, box-shadow 0.3s;
+}
+
+@media (hover: hover) {
+    .cart-toggle:hover {
+        background: rgba(255, 255, 255, 0.72);
+        box-shadow:
+            0 10px 32px rgba(123, 17, 32, 0.22),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9),
+            inset 0 -1px 6px rgba(123, 17, 32, 0.06);
+    }
+}
+
+.cart-icon {
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+    color: var(--maroon);
+}
+
+.cart-price {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--maroon);
 }
 
 .cart-toggle.visible {
@@ -1541,8 +1569,24 @@ footer {
 [data-theme="dark"] .cart-total { color: var(--gold); }
 
 [data-theme="dark"] .cart-toggle {
-    background: var(--gold);
-    color: #000;
+    background: rgba(20, 26, 40, 0.55);
+    border-color: rgba(212, 160, 23, 0.35);
+    color: var(--gold);
+    box-shadow:
+        0 8px 28px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        inset 0 -1px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .cart-icon,
+[data-theme="dark"] .cart-price {
+    color: var(--gold);
+}
+
+@media (hover: hover) {
+    [data-theme="dark"] .cart-toggle:hover {
+        background: rgba(20, 26, 40, 0.72);
+    }
 }
 
 @keyframes pillPopAdd {
@@ -1607,8 +1651,8 @@ footer {
 }
 
 .cart-badge {
-    background: rgba(255,255,255,0.25);
-    color: inherit;
+    background: rgba(123, 17, 32, 0.12);
+    color: var(--maroon);
     font-size: 0.82rem;
     font-weight: 700;
     min-width: 20px;
@@ -1622,7 +1666,8 @@ footer {
 }
 
 [data-theme="dark"] .cart-badge {
-    background: rgba(0,0,0,0.15);
+    background: rgba(212, 160, 23, 0.15);
+    color: var(--gold);
 }
 
 @media (max-width: 768px) {

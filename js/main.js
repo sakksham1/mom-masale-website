@@ -68,16 +68,27 @@ const cartPill = document.createElement('button');
 cartPill.className = 'cart-toggle';
 cartPill.id = 'cart-toggle';
 cartPill.setAttribute('aria-label', 'View cart');
-cartPill.innerHTML = `🛒 <span class="cart-badge" id="cart-badge">0</span>`;
+cartPill.innerHTML = `
+    <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+    </svg>
+    <span class="cart-badge" id="cart-badge">0</span>
+    <span class="cart-price" id="cart-price"></span>
+`;
 document.body.appendChild(cartPill);
 
 function updateCartBadge() {
     const pill = document.getElementById('cart-toggle');
     const badge = document.getElementById('cart-badge');
+    const priceEl = document.getElementById('cart-price');
     if (!pill || !badge) return;
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    const totalPrice = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
     badge.textContent = totalQty;
+    if (priceEl) priceEl.textContent = totalPrice ? `₹${totalPrice}` : '';
     pill.classList.toggle('visible', totalQty > 0);
 }
 
@@ -242,7 +253,7 @@ document.addEventListener('click', e => {
         saveCart(cart);
         updateCartBadge();
         renderCartItems();
-        syncAllCardUI(dropdown.closest('.card'));
+        syncAllCardUI();
         pulseCartPill('remove');
     }
 });
