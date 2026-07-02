@@ -333,7 +333,7 @@ nav a.active {
     gap: 4px;
 }
 
-.card-body h3 { font-size: 1.1rem; color: var(--brown); }
+.card-body h3 { font-size: 1.1rem; color: var(--brown); text-align: center; }
 
 .card-category {
     font-size: 0.8rem;
@@ -347,6 +347,13 @@ nav a.active {
     flex-wrap: wrap;
     gap: 5px;
     margin: 6px 0;
+}
+.card-sizes-label {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-top: 4px;
 }
 
 .size-tag {
@@ -1117,15 +1124,15 @@ footer {
 
 .purchase-row {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    gap: 10px;
     margin: 10px 1.1rem 1.1rem;
-    flex-wrap: wrap;
 }
 
 .purchase-row .coming-soon-badge {
+    display: none;
     margin: 0;
-    flex: 1;
+    width: 100%;
     padding: 0.6rem 0.8rem;
     font-size: 0.85rem;
 }
@@ -1133,52 +1140,108 @@ footer {
 .add-to-cart-block {
     display: flex;
     gap: 6px;
+    width: 100%;
 }
 
-.size-select {
-    padding: 0.5rem 1.6rem 0.5rem 0.6rem;
+.add-to-cart-block .add-to-cart-btn {
+    flex: 1;
+}
+
+.size-dropdown {
+    position: relative;
+    max-width: 78px;
+    flex-shrink: 0;
+}
+
+.size-dropdown-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    padding: 0.5rem 0.6rem;
     border-radius: 6px;
     border: 1.5px solid var(--maroon);
     background: var(--white);
     color: var(--text);
     font-size: 0.85rem;
-    max-width: 78px;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237b1120' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.55rem center;
     cursor: pointer;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.size-select:hover {
-    border-color: var(--gold);
+@media (hover: hover) {
+    .size-dropdown-toggle:hover { border-color: var(--gold); }
 }
 
-.size-select:focus {
-    outline: none;
+.size-dropdown.open .size-dropdown-toggle {
     border-color: var(--gold);
     box-shadow: 0 0 0 3px rgba(212,160,23,0.18);
 }
 
-.add-to-cart-btn {
+.size-dropdown-chevron {
+    color: var(--maroon);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.size-dropdown.open .size-dropdown-chevron {
+    transform: rotate(180deg);
+}
+
+.size-dropdown-list {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 0;
+    min-width: 100%;
+    background: rgba(240,240,245,0.98);
+    border: 1.5px solid var(--gold);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    list-style: none;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.size-dropdown.open .size-dropdown-list { display: block; }
+
+.size-dropdown-option {
+    padding: 8px 12px;
     font-size: 0.85rem;
-    padding: 0.5rem 0.9rem;
+    color: var(--brown);
+    cursor: pointer;
+    text-align: center;
     white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
 }
 
-[data-theme="dark"] .size-select {
-    background-color: #1a2540;
-    border-color: var(--gold);
+@media (hover: hover) {
+    .size-dropdown-option:hover {
+        background: var(--maroon);
+        color: var(--white);
+    }
+}
+
+[data-theme="dark"] .size-dropdown-toggle {
+    background: #1a2540;
     color: var(--text);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4a017' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    border-color: var(--gold);
 }
 
-@media (max-width: 480px) {
-    .purchase-row { flex-direction: column; align-items: stretch; }
-    .add-to-cart-block { justify-content: space-between; }
+[data-theme="dark"] .size-dropdown-chevron { color: var(--gold); }
+
+[data-theme="dark"] .size-dropdown-list {
+    background: rgba(26,37,64,0.98);
+    border-color: var(--gold);
+}
+
+[data-theme="dark"] .size-dropdown-option {
+    color: #e8e8e8;
+}
+
+[data-theme="dark"] .size-dropdown-option:hover {
+    background: var(--maroon);
+    color: var(--white);
 }
 
 .buy-toggle {

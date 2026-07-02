@@ -265,6 +265,7 @@ async function loadProducts() {
         <div class="card-body">
             <span class="card-category">${p.category}</span>
             <h3>${p.name}</h3>
+            <span class="card-sizes-label">Available in</span>
             <div class="card-sizes">
                 ${p.sizes.map(s => `<span class="size-tag">${s}</span>`).join('')}
             </div>
@@ -277,11 +278,17 @@ async function loadProducts() {
                 </div>
             </div>
             <div class="purchase-row">
-                <div class="coming-soon-badge">Available Soon</div>
+                <div class="coming-soon-badge">Available Soon on ecom platforms</div>
                 <div class="add-to-cart-block">
-                    <select class="size-select" aria-label="Select size">
-                        ${p.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}
-                    </select>
+                    <div class="size-dropdown" data-selected="${p.sizes[0]}">
+                        <button type="button" class="size-dropdown-toggle">
+                            <span class="size-dropdown-value">${p.sizes[0]}</span>
+                            <svg class="size-dropdown-chevron" viewBox="0 0 10 6" width="10" height="6"><path d="M1 5l4-4 4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <ul class="size-dropdown-list">
+                            ${p.sizes.map(s => `<li class="size-dropdown-option" data-size="${s}">${s}</li>`).join('')}
+                        </ul>
+                    </div>
                     <button class="btn btn-outline add-to-cart-btn" data-name="${p.name}">Add to Cart</button>
                 </div>
             </div>
@@ -451,8 +458,27 @@ document.addEventListener('click', e => {
     const addBtn = e.target.closest('.add-to-cart-btn');
     if (!addBtn) return;
     const card = addBtn.closest('.card');
-    const sizeSelect = card.querySelector('.size-select');
-    addToCart(addBtn.dataset.name, sizeSelect.value);
+    const sizeDropdown = card.querySelector('.size-dropdown');
+    addToCart(addBtn.dataset.name, sizeDropdown.dataset.selected);
+});
+document.addEventListener('click', e => {
+    const toggle = e.target.closest('.size-dropdown-toggle');
+    document.querySelectorAll('.size-dropdown.open').forEach(d => {
+        if (d !== toggle?.closest('.size-dropdown')) d.classList.remove('open');
+    });
+    if (toggle) {
+        toggle.closest('.size-dropdown').classList.toggle('open');
+        e.stopPropagation();
+        return;
+    }
+
+    const option = e.target.closest('.size-dropdown-option');
+    if (option) {
+        const dropdown = option.closest('.size-dropdown');
+        dropdown.dataset.selected = option.dataset.size;
+        dropdown.querySelector('.size-dropdown-value').textContent = option.dataset.size;
+        dropdown.classList.remove('open');
+    }
 });
 
 // ── BULK ORDER FORM ──
