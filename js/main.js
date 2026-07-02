@@ -184,6 +184,7 @@ function renderCartItems() {
 
     container.innerHTML = cart.map((item, i) => `
         <div class="cart-item">
+            <img class="cart-item-img" src="${item.image || 'https://placehold.co/60x60/7b1120/fff?text=' + encodeURIComponent(item.name[0])}" alt="${item.name}" loading="lazy">
             <div class="cart-item-info">
                 <span class="cart-item-name">${item.name}</span>
                 <span class="cart-item-size">${item.size}${item.price ? ` · ₹${item.price} each` : ''}</span>
@@ -487,13 +488,13 @@ function getCart() {
 function saveCart(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
-function addToCart(name, size, price) {
+function addToCart(name, size, price, image) {
     const cart = getCart();
     const existing = cart.find(i => i.name === name && i.size === size);
     if (existing) {
         existing.qty += 1;
     } else {
-        cart.push({ name, size, qty: 1, price: price || 0 });
+        cart.push({ name, size, qty: 1, price: price || 0, image: image || '' });
     }
     saveCart(cart);
     updateCartBadge();
@@ -551,7 +552,7 @@ document.addEventListener('click', e => {
     if (!addBtn) return;
     const card = addBtn.closest('.card');
     const sizeDropdown = card.querySelector('.size-chip-row');
-    addToCart(addBtn.dataset.name, sizeDropdown.dataset.selected, Number(sizeDropdown.dataset.selectedPrice) || 0);
+    addToCart(addBtn.dataset.name, sizeDropdown.dataset.selected, Number(sizeDropdown.dataset.selectedPrice) || 0, card.querySelector('.card-image img')?.src);
     syncCardUI(card);
 });
 
@@ -561,7 +562,7 @@ document.addEventListener('click', e => {
     const card = cardQtyBtn.closest('.card');
     const name = card.querySelector('.add-to-cart-btn').dataset.name;
     const size = card.querySelector('.size-chip-row').dataset.selected;
-    if (cardQtyBtn.dataset.action === 'inc') addToCart(name, size, Number(card.querySelector('.size-chip-row').dataset.selectedPrice) || 0);
+    if (cardQtyBtn.dataset.action === 'inc') addToCart(name, size, Number(card.querySelector('.size-chip-row').dataset.selectedPrice) || 0, card.querySelector('.card-image img')?.src);
     if (cardQtyBtn.dataset.action === 'dec') { decrementCartItem(name, size); updateCartBadge(); }
     syncCardUI(card);
     if (document.getElementById('cart-drawer')?.classList.contains('open')) renderCartItems();
