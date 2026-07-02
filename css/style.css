@@ -1226,20 +1226,24 @@ footer {
 }
 
 .size-chip-row {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
     gap: 6px;
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(212, 160, 23, 0.3);
 }
 
 .size-chip {
-    padding: 6px 12px;
+    padding: 6px 8px;
     border-radius: 20px;
     border: 1.5px solid var(--maroon);
     background: transparent;
     color: var(--maroon);
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
+    text-align: center;
     transition: background 0.18s, color 0.18s, border-color 0.18s;
 }
 
@@ -1262,6 +1266,9 @@ footer {
     background: var(--gold);
     color: #000;
     border-color: var(--gold);
+}
+[data-theme="dark"] .size-chip-row {
+    border-bottom-color: rgba(212, 160, 23, 0.2);
 }
 
 .selected-price {
