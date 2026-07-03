@@ -213,6 +213,36 @@ nav a.active {
     opacity: 0.82;
 }
 
+/* ── PROMO BANNER (site-wide) ── */
+.promo-banner {
+    background: var(--maroon-dark);
+    color: var(--gold);
+    text-align: center;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 7px 12px;
+    letter-spacing: 0.3px;
+    border-bottom: 1px solid rgba(212,160,23,0.25);
+}
+[data-theme="dark"] .promo-banner {
+    background: #000;
+}
+
+/* ── CART PROMO LINE ── */
+.cart-promo-line {
+    background: rgba(212,160,23,0.12);
+    color: var(--maroon);
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(212,160,23,0.25);
+}
+[data-theme="dark"] .cart-promo-line {
+    color: var(--gold);
+    background: rgba(212,160,23,0.06);
+}
+
 /* ── HERO ── */
 .hero {
     min-height: 80vh;
@@ -1271,15 +1301,39 @@ footer {
     border-bottom-color: rgba(212, 160, 23, 0.2);
 }
 
-.selected-price {
+.price-display {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+.price-original {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    text-decoration: line-through;
+}
+.price-discounted {
     font-weight: 700;
     color: var(--maroon);
     font-size: 0.95rem;
-    flex-shrink: 0;
-    min-width: 46px;
 }
-
-[data-theme="dark"] .selected-price { color: var(--gold); }
+[data-theme="dark"] .price-discounted { color: var(--gold); }
+.discount-badge {
+    background: rgba(212,160,23,0.18);
+    color: var(--maroon);
+    font-size: 0.66rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 8px;
+    border: 1px solid rgba(212,160,23,0.4);
+    white-space: nowrap;
+}
+[data-theme="dark"] .discount-badge {
+    color: var(--gold);
+    background: rgba(212,160,23,0.1);
+    border-color: rgba(212,160,23,0.3);
+}
 
 .buy-toggle {
     width: 100%;

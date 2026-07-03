@@ -137,6 +137,7 @@ function buildCartDrawer() {
             <h3>Your Cart</h3>
             <button class="cart-close" id="cart-close" aria-label="Close cart">✕</button>
         </div>
+        <div class="cart-promo-line">🚚 Free Shipping &amp; Same-Day Delivery in Kanpur</div>
         <div class="cart-items" id="cart-items"></div>
         <div class="cart-footer" id="cart-footer">
             <div class="cart-footer-top">
@@ -353,6 +354,12 @@ if (slides.length) {
     });
 }
 
+// ── DISCOUNT ──
+const DISCOUNT_PERCENT = 25;
+function discountedPrice(original) {
+    return Math.round(original * (1 - DISCOUNT_PERCENT / 100));
+}
+
 // ── LOAD PRODUCTS ──
 async function loadProducts() {
     const containers = document.querySelectorAll('#products-container');
@@ -383,11 +390,13 @@ async function loadProducts() {
             <div class="purchase-row">
                 <div class="coming-soon-badge">Available Soon on ecom platforms</div>
                     <div class="product-controls">
-                        <div class="size-chip-row" data-selected="${p.sizes[0]}" data-selected-price="${p.prices?.[p.sizes[0]] || ''}">
-                            ${p.sizes.map((s, i) => `<button type="button" class="size-chip${i === 0 ? ' active' : ''}" data-size="${s}" data-price="${p.prices?.[s] || ''}">${s}</button>`).join('')}
+                        <div class="size-chip-row" data-selected="${p.sizes[0]}" data-selected-price="${p.prices?.[p.sizes[0]] ? discountedPrice(p.prices[p.sizes[0]]) : ''}" data-selected-original="${p.prices?.[p.sizes[0]] || ''}">
+                            ${p.sizes.map((s, i) => `<button type="button" class="size-chip${i === 0 ? ' active' : ''}" data-size="${s}" data-price="${p.prices?.[s] ? discountedPrice(p.prices[s]) : ''}" data-original="${p.prices?.[s] || ''}">${s}</button>`).join('')}
                         </div>
                         <div class="add-to-cart-block">
-                            <span class="selected-price">${p.prices?.[p.sizes[0]] ? `₹${p.prices[p.sizes[0]]}` : ''}</span>
+                            <div class="price-display">
+                                ${p.prices?.[p.sizes[0]] ? `<span class="price-original">₹${p.prices[p.sizes[0]]}</span><span class="price-discounted">₹${discountedPrice(p.prices[p.sizes[0]])}</span><span class="discount-badge">25% OFF</span>` : ''}
+                            </div>
                             <div class="cart-action">
                                 <button type="button" class="btn add-to-cart-btn" data-name="${p.name}">Add to Cart</button>
                                 <div class="card-qty-stepper" hidden>
@@ -638,9 +647,14 @@ document.addEventListener('click', e => {
     chip.classList.add('active');
     row.dataset.selected = chip.dataset.size;
     row.dataset.selectedPrice = chip.dataset.price;
+    row.dataset.selectedOriginal = chip.dataset.original;
     const card = row.closest('.card');
-    const priceEl = card.querySelector('.selected-price');
-    if (priceEl) priceEl.textContent = chip.dataset.price ? `₹${chip.dataset.price}` : '';
+    const priceWrap = card.querySelector('.price-display');
+    if (priceWrap) {
+        priceWrap.innerHTML = chip.dataset.original
+            ? `<span class="price-original">₹${chip.dataset.original}</span><span class="price-discounted">₹${chip.dataset.price}</span><span class="discount-badge">25% OFF</span>`
+            : '';
+    }
     syncCardUI(card);
 });
 
