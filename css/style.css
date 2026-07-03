@@ -282,6 +282,10 @@ nav a.active {
     padding: 2.5rem 1.5rem;
 }
 
+@media (max-width: 768px) {
+    .container { padding: 1.8rem 0.9rem; }
+}
+
 .section-title {
     font-size: 1.7rem;
     color: var(--maroon);
@@ -753,6 +757,41 @@ footer {
 @media (max-width: 768px) {
     .hamburger { display: block; }
 
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+
+    .card-image { padding: 10px; }
+
+    .card-body {
+        padding: 0.75rem 0.7rem;
+        gap: 3px;
+    }
+
+    .card-body h3 { font-size: 0.92rem; }
+
+    .card-category { font-size: 0.68rem; }
+
+    .price-display {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .discount-badge {
+        font-size: 0.62rem;
+        padding: 2px 5px;
+    }
+
+    .add-to-cart-btn {
+        font-size: 0.85rem;
+        padding: 0.55rem 0.8rem;
+    }
+
+    .card-qty-stepper {
+        padding: 0.35rem 0.6rem;
+    }
+
     nav {
     display: none;
     position: absolute;
@@ -1177,11 +1216,13 @@ footer {
     align-items: center;   
     gap: 8px;
     width: 100%;
+    flex-wrap: wrap;
 }
 
 .cart-action {
     flex: 1;
     display: flex;
+    min-width: 0;
 }
 
 .cart-action .add-to-cart-btn {
