@@ -49,17 +49,29 @@ The website showcases the company's range of authentic Indian spices and blended
 
 ## Project Structure
 
-```
-.
+## 📁 Project Structure
+
+```text
+mom-masale-website/
+├── css/                 # Stylesheets
+├── js/                  # Application logic
+├── images/              # Product images, hero banners & icons
+├── data/
+│   └── products.json    # Product catalog
+│
 ├── index.html
 ├── products.html
+├── about.html
 ├── bulk-orders.html
 ├── contact.html
-├── data/
-│   └── products.json
-├── css/
-├── js/
-└── images/
+├── 404.html
+│
+├── favicon.ico
+├── robots.txt
+├── sitemap.xml
+├── site.webmanifest
+├── CNAME
+└── README.md
 ```
 
 ---
