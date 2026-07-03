@@ -86,7 +86,6 @@ python -m http.server
 
 The website is automatically deployed using **GitHub Pages**.
 
-
 Every push to the main branch triggers a new deployment.
 
 ---
