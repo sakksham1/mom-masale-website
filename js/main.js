@@ -363,7 +363,13 @@ function discountedPrice(original) {
 // ── LOAD PRODUCTS ──
 async function loadProducts() {
     const containers = document.querySelectorAll('#products-container');
-    if (!containers.length) return;
+    const homeSections = {
+        featured: { el: document.getElementById('featured-container'), wrap: document.getElementById('featured-section'), filter: p => p.featured },
+        bestsellers: { el: document.getElementById('bestsellers-container'), wrap: document.getElementById('bestsellers-section'), filter: p => p.bestseller },
+        newarrivals: { el: document.getElementById('newarrivals-container'), wrap: document.getElementById('newarrivals-section'), filter: p => p.newArrival },
+    };
+    const hasHomeSections = Object.values(homeSections).some(s => s.el);
+    if (!containers.length && !hasHomeSections) return;
 
     try {
         const data = await fetch('data/products.json').then(r => r.json());
@@ -415,9 +421,7 @@ async function loadProducts() {
 `).join('');
 
         containers.forEach(c => {
-            const isProductsPage = c.closest('.products-page') !== null;
-
-            if (isProductsPage) {
+            {
                 // ── PRODUCTS PAGE: filter bar + search ──
                 const categories = ['All', ...new Set(data.map(p => p.category))];
                 const filterBar = document.getElementById('filter-bar');
@@ -521,14 +525,21 @@ async function loadProducts() {
                 // Initial render
                 applyFilters();
                 observeCards();
-
-            } else {
-                // Homepage — featured products only
-                const featured = data.filter(p => p.featured);
-                c.innerHTML = renderCards(featured);
-                observeCards();
-}
+            }
         });
+
+        // ── HOMEPAGE HORIZONTAL SECTIONS ──
+        Object.values(homeSections).forEach(section => {
+            if (!section.el) return;
+            const items = data.filter(section.filter);
+            if (items.length === 0) {
+                if (section.wrap) section.wrap.hidden = true;
+                return;
+            }
+            if (section.wrap) section.wrap.hidden = false;
+            section.el.innerHTML = renderCards(items);
+        });
+        if (hasHomeSections) observeCards();
 
         // ── BUY DROPDOWN TOGGLE ──
         document.addEventListener('click', e => {
