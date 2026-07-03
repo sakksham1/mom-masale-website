@@ -202,6 +202,93 @@ document.addEventListener('keydown', e => {
     }
 });
 
+// ── PRODUCT DETAIL OVERLAY ──
+function buildProductOverlay() {
+    if (document.getElementById('product-overlay')) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'product-overlay';
+    overlay.id = 'product-overlay';
+
+    const modal = document.createElement('div');
+    modal.className = 'product-modal';
+    modal.id = 'product-modal';
+    modal.innerHTML = `
+        <button class="product-modal-close" id="product-modal-close" aria-label="Close product details">✕</button>
+        <div class="product-modal-body" id="product-modal-body"></div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(modal);
+
+    overlay.addEventListener('click', closeProductOverlay);
+    document.getElementById('product-modal-close').addEventListener('click', closeProductOverlay);
+}
+
+function openProductOverlay(cardEl) {
+    buildProductOverlay();
+    const body = document.getElementById('product-modal-body');
+    const front = cardEl.querySelector('.card-face-front');
+    const clone = document.createElement('div');
+    clone.className = 'card visible';
+    clone.dataset.category = cardEl.dataset.category || '';
+    clone.innerHTML = (front || cardEl).innerHTML;
+    const hint = clone.querySelector('.tap-hint');
+    if (hint) hint.remove();
+    body.innerHTML = '';
+    body.appendChild(clone);
+    syncCardUI(clone);
+
+    document.getElementById('product-overlay').classList.add('active');
+    document.getElementById('product-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('product-modal-close')?.focus();
+}
+
+function closeProductOverlay() {
+    const overlay = document.getElementById('product-overlay');
+    const modal = document.getElementById('product-modal');
+    if (overlay) overlay.classList.remove('active');
+    if (modal) modal.classList.remove('open');
+    document.body.style.overflow = '';
+    syncAllCardUI();
+}
+
+document.addEventListener('click', e => {
+    if (e.target.closest('#product-modal')) return;
+    const card = e.target.closest('.card--collapsed');
+    if (!card) return;
+    if (card.dataset.justPeeked) {
+        delete card.dataset.justPeeked;
+        return;
+    }
+    openProductOverlay(card);
+});
+
+document.addEventListener('keydown', e => {
+    const modal = document.getElementById('product-modal');
+    if (!modal || !modal.classList.contains('open')) return;
+
+    if (e.key === 'Escape') {
+        closeProductOverlay();
+        return;
+    }
+
+    if (e.key === 'Tab') {
+        const focusable = modal.querySelectorAll('button, a[href], input, [tabindex]');
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
+    }
+});
+
 function updateShippingProgress(total) {
     const wrap = document.getElementById('shipping-progress');
     const text = document.getElementById('shipping-progress-text');
@@ -375,11 +462,14 @@ async function loadProducts() {
         const data = await fetch('data/products.json').then(r => r.json());
 
         const renderCards = (items) => items.map(p => `
-    <div class="card" data-category="${p.category}">
+    <div class="card card--collapsed" data-category="${p.category}">
+      <div class="card-flip-inner">
+        <div class="card-face card-face-front">
         <div class="card-image">
             <img src="${p.image}" alt="${p.name}" loading="lazy" width="400" height="400"
                 onload="this.closest('.card-image').style.animation='none'"
                 onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(p.name)}'">
+            <span class="tap-hint">Tap for details</span>
         </div>
         <div class="card-body">
             <span class="card-category">${p.category}</span>
@@ -417,6 +507,13 @@ async function loadProducts() {
             <div class="other-size-note" hidden></div>
             </div>
         </div>
+        <div class="card-face card-face-back">
+            <img class="back-thumb" src="${p.image}" alt="${p.name}" loading="lazy">
+            <h3 class="back-name">${p.name}</h3>
+            <div class="back-cart-info"></div>
+            <span class="back-hint">Tap to edit</span>
+        </div>
+      </div>
     </div>
 `).join('');
 
@@ -666,6 +763,16 @@ function syncCardUI(card) {
     const stepper = card.querySelector('.card-qty-stepper');
     const qtyValue = card.querySelector('.card-qty-value');
 
+    const itemsInCart = cart.filter(i => i.name === name);
+    const anyInCart = itemsInCart.length > 0;
+    card.classList.toggle('card--in-cart', anyInCart);
+    const backInfo = card.querySelector('.back-cart-info');
+    if (backInfo) {
+        backInfo.innerHTML = anyInCart
+            ? `<span class="back-cart-label">In Cart</span>` + itemsInCart.map(i => `<span class="back-cart-item">${i.size} ×${i.qty}</span>`).join('')
+            : '';
+    }
+
     if (currentItem) {
         addBtn.hidden = true;
         stepper.hidden = false;
@@ -676,10 +783,10 @@ function syncCardUI(card) {
     }
 
     const note = card.querySelector('.other-size-note');
-    const otherItems = cart.filter(i => i.name === name && i.size !== selectedSize);
+    const allItems = cart.filter(i => i.name === name);
     if (note) {
-        if (otherItems.length > 0) {
-            note.textContent = `Also in cart: ${otherItems.map(i => `${i.size} ×${i.qty}`).join(', ')}`;
+        if (allItems.length > 0) {
+            note.textContent = `In Cart: ${allItems.map(i => `${i.size} ×${i.qty}`).join(', ')}`;
             note.hidden = false;
         } else {
             note.hidden = true;
@@ -958,6 +1065,39 @@ if (statNums.length) {
     document.addEventListener('touchstart', (e) => {
         const t = e.touches[0];
         burst(t.clientX, t.clientY);
+    }, { passive: true });
+})();
+
+// ── FLICK TO PEEK (in-cart cards only, mobile) ──
+(function() {
+    let startX = 0, startY = 0, startTime = 0, activeCard = null;
+    const peekTimers = new WeakMap();
+
+    document.addEventListener('touchstart', e => {
+        const card = e.target.closest('.card--collapsed.card--in-cart');
+        activeCard = card || null;
+        if (!card) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        startTime = Date.now();
+    }, { passive: true });
+
+    document.addEventListener('touchend', e => {
+        if (!activeCard) return;
+        const card = activeCard;
+        activeCard = null;
+        const touch = e.changedTouches[0];
+        const dx = touch.clientX - startX;
+        const dy = touch.clientY - startY;
+        const dt = Date.now() - startTime;
+
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 600) {
+            card.classList.add('card--peek');
+            card.dataset.justPeeked = 'true';
+            clearTimeout(peekTimers.get(card));
+            const timer = setTimeout(() => card.classList.remove('card--peek'), 2000);
+            peekTimers.set(card, timer);
+        }
     }, { passive: true });
 })();
 
