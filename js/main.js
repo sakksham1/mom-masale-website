@@ -270,7 +270,7 @@ updateShippingProgress(total);
 function buildWhatsAppMessage(cart) {
     const lines = cart.map(item => `- ${item.name} (${item.size}) x${item.qty}${item.price ? ` = ₹${item.price * item.qty}` : ''}`);
     const total = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
-    const message = `Hi, I'd like to order:\n${lines.join('\n')}${total ? `\n\nTotal: ₹${total}` : ''}\n\nPlease confirm availability & price.`;
+    const message = `Hi, I'd like to order:\n${lines.join('\n')}${total ? `\n\nTotal: ₹${total}` : ''}\n\nPlease confirm availability & order details`;
     return encodeURIComponent(message);
 }
 
@@ -423,8 +423,8 @@ async function loadProducts() {
         containers.forEach(c => {
             {
                 // ── PRODUCTS PAGE: filter bar + search ──
-                const categories = ['All', ...new Set(data.map(p => p.category))];
-                const filterBar = document.getElementById('filter-bar');
+                const categories = [...new Set(data.map(p => p.category))];
+                const allSizes = [...new Set(data.flatMap(p => p.sizes))];
                 const searchInput = document.getElementById('product-search');
                 const searchClear = document.getElementById('search-clear');
                 const noResults = document.getElementById('no-results');
@@ -432,16 +432,37 @@ async function loadProducts() {
                 const scopeHint = document.getElementById('search-scope-hint');
                 const scopeCategory = document.getElementById('scope-category');
                 const scopeReset = document.getElementById('scope-reset');
+                const filterToggle = document.getElementById('filter-toggle');
+                const filterPanel = document.getElementById('filter-panel');
+                const filterCountBadge = document.getElementById('filter-count-badge');
+                const filterClearBtn = document.getElementById('filter-clear-btn');
+                const categoryList = document.getElementById('filter-category-list');
+                const sizeList = document.getElementById('filter-size-list');
 
-                let activeCategory = 'All';
+                let selectedCategories = new Set();
+                let selectedSizes = new Set();
                 let searchTerm = '';
+
+                function updateFilterCount() {
+                    const total = selectedCategories.size + selectedSizes.size;
+                    if (filterCountBadge) {
+                        filterCountBadge.textContent = total;
+                        filterCountBadge.hidden = total === 0;
+                    }
+                    if (filterToggle) filterToggle.classList.toggle('has-filters', total > 0);
+                }
 
                 function applyFilters() {
                     let filtered = data;
 
-                    // Category filter
-                    if (activeCategory !== 'All') {
-                        filtered = filtered.filter(p => p.category === activeCategory);
+                    // Category filter (OR within group)
+                    if (selectedCategories.size > 0) {
+                        filtered = filtered.filter(p => selectedCategories.has(p.category));
+                    }
+
+                    // Size filter (OR within group) — combined with category via AND
+                    if (selectedSizes.size > 0) {
+                        filtered = filtered.filter(p => p.sizes.some(s => selectedSizes.has(s)));
                     }
 
                     // Search filter — match name, category, or alias
@@ -456,18 +477,20 @@ async function loadProducts() {
 
                     // Show a reminder whenever category filter + search are both active
                     if (scopeHint) {
-                        if (activeCategory !== 'All' && searchTerm) {
-                            scopeCategory.textContent = activeCategory;
+                        if (selectedCategories.size > 0 && searchTerm) {
+                            scopeCategory.textContent = [...selectedCategories].join(', ');
                             scopeHint.hidden = false;
                         } else {
                             scopeHint.hidden = true;
                         }
                     }
 
+                    updateFilterCount();
+
                     if (filtered.length === 0) {
                         c.innerHTML = '';
                         noResults.hidden = false;
-                        noResultsTerm.textContent = searchTerm || activeCategory;
+                        noResultsTerm.textContent = searchTerm || [...selectedCategories, ...selectedSizes].join(', ');
                     } else {
                         noResults.hidden = true;
                         c.innerHTML = renderCards(filtered);
@@ -477,28 +500,66 @@ async function loadProducts() {
 
                 if (scopeReset) {
                     scopeReset.addEventListener('click', () => {
-                        activeCategory = 'All';
-                        filterBar.querySelectorAll('.filter-btn').forEach(b => {
-                            b.classList.toggle('active', b.dataset.cat === 'All');
-                        });
+                        selectedCategories.clear();
+                        categoryList?.querySelectorAll('input').forEach(cb => cb.checked = false);
                         applyFilters();
                     });
                 }
-                // Build filter buttons
-                if (filterBar) {
-                    filterBar.innerHTML = categories.map(cat => `
-                        <button class="filter-btn ${cat === 'All' ? 'active' : ''}" data-cat="${cat}">
-                            ${cat}
-                        </button>
-                    `).join('');
 
-                    filterBar.addEventListener('click', e => {
-                        const btn = e.target.closest('.filter-btn');
-                        if (!btn) return;
-                        filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                        activeCategory = btn.dataset.cat;
+                // Build category checkboxes
+                if (categoryList) {
+                    categoryList.innerHTML = categories.map(cat => `
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="${cat}" data-group="category">
+                            <span>${cat}</span>
+                        </label>
+                    `).join('');
+                }
+
+                // Build size checkboxes
+                if (sizeList) {
+                    sizeList.innerHTML = allSizes.map(size => `
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="${size}" data-group="size">
+                            <span>${size}</span>
+                        </label>
+                    `).join('');
+                }
+
+                if (filterPanel) {
+                    filterPanel.addEventListener('change', e => {
+                        const cb = e.target.closest('input[type="checkbox"]');
+                        if (!cb) return;
+                        const targetSet = cb.dataset.group === 'category' ? selectedCategories : selectedSizes;
+                        if (cb.checked) targetSet.add(cb.value);
+                        else targetSet.delete(cb.value);
                         applyFilters();
+                    });
+                    filterPanel.addEventListener('click', e => e.stopPropagation());
+                }
+
+                if (filterClearBtn) {
+                    filterClearBtn.addEventListener('click', () => {
+                        selectedCategories.clear();
+                        selectedSizes.clear();
+                        filterPanel.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                        applyFilters();
+                    });
+                }
+
+                // Toggle dropdown open/close
+                if (filterToggle && filterPanel) {
+                    filterToggle.addEventListener('click', e => {
+                        e.stopPropagation();
+                        const isOpen = !filterPanel.hidden;
+                        filterPanel.hidden = isOpen;
+                        filterToggle.setAttribute('aria-expanded', String(!isOpen));
+                    });
+                    document.addEventListener('click', () => {
+                        if (!filterPanel.hidden) {
+                            filterPanel.hidden = true;
+                            filterToggle.setAttribute('aria-expanded', 'false');
+                        }
                     });
                 }
 

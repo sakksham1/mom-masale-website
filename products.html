@@ -71,8 +71,24 @@
             >
             <button class="search-clear" id="search-clear" aria-label="Clear search" hidden>✕</button>
         </div>
+        <div class="filter-dropdown" id="filter-dropdown">
+            <button class="filter-toggle" id="filter-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+                <span>⚙ Filters</span>
+                <span class="filter-count-badge" id="filter-count-badge" hidden>0</span>
+            </button>
+            <div class="filter-panel" id="filter-panel" hidden>
+                <div class="filter-group">
+                    <h4>Category</h4>
+                    <div class="filter-checkbox-list" id="filter-category-list"></div>
+                </div>
+                <div class="filter-group">
+                    <h4>Size</h4>
+                    <div class="filter-checkbox-list" id="filter-size-list"></div>
+                </div>
+                <button type="button" class="filter-clear-btn" id="filter-clear-btn">Clear All Filters</button>
+            </div>
+        </div>
     </div>
-    <div id="filter-bar" class="filter-bar"></div>
     <div id="search-scope-hint" class="search-scope-hint" hidden>
         🔍 Searching within <strong id="scope-category"></strong> only — <button id="scope-reset" class="scope-reset-btn" type="button">search all categories instead</button>
     </div>
