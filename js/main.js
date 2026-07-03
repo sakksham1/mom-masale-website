@@ -120,6 +120,8 @@ function showCartToast(message) {
     toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 1600);
 }
 // ── CART DRAWER ──
+const FREE_SHIPPING_THRESHOLD = 499; // change this if the real number is different
+
 function buildCartDrawer() {
     if (document.getElementById('cart-drawer')) return;
 
@@ -137,7 +139,13 @@ function buildCartDrawer() {
         </div>
         <div class="cart-items" id="cart-items"></div>
         <div class="cart-footer" id="cart-footer">
-         <div class="cart-total" id="cart-total"></div>
+            <div class="cart-footer-top">
+                <div class="shipping-progress" id="shipping-progress" hidden>
+                    <div class="shipping-progress-text" id="shipping-progress-text"></div>
+                    <div class="shipping-progress-bar"><div class="shipping-progress-fill" id="shipping-progress-fill"></div></div>
+                </div>
+                <div class="cart-total" id="cart-total"></div>
+            </div>
             <button class="btn btn-outline cart-clear-btn" id="cart-clear-btn">Clear Cart</button>
             <button class="btn cart-checkout-btn" id="cart-checkout-btn">Checkout via WhatsApp</button>
         </div>
@@ -193,12 +201,30 @@ document.addEventListener('keydown', e => {
     }
 });
 
+function updateShippingProgress(total) {
+    const wrap = document.getElementById('shipping-progress');
+    const text = document.getElementById('shipping-progress-text');
+    const fill = document.getElementById('shipping-progress-fill');
+    if (!wrap || !text || !fill) return;
+    const remaining = FREE_SHIPPING_THRESHOLD - total;
+    const pct = Math.min((total / FREE_SHIPPING_THRESHOLD) * 100, 100);
+    fill.style.width = `${pct}%`;
+    if (remaining <= 0) {
+        text.textContent = "✅ You've unlocked free shipping!";
+        wrap.classList.add('unlocked');
+    } else {
+        text.textContent = `🚚 Add ₹${remaining} more for free shipping`;
+        wrap.classList.remove('unlocked');
+    }
+}
+
 function renderCartItems() {
     const container = document.getElementById('cart-items');
     if (!container) return;
     const cart = getCart();
 
     const footer = document.getElementById('cart-footer');
+    const shippingWrap = document.getElementById('shipping-progress');
     if (cart.length === 0) {
         container.innerHTML = `
             <div class="cart-empty">
@@ -212,9 +238,11 @@ function renderCartItems() {
             </div>
         `;
         if (footer) footer.hidden = true;
+        if (shippingWrap) shippingWrap.hidden = true;
         return;
     }
     if (footer) footer.hidden = false;
+    if (shippingWrap) shippingWrap.hidden = false;
 
     container.innerHTML = cart.map((item, i) => `
         <div class="cart-item">
@@ -235,6 +263,7 @@ function renderCartItems() {
     const total = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
 const totalEl = document.getElementById('cart-total');
 if (totalEl) totalEl.textContent = total ? `Total: ₹${total}` : '';
+updateShippingProgress(total);
 }
 
 function buildWhatsAppMessage(cart) {
