@@ -58,7 +58,8 @@
 </div>
 
 <div class="container products-page">
-    <div class="search-filter-bar">
+    <div class="search-filter-sentinel" id="search-filter-sentinel"></div>
+    <div class="search-filter-bar" id="search-filter-bar">
         <div class="search-wrap">
             <span class="search-icon">🔍</span>
             <input
@@ -73,9 +74,11 @@
         </div>
         <div class="filter-dropdown" id="filter-dropdown">
             <button class="filter-toggle" id="filter-toggle" type="button" aria-haspopup="true" aria-expanded="false">
-                <span>⚙ Filters</span>
+                <span class="filter-toggle-icon">⚙</span>
+                <span class="filter-toggle-label">Filters</span>
                 <span class="filter-count-badge" id="filter-count-badge" hidden>0</span>
             </button>
+            <div class="filter-overlay" id="filter-overlay"></div>
             <div class="filter-panel" id="filter-panel" hidden>
                 <div class="filter-group">
                     <h4>Category</h4>

@@ -521,7 +521,16 @@ async function loadProducts() {
             {
                 // ── PRODUCTS PAGE: filter bar + search ──
                 const categories = [...new Set(data.map(p => p.category))];
-                const allSizes = [...new Set(data.flatMap(p => p.sizes))];
+                function sizeSortValue(s) {
+                    const match = s.match(/^([\d.]+)(rs|kg|g)$/i);
+                    if (!match) return Number.MAX_SAFE_INTEGER;
+                    const num = parseFloat(match[1]);
+                    const unit = match[2].toLowerCase();
+                    if (unit === 'kg') return num * 1000;
+                    if (unit === 'g') return num;
+                    return num * 0.001; // rupee sachets sort first (smallest)
+                }
+                const allSizes = [...new Set(data.flatMap(p => p.sizes))].sort((a, b) => sizeSortValue(a) - sizeSortValue(b));
                 const searchInput = document.getElementById('product-search');
                 const searchClear = document.getElementById('search-clear');
                 const noResults = document.getElementById('no-results');
@@ -927,6 +936,27 @@ if (backToTop) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 }
+
+// ── STICKY SEARCH/FILTER BAR (products page) ──
+(function() {
+    const sfBar = document.getElementById('search-filter-bar');
+    const sfSentinel = document.getElementById('search-filter-sentinel');
+    if (!sfBar || !sfSentinel) return;
+    const headerEl = document.querySelector('header');
+
+    function setStickyTop() {
+        sfBar.style.top = (headerEl ? headerEl.offsetHeight : 0) + 'px';
+    }
+    setStickyTop();
+    window.addEventListener('resize', setStickyTop);
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            sfBar.classList.toggle('is-stuck', !entry.isIntersecting);
+        });
+    }, { threshold: 0 });
+    observer.observe(sfSentinel);
+})();
 
 // ── CARD ENTRANCE ANIMATION ──
 function observeCards() {
