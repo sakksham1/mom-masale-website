@@ -732,6 +732,41 @@ async function loadProducts() {
 
 loadProducts();
 
+// ── LOAD RECIPES (recipes.html) ──
+async function loadRecipes() {
+    const container = document.getElementById('recipes-container');
+    if (!container) return;
+
+    try {
+        const recipes = await fetch('data/recipes.json').then(r => r.json());
+
+        container.innerHTML = recipes.map(r => `
+            <a class="card recipe-card" href="recipes/${r.slug}.html">
+                <div class="card-image">
+                    <img src="${r.image}" alt="${r.imageAlt || r.title}" loading="lazy" width="400" height="400"
+                        onload="this.closest('.card-image').style.animation='none'"
+                        onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(r.title)}'">
+                </div>
+                <div class="card-body">
+                    <span class="card-category">${r.category}</span>
+                    <h3>${r.title}</h3>
+                    <p class="recipe-desc">${r.description}</p>
+                    <div class="recipe-meta">
+                        <span>⏱ Prep ${r.prepTime.replace(/PT|M/g, '')} min · Cook ${r.cookTime.replace(/PT|M/g, '')} min</span>
+                        <span>🍽 Serves ${r.servings}</span>
+                    </div>
+                </div>
+            </a>
+        `).join('');
+
+        observeCards();
+    } catch (e) {
+        container.innerHTML = '<p style="color:#888;padding:1rem">Could not load recipes.</p>';
+    }
+}
+
+loadRecipes();
+
 // ── CART ──
 function getCart() {
     return JSON.parse(localStorage.getItem('cart') || '[]');

@@ -1,13 +1,15 @@
-name: Generate Product Pages
+name: Generate Site (Products + Recipes)
 
 on:
   push:
     branches: [main]
     paths:
       - 'data/products.json'
-      - 'scripts/build-products.js'
+      - 'data/recipes.json'
+      - 'scripts/build-site.js'
       - 'scripts/product-template.html'
-  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab if needed
+      - 'scripts/recipe-template.html'
+  workflow_dispatch: {}
 
 permissions:
   contents: write
@@ -25,16 +27,16 @@ jobs:
           node-version: '20'
 
       - name: Run generator
-        run: node scripts/build-products.js
+        run: node scripts/build-site.js
 
       - name: Commit generated pages if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add products/ sitemap.xml
+          git add products/ recipes/ sitemap.xml
           if git diff --cached --quiet; then
             echo "No changes to commit — output already up to date."
           else
-            git commit -m "chore: regenerate product pages and sitemap [skip ci]"
+            git commit -m "chore: regenerate product/recipe pages and sitemap [skip ci]"
             git push
           fi
