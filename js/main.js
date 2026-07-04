@@ -428,7 +428,7 @@ if (slides.length) {
 
     let timer = setInterval(() => {
         goToSlide((current + 1) % slides.length);
-    }, 3000);
+    }, 5000);
 
     dots.forEach(dot => {
         dot.addEventListener('click', () => {
@@ -436,7 +436,7 @@ if (slides.length) {
             goToSlide(parseInt(dot.dataset.index));
             timer = setInterval(() => {
                 goToSlide((current + 1) % slides.length);
-            }, 3000);
+            }, 5000);
         });
     });
 }

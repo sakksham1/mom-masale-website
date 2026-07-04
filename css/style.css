@@ -1234,8 +1234,6 @@ footer {
 .slide {
     position: absolute;
     inset: 0;
-    background-size: cover;
-    background-position: center;
     opacity: 0;
     transition: opacity 0.8s ease-in-out;
     display: flex;
@@ -1243,9 +1241,25 @@ footer {
     justify-content: center;
 }
 
+.slide-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1);
+}
+
+.slide.active .slide-bg {
+    animation: heroKenBurns 5s ease-in-out forwards;
+}
+
+@keyframes heroKenBurns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.08); }
+}
+
 /* Dark overlay on each slide */
-.slide::before {
-    content: '';
+.slide-overlay {
     position: absolute;
     inset: 0;
     background: rgba(0,0,0,0.50);
@@ -1253,6 +1267,78 @@ footer {
 
 .slide.active {
     opacity: 1;
+}
+
+.hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.hero-stat-strip {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 30px;
+    padding: 10px 8px;
+}
+
+.hero-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    color: var(--white);
+    padding: 0 14px;
+    border-right: 1px solid rgba(255,255,255,0.25);
+}
+.hero-stat:last-child { border-right: none; }
+
+.hero-stat-num {
+    font-weight: 800;
+    color: var(--gold);
+    font-size: 1rem;
+}
+
+.hero-stat-label {
+    font-size: 0.78rem;
+    opacity: 0.85;
+}
+
+.hero-wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    z-index: 6;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .hero-stat-strip {
+        bottom: 90px;
+        gap: 2x;
+        padding: 8px 4px;
+        
+        justify-content: center;
+        max-width: 92vw;
+    }
+    .hero-stat { padding: 0 8px; }
+    .hero-stat-num { font-size: 0.85rem; }
+    .hero-stat-label { font-size: 0.68rem; }
+    .hero-wave { height: 45px; }
 }
 
 .slide-content {

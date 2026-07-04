@@ -61,41 +61,67 @@
 
 <!-- HERO SLIDER -->
 <section class="hero-slider">
+    <canvas class="hero-canvas" aria-hidden="true"></canvas>
     <div class="slides">
-        <div class="slide active" style="background-image: url('images/hero/hero1.jpg')">
+        <div class="slide active">
+            <div class="slide-bg" style="background-image: url('images/hero/hero1.jpg')"></div>
+            <div class="slide-overlay"></div>
             <div class="slide-content">
                 <h2>Traditional Indian Spices</h2>
                 <p>Authentic flavours, handcrafted for every kitchen.</p>
                 <a class="btn" href="products.html">Explore Products</a>
             </div>
         </div>
-        <div class="slide" style="background-image: url('images/hero/hero2.jpg')">
+        <div class="slide">
+            <div class="slide-bg" style="background-image: url('images/hero/hero2.jpg')"></div>
+            <div class="slide-overlay"></div>
             <div class="slide-content">
                 <h2>Pure. Natural. Flavourful.</h2>
                 <p>No additives, no shortcuts — just real spices.</p>
                 <a class="btn" href="products.html">Explore Products</a>
             </div>
         </div>
-        <div class="slide" style="background-image: url('images/hero/hero3.jpg')">
+        <div class="slide">
+            <div class="slide-bg" style="background-image: url('images/hero/hero3.jpg')"></div>
+            <div class="slide-overlay"></div>
             <div class="slide-content">
                 <h2>Blended with Tradition</h2>
                 <p>Recipes passed down through generations.</p>
                 <a class="btn" href="products.html">Explore Products</a>
             </div>
         </div>
-        <div class="slide" style="background-image: url('images/hero/hero4.jpg')">
+        <div class="slide">
+            <div class="slide-bg" style="background-image: url('images/hero/hero4.jpg')"></div>
+            <div class="slide-overlay"></div>
             <div class="slide-content">
                 <h2>Made in Unnao, UP</h2>
                 <p>Proudly local, loved across kitchens.</p>
                 <a class="btn" href="bulk-orders.html">Bulk Orders</a>
             </div>
         </div>
-        <div class="slide" style="background-image: url('images/hero/hero5.jpg')">
+        <div class="slide">
+            <div class="slide-bg" style="background-image: url('images/hero/hero5.jpg')"></div>
+            <div class="slide-overlay"></div>
             <div class="slide-content">
                 <h2>For Every Kitchen</h2>
                 <p>From homes to hotels — quality you can taste.</p>
                 <a class="btn" href="contact.html">Get in Touch</a>
             </div>
+        </div>
+    </div>
+
+    <div class="hero-stat-strip">
+        <div class="hero-stat">
+            <span class="hero-stat-num">30+</span>
+            <span class="hero-stat-label">Products</span>
+        </div>
+        <div class="hero-stat">
+            <span class="hero-stat-num">100%</span>
+            <span class="hero-stat-label">Natural</span>
+        </div>
+        <div class="hero-stat">
+            <span class="hero-stat-num">FSSAI</span>
+            <span class="hero-stat-label">Certified</span>
         </div>
     </div>
 
@@ -107,6 +133,16 @@
         <span class="dot" data-index="3"></span>
         <span class="dot" data-index="4"></span>
     </div>
+
+    <svg class="hero-wave" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+            <linearGradient id="heroWaveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#7b1120"/>
+                <stop offset="100%" stop-color="#d4a017"/>
+            </linearGradient>
+        </defs>
+        <path fill="url(#heroWaveGradient)" d="M0,45 C240,100 480,0 720,45 C960,90 1200,10 1440,55 L1440,100 L0,100 Z"/>
+    </svg>
 </section>
 <div class="marquee-strip" aria-hidden="true">
     <div class="marquee-track">
@@ -291,5 +327,41 @@
     </svg>
 </button>
 <script src="js/main.js" defer></script>
+<script>
+window.addEventListener('load', function() {
+    const canvas = document.querySelector('.hero-canvas');
+    if (!canvas) return;
+    const banner = canvas.parentElement;
+    const dpr = window.devicePixelRatio || 1;
+    const W = banner.offsetWidth;
+    const H = banner.offsetHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const particles = Array.from({length: 200}, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 0.9 + 0.2,
+        opacity: Math.random() * 0.4 + 0.1,
+        speed: Math.random() * 0.4 + 0.1,
+        drift: (Math.random() - 0.5) * 0.4
+    }));
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(212,160,23,${p.opacity})`;
+            ctx.fill();
+            p.y -= p.speed;
+            p.x += p.drift;
+            if (p.y < -5) { p.y = H + 5; p.x = Math.random() * W; }
+        });
+        requestAnimationFrame(draw);
+    }
+    draw();
+});
+</script>
 </body>
 </html>
