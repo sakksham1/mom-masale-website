@@ -309,11 +309,14 @@ nav a.active {
 }
 .hscroll-track {
     display: flex;
+    align-items: flex-start;
     gap: 1.2rem;
     overflow-x: auto;
+    overflow-y: hidden;
     scroll-snap-type: x mandatory;
     padding-bottom: 0.6rem;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     scrollbar-width: thin;
     scrollbar-color: var(--gold) transparent;
 }
