@@ -944,6 +944,42 @@ function observeCards() {
     document.querySelectorAll('.card').forEach(card => observer.observe(card));
     syncAllCardUI();
 }
+
+// ── WHY CHOOSE US FLIP CARDS ──
+const WHY_FUN_FACTS = [
+    "Turmeric contains curcumin, used in Ayurveda for over 4,000 years.",
+    "Black pepper was once so valuable it was called \"black gold\" and used as currency.",
+    "Cardamom is the world's third most expensive spice by weight, after saffron and vanilla.",
+    "Chilli heat comes from capsaicin, which also triggers your brain's endorphin release.",
+    "\"Garam masala\" means \"hot mixture\" — but it refers to warming spices, not fiery heat.",
+    "Cumin seeds have been found in ancient Egyptian tombs dating back thousands of years.",
+    "A single kilogram of saffron needs around 150,000 hand-picked flowers.",
+    "Cloves were once worth more than gold along ancient spice trade routes.",
+    "Coriander is one of the oldest spices on record, used in cooking for over 5,000 years.",
+    "India grows and exports roughly 75% of the world's spices — earning it the name \"Land of Spices.\""
+];
+
+function setRandomWhyFact(card) {
+    const factEl = card.querySelector('.why-fact-text');
+    if (!factEl) return;
+    const fact = WHY_FUN_FACTS[Math.floor(Math.random() * WHY_FUN_FACTS.length)];
+    factEl.textContent = fact;
+}
+
+document.querySelectorAll('.why-card').forEach(card => {
+    card.addEventListener('mouseenter', () => {
+        if (window.matchMedia('(hover: hover)').matches) setRandomWhyFact(card);
+    });
+
+    card.addEventListener('click', () => {
+        if (!window.matchMedia('(pointer: coarse)').matches) return;
+        if (card.classList.contains('why-flipped')) return;
+        setRandomWhyFact(card);
+        card.classList.add('why-flipped');
+        setTimeout(() => card.classList.remove('why-flipped'), 5000);
+    });
+});
+
 // ── STAT COUNTER ANIMATION ──
 const statNums = document.querySelectorAll('.stat-num');
 

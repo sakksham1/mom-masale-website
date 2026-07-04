@@ -2617,6 +2617,30 @@ footer {
     gap: 1.4rem;
 }
 .why-card {
+    perspective: 1200px;
+    min-height: 190px;
+}
+.why-flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 190px;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+}
+.why-card.why-flipped .why-flip-inner {
+    transform: rotateY(180deg);
+}
+@media (hover: hover) {
+    .why-card:hover .why-flip-inner {
+        transform: rotateY(180deg);
+    }
+}
+.why-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     background: var(--card-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -2625,13 +2649,36 @@ footer {
     padding: 1.6rem 1.2rem;
     text-align: center;
     box-shadow: var(--shadow);
-    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
-.why-card:hover { transform: translateY(-4px); }
+.why-face-back {
+    transform: rotateY(180deg);
+    background: var(--maroon);
+    color: var(--white);
+    gap: 8px;
+}
+[data-theme="dark"] .why-face-back {
+    background: var(--maroon-dark);
+}
 .why-icon { font-size: 2.2rem; margin-bottom: 10px; }
-.why-card h3 { color: var(--maroon); font-size: 1.05rem; margin-bottom: 6px; }
-[data-theme="dark"] .why-card h3 { color: var(--gold); }
-.why-card p { color: var(--text-light); font-size: 0.9rem; }
+.why-face-front h3 { color: var(--maroon); font-size: 1.05rem; margin-bottom: 6px; }
+[data-theme="dark"] .why-face-front h3 { color: var(--gold); }
+.why-face-front p { color: var(--text-light); font-size: 0.9rem; }
+.why-fact-label {
+    color: var(--gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    letter-spacing: 0.5px;
+}
+.why-fact-text {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    opacity: 0.95;
+}
 
 /* ── TESTIMONIALS ── */
 .testimonial-section { padding: 1rem 0 2rem; }
