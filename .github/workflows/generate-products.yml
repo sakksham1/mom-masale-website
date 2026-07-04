@@ -1,0 +1,40 @@
+name: Generate Product Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/products.json'
+      - 'scripts/build-products.js'
+      - 'scripts/product-template.html'
+  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab if needed
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run generator
+        run: node scripts/build-products.js
+
+      - name: Commit generated pages if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add products/ sitemap.xml
+          if git diff --cached --quiet; then
+            echo "No changes to commit — output already up to date."
+          else
+            git commit -m "chore: regenerate product pages and sitemap [skip ci]"
+            git push
+          fi

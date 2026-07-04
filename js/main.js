@@ -505,6 +505,7 @@ async function loadProducts() {
                     </div>
                 </div>
             <div class="other-size-note" hidden></div>
+            ${p.slug ? `<a class="product-detail-link" href="products/${p.slug}.html">View Full Details →</a>` : ''}
             </div>
         </div>
         <div class="card-face card-face-back">

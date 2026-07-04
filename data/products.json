@@ -25,7 +25,39 @@
     "bestseller": true,
     "aliases": [
       "haldi"
-    ]
+    ],
+    "slug": "turmeric-powder",
+    "imageAlt": "Mom Masale Turmeric Powder retail pack",
+    "featured": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Turmeric Powder Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality turmeric powder from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality turmeric powder prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Turmeric Powder is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "turmeric powder",
+        "haldi",
+        "ground spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Turmeric Powder?",
+        "answer": "Turmeric Powder is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Turmeric Powder?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Red Chilli Powder",
@@ -54,7 +86,40 @@
     "aliases": [
       "lal mirch",
       "mirchi"
-    ]
+    ],
+    "slug": "red-chilli-powder",
+    "imageAlt": "Mom Masale Red Chilli Powder retail pack",
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Red Chilli Powder Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality red chilli powder from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality red chilli powder prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Red Chilli Powder is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "red chilli powder",
+        "lal mirch",
+        "mirchi",
+        "ground spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Red Chilli Powder?",
+        "answer": "Red Chilli Powder is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Red Chilli Powder?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Coriander Powder",
@@ -82,7 +147,41 @@
     "aliases": [
       "dhania",
       "dhaniya"
-    ]
+    ],
+    "slug": "coriander-powder",
+    "imageAlt": "Mom Masale Coriander Powder retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Coriander Powder Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality coriander powder from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality coriander powder prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Coriander Powder is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "coriander powder",
+        "dhania",
+        "dhaniya",
+        "ground spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Coriander Powder?",
+        "answer": "Coriander Powder is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Coriander Powder?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Kasuri Methi",
@@ -101,7 +200,40 @@
     "prices": {
       "50g": 40,
       "100g": 75
-    }
+    },
+    "slug": "kasuri-methi",
+    "imageAlt": "Mom Masale Kasuri Methi retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Kasuri Methi Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality kasuri methi from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality kasuri methi prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Kasuri Methi is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "kasuri methi",
+        "kasoori",
+        "ground spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Kasuri Methi?",
+        "answer": "Kasuri Methi is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Kasuri Methi?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Sabzi King Masala",
@@ -127,7 +259,41 @@
       "50g": 35,
       "100g": 65,
       "200g": 110
-    }
+    },
+    "slug": "sabzi-king-masala",
+    "imageAlt": "Mom Masale Sabzi King Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Sabzi King Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality sabzi king masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality sabzi king masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Sabzi King Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "sabzi king masala",
+        "sabji",
+        "sabji king",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Sabzi King Masala?",
+        "answer": "Sabzi King Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Sabzi King Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Amchur Powder",
@@ -155,7 +321,41 @@
       "200g": 79,
       "500g": 180,
       "1kg": 350
-    }
+    },
+    "slug": "amchur-powder",
+    "imageAlt": "Mom Masale Amchur Powder retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Amchur Powder Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality amchur powder from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality amchur powder prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Amchur Powder is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "amchur powder",
+        "aamchur",
+        "dry mango",
+        "ground spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Amchur Powder?",
+        "answer": "Amchur Powder is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Amchur Powder?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Biryani Masala",
@@ -179,7 +379,39 @@
       "50g": 63,
       "100g": 95,
       "200g": 205
-    }
+    },
+    "slug": "biryani-masala",
+    "imageAlt": "Mom Masale Biryani Masala retail pack",
+    "featured": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Biryani Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality biryani masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality biryani masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Biryani Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "biryani masala",
+        "biriyani",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Biryani Masala?",
+        "answer": "Biryani Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Biryani Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Chai Masala",
@@ -206,7 +438,40 @@
       "50g": 50,
       "100g": 100,
       "200g": 200
-    }
+    },
+    "slug": "chai-masala",
+    "imageAlt": "Mom Masale Chai Masala retail pack",
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Chai Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality chai masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality chai masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Chai Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "chai masala",
+        "chay",
+        "chaa",
+        "tea",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Chai Masala?",
+        "answer": "Chai Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Chai Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Chaat Masala",
@@ -230,7 +495,39 @@
       "50g": 35,
       "100g": 65,
       "200g": 110
-    }
+    },
+    "slug": "chaat-masala",
+    "imageAlt": "Mom Masale Chaat Masala retail pack",
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Chaat Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality chaat masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality chaat masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Chaat Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "chaat masala",
+        "chat",
+        "seasoning",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Chaat Masala?",
+        "answer": "Chaat Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Chaat Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Chicken Masala",
@@ -250,7 +547,39 @@
       "50g": 45,
       "100g": 58,
       "200g": 180
-    }
+    },
+    "slug": "chicken-masala",
+    "imageAlt": "Mom Masale Chicken Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Chicken Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality chicken masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality chicken masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Chicken Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "chicken masala",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Chicken Masala?",
+        "answer": "Chicken Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Chicken Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Chhola Masala",
@@ -277,7 +606,42 @@
       "50g": 55,
       "100g": 82,
       "200g": 119
-    }
+    },
+    "slug": "chhola-masala",
+    "imageAlt": "Mom Masale Chhola Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Chhola Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality chhola masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality chhola masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Chhola Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "chhola masala",
+        "chola",
+        "chana",
+        "chole",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Chhola Masala?",
+        "answer": "Chhola Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Chhola Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Garam Masala",
@@ -303,7 +667,39 @@
       "200g": 170,
       "500g": 340,
       "1kg": 660
-    }
+    },
+    "slug": "garam-masala",
+    "imageAlt": "Mom Masale Garam Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Garam Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality garam masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality garam masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Garam Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "garam masala",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Garam Masala?",
+        "answer": "Garam Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Garam Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Jaljeera Masala",
@@ -324,7 +720,38 @@
       "50g": 28,
       "100g": 53,
       "250g": 148
-    }
+    },
+    "slug": "jaljeera-masala",
+    "imageAlt": "Mom Masale Jaljeera Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "seo": {
+      "title": "Buy Jaljeera Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality jaljeera masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality jaljeera masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Jaljeera Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "jaljeera masala",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Jaljeera Masala?",
+        "answer": "Jaljeera Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Jaljeera Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Kuch Bhi Masala",
@@ -341,7 +768,38 @@
     "prices": {
       "10rs": 10,
       "200g": 120
-    }
+    },
+    "slug": "kuch-bhi-masala",
+    "imageAlt": "Mom Masale Kuch Bhi Masala retail pack",
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Kuch Bhi Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality kuch bhi masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality kuch bhi masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Kuch Bhi Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "kuch bhi masala",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Kuch Bhi Masala?",
+        "answer": "Kuch Bhi Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Kuch Bhi Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Matar Paneer Masala",
@@ -361,7 +819,39 @@
       "50g": 51,
       "100g": 95,
       "200g": 110
-    }
+    },
+    "slug": "matar-paneer-masala",
+    "imageAlt": "Mom Masale Matar Paneer Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Matar Paneer Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality matar paneer masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality matar paneer masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Matar Paneer Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "matar paneer masala",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Matar Paneer Masala?",
+        "answer": "Matar Paneer Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Matar Paneer Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Meat Masala",
@@ -387,7 +877,39 @@
       "50g": 55,
       "100g": 82,
       "200g": 209
-    }
+    },
+    "slug": "meat-masala",
+    "imageAlt": "Mom Masale Meat Masala retail pack",
+    "featured": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Meat Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality meat masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality meat masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Meat Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "meat masala",
+        "mutton",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Meat Masala?",
+        "answer": "Meat Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Meat Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Pav Bhaji Masala",
@@ -411,7 +933,39 @@
       "50g": 41,
       "100g": 80,
       "200g": 105
-    }
+    },
+    "slug": "pav-bhaji-masala",
+    "imageAlt": "Mom Masale Pav Bhaji Masala retail pack",
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Pav Bhaji Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality pav bhaji masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality pav bhaji masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Pav Bhaji Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "pav bhaji masala",
+        "pao bhaji",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Pav Bhaji Masala?",
+        "answer": "Pav Bhaji Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Pav Bhaji Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Raita Masala",
@@ -432,7 +986,38 @@
       "50g": 40,
       "100g": 70,
       "200g": 130
-    }
+    },
+    "slug": "raita-masala",
+    "imageAlt": "Mom Masale Raita Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "seo": {
+      "title": "Buy Raita Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality raita masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality raita masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Raita Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "raita masala",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Raita Masala?",
+        "answer": "Raita Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Raita Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Sambhar Masala",
@@ -453,7 +1038,38 @@
       "50g": 45,
       "100g": 72,
       "200g": 115
-    }
+    },
+    "slug": "sambhar-masala",
+    "imageAlt": "Mom Masale Sambhar Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "seo": {
+      "title": "Buy Sambhar Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality sambhar masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality sambhar masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Sambhar Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "sambhar masala",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Sambhar Masala?",
+        "answer": "Sambhar Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Sambhar Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Shahi Paneer Masala",
@@ -477,7 +1093,39 @@
       "50g": 63,
       "100g": 115,
       "200g": 210
-    }
+    },
+    "slug": "shahi-paneer-masala",
+    "imageAlt": "Mom Masale Shahi Paneer Masala retail pack",
+    "featured": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Shahi Paneer Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality shahi paneer masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality shahi paneer masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Shahi Paneer Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "shahi paneer masala",
+        "shaahi",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Shahi Paneer Masala?",
+        "answer": "Shahi Paneer Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Shahi Paneer Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Fruit & Salad Masala",
@@ -494,7 +1142,38 @@
     "prices": {
       "100g": 44,
       "200g": 85
-    }
+    },
+    "slug": "fruit-and-salad-masala",
+    "imageAlt": "Mom Masale Fruit & Salad Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "seo": {
+      "title": "Buy Fruit & Salad Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality fruit & salad masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality fruit & salad masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Fruit & Salad Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "fruit & salad masala",
+        "seasoning",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Fruit & Salad Masala?",
+        "answer": "Fruit & Salad Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Fruit & Salad Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Kachauri Masala",
@@ -517,7 +1196,40 @@
       "50g": 36,
       "100g": 69,
       "200g": 110
-    }
+    },
+    "slug": "kachauri-masala",
+    "imageAlt": "Mom Masale Kachauri Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "seo": {
+      "title": "Buy Kachauri Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality kachauri masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality kachauri masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Kachauri Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "kachauri masala",
+        "kachaudi",
+        "kachodi",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Kachauri Masala?",
+        "answer": "Kachauri Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Kachauri Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Kalonji Bharwa Masala",
@@ -539,7 +1251,41 @@
       "50g": 63,
       "100g": 97,
       "200g": 175
-    }
+    },
+    "slug": "kalonji-bharwa-masala",
+    "imageAlt": "Mom Masale Kalonji Bharwa Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Kalonji Bharwa Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality kalonji bharwa masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality kalonji bharwa masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Kalonji Bharwa Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "kalonji bharwa masala",
+        "kalaunji",
+        "bharva",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Kalonji Bharwa Masala?",
+        "answer": "Kalonji Bharwa Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Kalonji Bharwa Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Shahi Thandai",
@@ -555,7 +1301,39 @@
     "prices": {
       "100g": 110,
       "250g": 260
-    }
+    },
+    "slug": "shahi-thandai",
+    "imageAlt": "Mom Masale Shahi Thandai retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Shahi Thandai Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality shahi thandai from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality shahi thandai prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Shahi Thandai is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "shahi thandai",
+        "special mix",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Shahi Thandai?",
+        "answer": "Shahi Thandai is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Shahi Thandai?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Gulab Jamun Mix",
@@ -569,7 +1347,39 @@
     "meesho": "#",
     "prices": {
       "250g": 95
-    }
+    },
+    "slug": "gulab-jamun-mix",
+    "imageAlt": "Mom Masale Gulab Jamun Mix retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Gulab Jamun Mix Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality gulab jamun mix from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality gulab jamun mix prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Gulab Jamun Mix is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "gulab jamun mix",
+        "special mix",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Gulab Jamun Mix?",
+        "answer": "Gulab Jamun Mix is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Gulab Jamun Mix?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Tawa Masala",
@@ -583,7 +1393,39 @@
     "meesho": "#",
     "prices": {
       "200g": 170
-    }
+    },
+    "slug": "tawa-masala",
+    "imageAlt": "Mom Masale Tawa Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Tawa Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality tawa masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality tawa masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Tawa Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "tawa masala",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Tawa Masala?",
+        "answer": "Tawa Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Tawa Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Dam Aloo Masala",
@@ -599,7 +1441,39 @@
     "prices": {
       "50g": 51,
       "100g": 98
-    }
+    },
+    "slug": "dam-aloo-masala",
+    "imageAlt": "Mom Masale Dam Aloo Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Dam Aloo Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality dam aloo masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality dam aloo masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Dam Aloo Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "dam aloo masala",
+        "blended spices",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Dam Aloo Masala?",
+        "answer": "Dam Aloo Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Dam Aloo Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   },
   {
     "name": "Dahi Bada Masala",
@@ -613,6 +1487,38 @@
     "meesho": "#",
     "prices": {
       "200g": 125
-    }
+    },
+    "slug": "dahi-bada-masala",
+    "imageAlt": "Mom Masale Dahi Bada Masala retail pack",
+    "featured": false,
+    "bestseller": false,
+    "newArrival": false,
+    "seo": {
+      "title": "Buy Dahi Bada Masala Online | Premium Quality | Mom Masale",
+      "metaDescription": "Buy premium quality dahi bada masala from Mom Masale. Hygienically packed, rich in aroma and flavour, ideal for authentic Indian cooking.",
+      "shortDescription": "Premium quality dahi bada masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
+      "longDescription": "Mom Masale Dahi Bada Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.",
+      "keywords": [
+        "dahi bada masala",
+        "special mix",
+        "indian spices",
+        "mom masale"
+      ]
+    },
+    "faq": [
+      {
+        "question": "What dishes can I prepare with Dahi Bada Masala?",
+        "answer": "Dahi Bada Masala is suitable for a variety of Indian recipes depending on your preference and cooking style."
+      },
+      {
+        "question": "How should I store Dahi Bada Masala?",
+        "answer": "Store in an airtight container away from moisture, heat and direct sunlight to retain freshness and aroma."
+      },
+      {
+        "question": "Does this product contain artificial additives?",
+        "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
+      }
+    ],
+    "relatedProducts": []
   }
 ]

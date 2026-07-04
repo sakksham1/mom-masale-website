@@ -2937,3 +2937,104 @@ footer {
     .value-art { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
     .value-icon svg { width: 64px; height: 64px; }
 }
+
+/* ── PRODUCT DETAIL PAGE: FAQ ── */
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.faq-item {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.3rem;
+}
+.faq-question {
+    color: var(--maroon);
+    font-size: 1rem;
+    margin-bottom: 6px;
+}
+[data-theme="dark"] .faq-question { color: var(--gold); }
+.faq-answer {
+    color: var(--text-light);
+    font-size: 0.93rem;
+}
+
+/* ── PRODUCT DETAIL PAGE: RELATED PRODUCTS ── */
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+}
+.related-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.related-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(123, 17, 32, 0.12);
+}
+.related-card img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+}
+.related-card span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--brown);
+    text-align: center;
+}
+[data-theme="dark"] .related-card span { color: var(--text); }
+
+/* ── "VIEW FULL DETAILS" LINK (modal only — hidden on collapsed cards) ── */
+.card--collapsed .product-detail-link {
+    display: none;
+}
+.product-detail-link {
+    display: inline-block;
+    text-align: center;
+    margin: 0 1.1rem 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--maroon);
+    text-decoration: underline;
+}
+[data-theme="dark"] .product-detail-link { color: var(--gold); }
+
+/* ── PRODUCT DETAIL PAGE: desktop side-by-side layout ── */
+@media (min-width: 769px) {
+    .product-detail-card {
+        max-width: 950px;
+        margin: 0 auto;
+        flex-direction: row;
+        align-items: stretch;
+    }
+    .product-detail-card .card-image {
+    width: 42%;
+    max-width: 400px;
+    flex: 0 0 42%;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+    padding: 28px;
+    border-bottom: none;
+    border-right: 1px solid #eee;
+}
+    [data-theme="dark"] .product-detail-card .card-image {
+        border-right-color: rgba(255,255,255,0.08);
+    }
+    .product-detail-card .card-body {
+        flex: 1;
+        padding: 2rem 2.4rem;
+        justify-content: center;
+    }
+}
