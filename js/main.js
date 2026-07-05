@@ -751,7 +751,7 @@ async function loadRecipes() {
     try {
         const recipes = await fetch('data/recipes.json').then(r => r.json());
 
-        container.innerHTML = recipes.map(r => `
+        const renderRecipeBar = (r) => `
             <a class="card recipe-bar" href="recipes/${r.slug}.html">
                 <div class="recipe-bar-image">
                     <img src="${r.image}" alt="${r.imageAlt || r.title}" loading="lazy" width="120" height="120"
@@ -760,7 +760,7 @@ async function loadRecipes() {
                 </div>
                 <div class="recipe-bar-body">
                     <div class="recipe-bar-main">
-                        <span class="card-category">${r.category}</span>
+                        <span class="card-category">${r.category}</span>${r.trending ? ' <span class="trending-chip">🔥 Trending</span>' : ''}${r.essentials ? ' <span class="essentials-chip">⭐ Essential</span>' : ''}
                         <h3 class="recipe-bar-title">${r.title}</h3>
                         <p class="recipe-desc">${r.description}</p>
                     </div>
@@ -777,9 +777,175 @@ async function loadRecipes() {
                     </svg>
                 </span>
             </a>
-        `).join('');
+        `;
 
+        const renderTrendingCard = (r) => `
+            <a class="card recipe-trending-card" href="recipes/${r.slug}.html">
+                <div class="card-image">
+                    <img src="${r.image}" alt="${r.imageAlt || r.title}" loading="lazy" width="200" height="200"
+                        onload="this.closest('.card-image').style.animation='none'"
+                        onerror="this.src='https://placehold.co/200x200/7b1120/fff?text=${encodeURIComponent(r.title)}'">
+                </div>
+                <div class="card-body">
+                    <span class="card-category">${r.category}</span>
+                    <h3>${r.title}</h3>
+                    <div class="trending-recipe-meta">
+                        <span>⏱ ${r.prepTime.replace(/PT|M/g, '')} min</span>
+                        <span>🍽 ${r.servings}</span>
+                    </div>
+                </div>
+            </a>
+        `;
+
+        // ── Trending Now / Essentials strips ──
+        function renderHscrollSection(sectionId, containerId, filterFn) {
+            const section = document.getElementById(sectionId);
+            const scrollContainer = document.getElementById(containerId);
+            if (!scrollContainer || !section) return;
+            const items = recipes.filter(filterFn).sort((a, b) => a.slug.localeCompare(b.slug));
+            if (items.length) {
+                section.hidden = false;
+                scrollContainer.innerHTML = items.map(renderTrendingCard).join('');
+            } else {
+                section.hidden = true;
+            }
+        }
+        renderHscrollSection('trending-section', 'trending-container', r => r.trending);
+        renderHscrollSection('essentials-section', 'essentials-container', r => r.essentials);
+
+        // ── Search + category filter + grouped list ──
+        const categories = [...new Set(recipes.map(r => r.category))].sort();
+        const searchInput = document.getElementById('recipe-search');
+        const searchClear = document.getElementById('recipe-search-clear');
+        const noResults = document.getElementById('recipe-no-results');
+        const noResultsTerm = document.getElementById('recipe-no-results-term');
+        const filterToggle = document.getElementById('recipe-filter-toggle');
+        const filterPanel = document.getElementById('recipe-filter-panel');
+        const filterCountBadge = document.getElementById('recipe-filter-count-badge');
+        const filterClearBtn = document.getElementById('recipe-filter-clear-btn');
+        const categoryList = document.getElementById('recipe-filter-category-list');
+
+        let selectedCategories = new Set();
+        let searchTerm = '';
+
+        function updateFilterCount() {
+            if (filterCountBadge) {
+                filterCountBadge.textContent = selectedCategories.size;
+                filterCountBadge.hidden = selectedCategories.size === 0;
+            }
+            if (filterToggle) filterToggle.classList.toggle('has-filters', selectedCategories.size > 0);
+        }
+
+        function applyFilters() {
+            let filtered = recipes;
+
+            if (selectedCategories.size > 0) {
+                filtered = filtered.filter(r => selectedCategories.has(r.category));
+            }
+
+            if (searchTerm) {
+                const q = searchTerm.toLowerCase();
+                filtered = filtered.filter(r =>
+                    r.title.toLowerCase().includes(q) ||
+                    r.category.toLowerCase().includes(q) ||
+                    (r.cuisine && r.cuisine.toLowerCase().includes(q)) ||
+                    (r.description && r.description.toLowerCase().includes(q)) ||
+                    (r.ingredients && r.ingredients.some(i => i.text.toLowerCase().includes(q)))
+                );
+            }
+
+            updateFilterCount();
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                if (noResults) {
+                    noResults.hidden = false;
+                    noResultsTerm.textContent = searchTerm || [...selectedCategories].join(', ');
+                }
+                return;
+            }
+            if (noResults) noResults.hidden = true;
+
+            const grouped = {};
+            filtered.forEach(r => {
+                if (!grouped[r.category]) grouped[r.category] = [];
+                grouped[r.category].push(r);
+            });
+
+            container.innerHTML = Object.keys(grouped).sort().map(cat => `
+                <div class="recipe-category-block">
+                    <h2 class="section-title recipe-category-heading">${cat}</h2>
+                    <div class="recipes-list">${grouped[cat].map(renderRecipeBar).join('')}</div>
+                </div>
+            `).join('');
+
+            observeCards();
+        }
+
+        if (categoryList) {
+            categoryList.innerHTML = categories.map(cat => `
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="${cat}" data-group="category">
+                    <span>${cat}</span>
+                </label>
+            `).join('');
+        }
+
+        if (filterPanel) {
+            filterPanel.addEventListener('change', e => {
+                const cb = e.target.closest('input[type="checkbox"]');
+                if (!cb) return;
+                if (cb.checked) selectedCategories.add(cb.value);
+                else selectedCategories.delete(cb.value);
+                applyFilters();
+            });
+            filterPanel.addEventListener('click', e => e.stopPropagation());
+        }
+
+        if (filterClearBtn) {
+            filterClearBtn.addEventListener('click', () => {
+                selectedCategories.clear();
+                filterPanel.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                applyFilters();
+            });
+        }
+
+        if (filterToggle && filterPanel) {
+            filterToggle.addEventListener('click', e => {
+                e.stopPropagation();
+                const isOpen = !filterPanel.hidden;
+                filterPanel.hidden = isOpen;
+                filterToggle.setAttribute('aria-expanded', String(!isOpen));
+            });
+            document.addEventListener('click', () => {
+                if (!filterPanel.hidden) {
+                    filterPanel.hidden = true;
+                    filterToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                searchTerm = searchInput.value.trim();
+                searchClear.hidden = !searchTerm;
+                applyFilters();
+            });
+        }
+
+        if (searchClear) {
+            searchClear.addEventListener('click', () => {
+                searchInput.value = '';
+                searchTerm = '';
+                searchClear.hidden = true;
+                searchInput.focus();
+                applyFilters();
+            });
+        }
+
+        applyFilters();
         observeCards();
+
     } catch (e) {
         container.innerHTML = '<p style="color:#888;padding:1rem">Could not load recipes.</p>';
     }
@@ -993,25 +1159,26 @@ if (backToTop) {
     });
 }
 
-// ── STICKY SEARCH/FILTER BAR (products page) ──
+// ── STICKY SEARCH/FILTER BAR (products.html, recipes.html) ──
 (function() {
-    const sfBar = document.getElementById('search-filter-bar');
-    const sfSentinel = document.getElementById('search-filter-sentinel');
-    if (!sfBar || !sfSentinel) return;
     const headerEl = document.querySelector('header');
+    document.querySelectorAll('.search-filter-bar').forEach(bar => {
+        const sentinel = bar.previousElementSibling;
+        if (!sentinel || !sentinel.classList.contains('search-filter-sentinel')) return;
 
-    function setStickyTop() {
-        sfBar.style.top = (headerEl ? headerEl.offsetHeight : 0) + 'px';
-    }
-    setStickyTop();
-    window.addEventListener('resize', setStickyTop);
+        function setStickyTop() {
+            bar.style.top = (headerEl ? headerEl.offsetHeight : 0) + 'px';
+        }
+        setStickyTop();
+        window.addEventListener('resize', setStickyTop);
 
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            sfBar.classList.toggle('is-stuck', !entry.isIntersecting);
-        });
-    }, { threshold: 0 });
-    observer.observe(sfSentinel);
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                bar.classList.toggle('is-stuck', !entry.isIntersecting);
+            });
+        }, { threshold: 0 });
+        observer.observe(sentinel);
+    });
 })();
 
 // ── CARD ENTRANCE ANIMATION ──

@@ -3353,3 +3353,88 @@ footer {
         padding: 2rem 2.4rem;
     }
 }
+/* ── RECIPES PAGE: trending, filters, category grouping ── */
+.recipes-page {
+    background: linear-gradient(135deg, rgba(123,17,32,0.04) 0%, rgba(212,160,23,0.06) 100%);
+    border-radius: 12px;
+}
+
+.recipe-category-block {
+    margin-bottom: 2.5rem;
+}
+.recipe-category-block:last-child {
+    margin-bottom: 0;
+}
+
+.recipe-section-block {
+    margin: 0 0 2rem;
+}
+
+.trending-chip,
+.essentials-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+    white-space: nowrap;
+}
+.trending-chip {
+    background: rgba(212,160,23,0.18);
+    color: var(--maroon);
+    border: 1px solid rgba(212,160,23,0.4);
+}
+[data-theme="dark"] .trending-chip {
+    color: var(--gold);
+    background: rgba(212,160,23,0.1);
+}
+.essentials-chip {
+    background: rgba(123,17,32,0.1);
+    color: var(--maroon);
+    border: 1px solid rgba(123,17,32,0.3);
+}
+[data-theme="dark"] .essentials-chip {
+    color: var(--gold-light);
+    background: rgba(123,17,32,0.25);
+    border-color: rgba(212,160,23,0.3);
+}
+
+#trending-container.hscroll-track,
+#essentials-container.hscroll-track {
+    align-items: stretch;
+}
+
+.recipe-trending-card {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.recipe-trending-card .card-body {
+    align-items: center;
+    text-align: center;
+    flex: 1;
+}
+.recipe-trending-card h3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.5em;
+}
+.trending-recipe-meta {
+    display: flex;
+    gap: 10px;
+    font-size: 0.76rem;
+    color: var(--maroon);
+    font-weight: 600;
+    justify-content: center;
+    margin-top: auto;
+    padding-top: 4px;
+}
+[data-theme="dark"] .trending-recipe-meta { color: var(--gold); }

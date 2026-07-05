@@ -57,8 +57,56 @@
     <p>Home-style dishes made with Mom Masale spices.</p>
 </div>
 
-<div class="container">
-    <div id="recipes-container" class="recipes-list"></div>
+<div class="container recipes-page">
+    <div class="search-filter-sentinel" id="recipe-search-filter-sentinel"></div>
+    <div class="search-filter-bar" id="recipe-search-filter-bar">
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input
+                type="search"
+                id="recipe-search"
+                class="product-search"
+                placeholder="Search recipes… e.g. Biryani, Chai"
+                aria-label="Search recipes"
+                autocomplete="off"
+            >
+            <button class="search-clear" id="recipe-search-clear" aria-label="Clear search" hidden>✕</button>
+        </div>
+        <div class="filter-dropdown" id="recipe-filter-dropdown">
+            <button class="filter-toggle" id="recipe-filter-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+                <span class="filter-toggle-icon">⚙</span>
+                <span class="filter-toggle-label">Filters</span>
+                <span class="filter-count-badge" id="recipe-filter-count-badge" hidden>0</span>
+            </button>
+            <div class="filter-panel" id="recipe-filter-panel" hidden>
+                <div class="filter-group">
+                    <h4>Category</h4>
+                    <div class="filter-checkbox-list" id="recipe-filter-category-list"></div>
+                </div>
+                <button type="button" class="filter-clear-btn" id="recipe-filter-clear-btn">Clear All Filters</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="recipe-section-block" id="trending-section" hidden>
+        <h2 class="section-title">🔥 Trending Now</h2>
+        <div class="hscroll-wrap">
+            <div id="trending-container" class="hscroll-track"></div>
+        </div>
+    </div>
+
+    <div class="recipe-section-block" id="essentials-section" hidden>
+        <h2 class="section-title">⭐ Essentials</h2>
+        <div class="hscroll-wrap">
+            <div id="essentials-container" class="hscroll-track"></div>
+        </div>
+    </div>
+
+    <div id="recipe-no-results" class="no-results" hidden>
+        <p>😕 No recipes found for "<span id="recipe-no-results-term"></span>".</p>
+        <button class="btn btn-outline" onclick="document.getElementById('recipe-search').value=''; document.getElementById('recipe-search').dispatchEvent(new Event('input'));">Clear Search</button>
+    </div>
+    <div id="recipes-container"></div>
 </div>
 
 <footer>

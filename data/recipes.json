@@ -2,6 +2,7 @@
   {
     "slug": "lemon-tea",
     "title": "Lemon Tea",
+    "trending": true,
     "cuisine": "Indian",
     "category": "Beverage",
     "prepTime": "PT10M",
@@ -41,6 +42,7 @@
   {
     "slug": "kadak-masala-chai",
     "title": "Kadak Masala Chai",
+    "essentials": true,
     "cuisine": "Indian",
     "category": "Beverage",
     "prepTime": "PT10M",
@@ -177,6 +179,7 @@
   {
     "slug": "shahi-thandai",
     "title": "Shahi Thandai",
+    "essentials": true,
     "cuisine": "Indian",
     "category": "Beverage",
     "prepTime": "PT10M",
@@ -222,6 +225,7 @@
   {
     "slug": "savoury-sattu-sharbat",
     "title": "Savoury Sattu Sharbat",
+    "trending": true,
     "cuisine": "Indian",
     "category": "Beverage",
     "prepTime": "PT10M",
@@ -378,6 +382,7 @@
   {
     "slug": "spiced-buttermilk-chatpata-chaach",
     "title": "Spiced Buttermilk (Chatpata Chaach)",
+    "trending": true,
     "cuisine": "Indian",
     "category": "Beverage",
     "prepTime": "PT10M",
@@ -421,6 +426,7 @@
   {
     "slug": "poha-seasoned-flattened-rice",
     "title": "Poha (Seasoned Flattened Rice)",
+    "trending": true,
     "cuisine": "Indian",
     "category": "Breakfast",
     "prepTime": "PT10M",
@@ -596,6 +602,7 @@
   {
     "slug": "pani-puri",
     "title": "Pani Puri",
+    "essentials": true,
     "cuisine": "Indian",
     "category": "Snack",
     "prepTime": "PT10M",
@@ -974,6 +981,7 @@
   {
     "slug": "shahi-paneer",
     "title": "Shahi Paneer",
+    "essentials": true,
     "cuisine": "Indian",
     "category": "Main Course",
     "prepTime": "PT10M",
@@ -1171,6 +1179,7 @@
   {
     "slug": "dal-makhani",
     "title": "Dal Makhani",
+    "essentials": true,
     "cuisine": "Indian",
     "category": "Main Course",
     "prepTime": "PT10M",
@@ -1582,6 +1591,7 @@
   {
     "slug": "vegetable-biryani",
     "title": "Vegetable Biryani",
+    "essentials": true,
     "cuisine": "Indian",
     "category": "Rice",
     "prepTime": "PT10M",
@@ -1643,6 +1653,7 @@
   {
     "slug": "hyderabadi-vegetable-biryani",
     "title": "Hyderabadi Vegetable Biryani",
+    "trending": true,
     "cuisine": "Indian",
     "category": "Rice",
     "prepTime": "PT10M",
