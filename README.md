@@ -52,6 +52,7 @@ The website showcases the company's range of authentic Indian spices and blended
 ## 📁 Project Structure
 
 ```text
+
  sakksham1-mom-masale-website/
     ├── README.md
     ├── 404.html
@@ -61,51 +62,24 @@ The website showcases the company's range of authentic Indian spices and blended
     ├── contact.html
     ├── index.html
     ├── products.html
+    ├── recipes.html
     ├── robots.txt
     ├── site.webmanifest
     ├── sitemap.xml
-    ├── css/
-    │   └── style.css
     ├── data/
-    │   └── products.json
+    │   └── recipes.json
     ├── js/
     │   └── main.js
-    ├── products/
-    │   ├── amchur-powder.html
-    │   ├── biryani-masala.html
-    │   ├── chaat-masala.html
-    │   ├── chai-masala.html
-    │   ├── chhola-masala.html
-    │   ├── chicken-masala.html
-    │   ├── coriander-powder.html
-    │   ├── dahi-bada-masala.html
-    │   ├── dam-aloo-masala.html
-    │   ├── fruit-and-salad-masala.html
-    │   ├── garam-masala.html
-    │   ├── gulab-jamun-mix.html
-    │   ├── jaljeera-masala.html
-    │   ├── kachauri-masala.html
-    │   ├── kalonji-bharwa-masala.html
-    │   ├── kasuri-methi.html
-    │   ├── kuch-bhi-masala.html
-    │   ├── matar-paneer-masala.html
-    │   ├── meat-masala.html
-    │   ├── pav-bhaji-masala.html
-    │   ├── raita-masala.html
-    │   ├── red-chilli-powder.html
-    │   ├── sabzi-king-masala.html
-    │   ├── sambhar-masala.html
-    │   ├── shahi-paneer-masala.html
-    │   ├── shahi-thandai.html
-    │   ├── tawa-masala.html
-    │   ├── turmeric-powder.html
-    │   └── .generated-manifest.json
+    ├── products/...
+    ├── recipes/...
     ├── scripts/
-    │   ├── build-products.js
-    │   └── product-template.html
+    │   ├── build-site.js
+    │   ├── product-template.html
+    │   └── recipe-template.html
     └── .github/
         └── workflows/
-            └── generate-products.yml
+            └── generate-site.yml
+
 
 ```
 

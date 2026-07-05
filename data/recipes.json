@@ -1,140 +1,974 @@
 [
   {
-    "slug": "haldi-doodh",
-    "title": "Haldi Doodh (Turmeric Milk)",
+    "slug": "lemon-tea",
+    "title": "Lemon Tea",
     "cuisine": "Indian",
     "category": "Beverage",
-    "prepTime": "PT2M",
-    "cookTime": "PT8M",
-    "servings": 2,
-    "image": "images/recipes/haldi-doodh.jpg",
-    "imageAlt": "A cup of turmeric milk (haldi doodh)",
-    "description": "A warm, comforting turmeric milk — India's original bedtime remedy.",
-    "ingredients": [
-      { "text": "2 cups milk", "productSlug": null },
-      { "text": "1/2 tsp Turmeric Powder", "productSlug": "turmeric-powder" },
-      { "text": "1 small piece ginger, crushed", "productSlug": null },
-      { "text": "1/4 tsp black pepper, crushed", "productSlug": null },
-      { "text": "1 tsp honey or jaggery, to taste", "productSlug": null }
-    ],
-    "steps": [
-      "Pour the milk into a saucepan and place over medium heat.",
-      "Add the Turmeric Powder, crushed ginger and black pepper.",
-      "Whisk gently and bring to a soft simmer, stirring occasionally so it doesn't catch at the bottom.",
-      "Simmer for 5-6 minutes to let the spices infuse into the milk.",
-      "Strain into cups, sweeten with honey or jaggery, and serve warm."
-    ],
-    "relatedProducts": ["turmeric-powder"],
-    "seo": {
-      "title": "Haldi Doodh Recipe (Turmeric Milk) | Mom Masale",
-      "metaDescription": "Learn how to make authentic Haldi Doodh (turmeric milk) at home using Mom Masale Turmeric Powder. A simple, soothing recipe for every season.",
-      "keywords": ["haldi doodh recipe", "turmeric milk recipe", "how to make turmeric milk", "golden milk"]
-    }
-  },
-  {
-    "slug": "chicken-biryani",
-    "title": "Chicken Biryani",
-    "cuisine": "Indian",
-    "category": "Main Course",
-    "prepTime": "PT20M",
-    "cookTime": "PT45M",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/chicken-biryani.jpg",
-    "imageAlt": "A pot of chicken biryani",
-    "description": "Layered, fragrant chicken biryani made simple with Mom Masale Biryani Masala.",
+    "image": "images/recipes/lemon-tea.jpg",
+    "imageAlt": "Lemon Tea",
+    "description": "Step-by-step Lemon Tea recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
-      { "text": "500g chicken, curry cut", "productSlug": null },
-      { "text": "2 cups basmati rice, soaked 30 minutes", "productSlug": null },
-      { "text": "2 onions, thinly sliced and fried", "productSlug": null },
-      { "text": "1 cup yogurt", "productSlug": null },
-      { "text": "2 tbsp Biryani Masala", "productSlug": "biryani-masala" },
-      { "text": "1 tbsp ginger-garlic paste", "productSlug": null },
-      { "text": "2 tbsp ghee or oil", "productSlug": null },
-      { "text": "A few strands saffron soaked in warm milk (optional)", "productSlug": null },
-      { "text": "Salt to taste", "productSlug": null },
-      { "text": "Fresh coriander and mint leaves", "productSlug": null }
+      {
+        "text": "4 tbsp Mom Masale Lemon Tea Premix",
+        "productSlug": null
+      },
+      {
+        "text": "4 cups (600 ml) Water",
+        "productSlug": null
+      }
     ],
     "steps": [
-      "Marinate the chicken with yogurt, Biryani Masala, ginger-garlic paste and salt for at least 30 minutes.",
-      "Parboil the soaked rice in salted water until 70% cooked, then drain.",
-      "In a heavy-bottomed pot, cook the marinated chicken in ghee until nearly done and the masala coats the pieces.",
-      "Layer the parboiled rice over the chicken, top with fried onions, coriander, mint and saffron milk.",
-      "Cover tightly and cook on low heat (dum) for 20-25 minutes.",
-      "Rest for 5 minutes before gently mixing and serving hot."
+      "Bring 4 cups of water to a rolling boil in a saucepan.",
+      "Turn off the heat once the water reaches a boil.",
+      "Add 4 tablespoons of Mom Masale Lemon Tea Premix and stir well until fully dissolved.",
+      "Strain into serving cups and enjoy hot for a refreshing cup of lemon tea."
     ],
-    "relatedProducts": ["biryani-masala"],
+    "relatedProducts": [],
     "seo": {
-      "title": "Chicken Biryani Recipe | Mom Masale",
-      "metaDescription": "Make restaurant-style chicken biryani at home with Mom Masale Biryani Masala. Step-by-step recipe for a fragrant, layered biryani.",
-      "keywords": ["chicken biryani recipe", "how to make biryani", "biryani masala recipe", "dum biryani"]
+      "title": "Lemon Tea Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Lemon Tea at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "lemon tea recipe",
+        "how to make lemon tea",
+        "mom masale",
+        "lemon tea premix"
+      ]
     }
   },
   {
-    "slug": "masala-chai",
-    "title": "Masala Chai",
+    "slug": "kadak-masala-chai",
+    "title": "Kadak Masala Chai",
     "cuisine": "Indian",
     "category": "Beverage",
-    "prepTime": "PT2M",
-    "cookTime": "PT8M",
-    "servings": 2,
-    "image": "images/recipes/masala-chai.jpg",
-    "imageAlt": "A cup of masala chai",
-    "description": "The classic Indian spiced tea, made the way mom makes it.",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/kadak-masala-chai.jpg",
+    "imageAlt": "Kadak Masala Chai",
+    "description": "Step-by-step Kadak Masala Chai recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
-      { "text": "1 cup water", "productSlug": null },
-      { "text": "1 cup milk", "productSlug": null },
-      { "text": "2 tsp tea leaves", "productSlug": null },
-      { "text": "1 tsp Chai Masala", "productSlug": "chai-masala" },
-      { "text": "Sugar or jaggery, to taste", "productSlug": null }
+      {
+        "text": "½ tsp Mom Masale Kadak Chai Masala",
+        "productSlug": "chai-masala"
+      },
+      {
+        "text": "2 cups Milk",
+        "productSlug": null
+      },
+      {
+        "text": "2 cups Water",
+        "productSlug": null
+      },
+      {
+        "text": "3 tsp Tea Leaves",
+        "productSlug": null
+      },
+      {
+        "text": "4 tsp (or to taste) Sugar",
+        "productSlug": null
+      }
     ],
     "steps": [
-      "Bring the water to a boil in a saucepan.",
-      "Add the tea leaves and Chai Masala, and let it boil for 1-2 minutes.",
-      "Pour in the milk and bring the mixture back to a boil.",
-      "Simmer for 3-4 minutes, stirring occasionally, until the chai turns a rich golden-brown.",
-      "Add sugar or jaggery to taste, strain into cups, and serve hot."
+      "In a saucepan, combine water, tea leaves, and sugar.",
+      "Bring to a boil.",
+      "Add the milk and allow the tea to boil again over medium heat.",
+      "Stir in Mom Masale Kadak Chai Masala and simmer for another minute.",
+      "Strain and serve hot with biscuits or your favorite snacks."
     ],
-    "relatedProducts": ["chai-masala"],
+    "relatedProducts": [
+      "chai-masala"
+    ],
     "seo": {
-      "title": "Masala Chai Recipe | Mom Masale",
-      "metaDescription": "How to make authentic masala chai at home using Mom Masale Chai Masala. A quick, comforting Indian spiced tea recipe.",
-      "keywords": ["masala chai recipe", "how to make chai masala", "indian spiced tea", "chai recipe"]
+      "title": "Kadak Masala Chai Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Kadak Masala Chai at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "kadak masala chai recipe",
+        "how to make kadak masala chai",
+        "mom masale",
+        "kadak chai masala"
+      ]
     }
   },
   {
-    "slug": "mutton-curry",
-    "title": "Mutton Curry",
+    "slug": "rose-syrup-sharbat",
+    "title": "Rose Syrup Sharbat",
     "cuisine": "Indian",
-    "category": "Main Course",
-    "prepTime": "PT15M",
-    "cookTime": "PT50M",
+    "category": "Beverage",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/mutton-curry.jpg",
-    "imageAlt": "A bowl of mutton curry",
-    "description": "A rich, slow-cooked mutton curry built around Mom Masale Meat Masala.",
+    "image": "images/recipes/rose-syrup-sharbat.jpg",
+    "imageAlt": "Rose Syrup Sharbat",
+    "description": "Step-by-step Rose Syrup Sharbat recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
-      { "text": "500g mutton, curry cut", "productSlug": null },
-      { "text": "2 onions, finely chopped", "productSlug": null },
-      { "text": "2 tomatoes, pureed", "productSlug": null },
-      { "text": "2 tbsp Meat Masala", "productSlug": "meat-masala" },
-      { "text": "1 tbsp ginger-garlic paste", "productSlug": null },
-      { "text": "3 tbsp oil or ghee", "productSlug": null },
-      { "text": "Salt to taste", "productSlug": null },
-      { "text": "Fresh coriander leaves, chopped", "productSlug": null }
+      {
+        "text": "8 tbsp Mom Masale Rose Syrup",
+        "productSlug": null
+      },
+      {
+        "text": "4 cups Chilled Milk or Water",
+        "productSlug": null
+      },
+      {
+        "text": "As required Ice Cubes",
+        "productSlug": null
+      }
     ],
     "steps": [
-      "Heat oil in a heavy pot and fry the onions until golden brown.",
-      "Add ginger-garlic paste and cook until the raw smell disappears.",
-      "Add the mutton pieces and sear on high heat for 5-6 minutes.",
-      "Stir in the Meat Masala and tomato puree, and cook until the oil separates.",
-      "Add water as needed, cover, and simmer on low heat for 35-40 minutes until the mutton is tender.",
-      "Garnish with fresh coriander and serve hot with rice or roti."
+      "Pour 2 tablespoons of Mom Masale Rose Syrup into each serving glass.",
+      "Add chilled milk or water.",
+      "Stir thoroughly.",
+      "Add ice cubes and serve immediately."
     ],
-    "relatedProducts": ["meat-masala"],
+    "relatedProducts": [],
     "seo": {
-      "title": "Mutton Curry Recipe | Mom Masale",
-      "metaDescription": "A rich, home-style mutton curry recipe made with Mom Masale Meat Masala. Simple steps for tender, flavourful mutton.",
-      "keywords": ["mutton curry recipe", "meat masala recipe", "how to make mutton curry"]
+      "title": "Rose Syrup Sharbat Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Rose Syrup Sharbat at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "rose syrup sharbat recipe",
+        "how to make rose syrup sharbat",
+        "mom masale",
+        "rose syrup"
+      ]
+    }
+  },
+  {
+    "slug": "dry-fruit-milk-shake",
+    "title": "Dry Fruit Milk Shake",
+    "cuisine": "Indian",
+    "category": "Beverage",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/dry-fruit-milk-shake.jpg",
+    "imageAlt": "Dry Fruit Milk Shake",
+    "description": "Step-by-step Dry Fruit Milk Shake recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "4 tbsp Mom Masale Dry Fruit Milk Shake Powder",
+        "productSlug": null
+      },
+      {
+        "text": "4 cups Chilled Milk",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Pour chilled milk into a blender.",
+      "Add Mom Masale Dry Fruit Milk Shake Powder.",
+      "Blend for 1–2 minutes until smooth, creamy, and frothy.",
+      "Pour into glasses and garnish with finely chopped almonds and pistachios before serving."
+    ],
+    "relatedProducts": [],
+    "seo": {
+      "title": "Dry Fruit Milk Shake Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Dry Fruit Milk Shake at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "dry fruit milk shake recipe",
+        "how to make dry fruit milk shake",
+        "mom masale",
+        "dry fruit milk shake powder"
+      ]
+    }
+  },
+  {
+    "slug": "shahi-thandai",
+    "title": "Shahi Thandai",
+    "cuisine": "Indian",
+    "category": "Beverage",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/shahi-thandai.jpg",
+    "imageAlt": "Shahi Thandai",
+    "description": "Step-by-step Shahi Thandai recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "4 tbsp Mom Masale Shahi Thandai Powder",
+        "productSlug": "shahi-thandai"
+      },
+      {
+        "text": "4 cups Chilled Full-Cream Milk",
+        "productSlug": null
+      },
+      {
+        "text": "4 tsp Sugar",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Soak the Mom Masale Shahi Thandai Powder in ½ cup of lukewarm milk for 10 minutes.",
+      "Transfer it to a blender with the remaining chilled milk and sugar.",
+      "Blend until smooth.",
+      "Refrigerate for about an hour before serving chilled."
+    ],
+    "relatedProducts": [
+      "shahi-thandai"
+    ],
+    "seo": {
+      "title": "Shahi Thandai Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Shahi Thandai at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "shahi thandai recipe",
+        "how to make shahi thandai",
+        "mom masale",
+        "shahi thandai powder"
+      ]
+    }
+  },
+  {
+    "slug": "savoury-sattu-sharbat",
+    "title": "Savoury Sattu Sharbat",
+    "cuisine": "Indian",
+    "category": "Beverage",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/savoury-sattu-sharbat.jpg",
+    "imageAlt": "Savoury Sattu Sharbat",
+    "description": "Step-by-step Savoury Sattu Sharbat recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "1 cup Mom Masale Sattu",
+        "productSlug": null
+      },
+      {
+        "text": "4 cups Chilled Water",
+        "productSlug": null
+      },
+      {
+        "text": "1 tsp Mom Masale Chaat Masala",
+        "productSlug": "chaat-masala"
+      },
+      {
+        "text": "2 tsp Lemon Juice",
+        "productSlug": null
+      },
+      {
+        "text": "To taste Black Salt",
+        "productSlug": null
+      },
+      {
+        "text": "To taste Salt",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Mix the sattu with a little water until completely lump-free.",
+      "Add the remaining water.",
+      "Stir in the lemon juice, black salt, and regular salt.",
+      "Sprinkle Mom Masale Chaat Masala over the top.",
+      "If desired, garnish with finely chopped onions and green chillies before serving."
+    ],
+    "relatedProducts": [
+      "chaat-masala"
+    ],
+    "seo": {
+      "title": "Savoury Sattu Sharbat Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Savoury Sattu Sharbat at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "savoury sattu sharbat recipe",
+        "how to make savoury sattu sharbat",
+        "mom masale",
+        "chaat masala",
+        "sattu"
+      ]
+    }
+  },
+  {
+    "slug": "moringa-sattu-energy-drink",
+    "title": "Moringa Sattu Energy Drink",
+    "cuisine": "Indian",
+    "category": "Beverage",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/moringa-sattu-energy-drink.jpg",
+    "imageAlt": "Moringa Sattu Energy Drink",
+    "description": "Step-by-step Moringa Sattu Energy Drink recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "1 cup Mom Masale Moringa Sattu",
+        "productSlug": null
+      },
+      {
+        "text": "4 cups Chilled Water",
+        "productSlug": null
+      },
+      {
+        "text": "1 tsp Black Salt",
+        "productSlug": null
+      },
+      {
+        "text": "2 tbsp Fresh Lemon Juice",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Combine chilled water and Mom Masale Moringa Sattu in a large jug.",
+      "Stir until completely dissolved.",
+      "Add black salt and fresh lemon juice.",
+      "Mix well and serve chilled as a healthy, energizing breakfast drink."
+    ],
+    "relatedProducts": [],
+    "seo": {
+      "title": "Moringa Sattu Energy Drink Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Moringa Sattu Energy Drink at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "moringa sattu energy drink recipe",
+        "how to make moringa sattu energy drink",
+        "mom masale",
+        "moringa sattu"
+      ]
+    }
+  },
+  {
+    "slug": "jaljeera-drink",
+    "title": "Jaljeera Drink",
+    "cuisine": "Indian",
+    "category": "Beverage",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/jaljeera-drink.jpg",
+    "imageAlt": "Jaljeera Drink",
+    "description": "Step-by-step Jaljeera Drink recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "2 tbsp Mom Masale Jaljeera Masala",
+        "productSlug": "jaljeera-masala"
+      },
+      {
+        "text": "4 cups Chilled Water",
+        "productSlug": null
+      },
+      {
+        "text": "1 tbsp Lemon Juice",
+        "productSlug": null
+      },
+      {
+        "text": "4 tsp Boondi",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Mix the Mom Masale Jaljeera Masala with chilled water and lemon juice.",
+      "Stir thoroughly until well combined.",
+      "Taste and strain if desired.",
+      "Pour into serving glasses.",
+      "Top with boondi and serve immediately while chilled."
+    ],
+    "relatedProducts": [
+      "jaljeera-masala"
+    ],
+    "seo": {
+      "title": "Jaljeera Drink Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Jaljeera Drink at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "jaljeera drink recipe",
+        "how to make jaljeera drink",
+        "mom masale",
+        "jaljeera masala"
+      ]
+    }
+  },
+  {
+    "slug": "spiced-buttermilk-chatpata-chaach",
+    "title": "Spiced Buttermilk (Chatpata Chaach)",
+    "cuisine": "Indian",
+    "category": "Beverage",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/spiced-buttermilk-chatpata-chaach.jpg",
+    "imageAlt": "Spiced Buttermilk (Chatpata Chaach)",
+    "description": "Step-by-step Spiced Buttermilk (Chatpata Chaach) recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "2 cups Fresh Yogurt",
+        "productSlug": null
+      },
+      {
+        "text": "2 cups Chilled Water",
+        "productSlug": null
+      },
+      {
+        "text": "1½ tsp Mom Masale Chatpata Chaach Masala",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Whisk the yogurt until smooth.",
+      "Add chilled water and mix to prepare buttermilk.",
+      "Stir in Mom Masale Chatpata Chaach Masala until evenly blended.",
+      "Serve chilled alongside lunch or any traditional Indian meal."
+    ],
+    "relatedProducts": [],
+    "seo": {
+      "title": "Spiced Buttermilk (Chatpata Chaach) Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Spiced Buttermilk (Chatpata Chaach) at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "spiced buttermilk (chatpata chaach) recipe",
+        "how to make spiced buttermilk (chatpata chaach)",
+        "mom masale",
+        "chatpata chaach masala"
+      ]
+    }
+  },
+  {
+    "slug": "poha-seasoned-flattened-rice",
+    "title": "Poha (Seasoned Flattened Rice)",
+    "cuisine": "Indian",
+    "category": "Breakfast",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/poha-seasoned-flattened-rice.jpg",
+    "imageAlt": "Poha (Seasoned Flattened Rice)",
+    "description": "Step-by-step Poha (Seasoned Flattened Rice) recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "3 cups Flattened Rice (Poha)",
+        "productSlug": null
+      },
+      {
+        "text": "1½ tbsp Mom Masale Poha Masala (Jiravan Masala)",
+        "productSlug": null
+      },
+      {
+        "text": "1 large Onion, finely chopped",
+        "productSlug": null
+      },
+      {
+        "text": "¼ cup Peanuts",
+        "productSlug": null
+      },
+      {
+        "text": "As required Oil",
+        "productSlug": null
+      },
+      {
+        "text": "1 tsp Mustard Seeds",
+        "productSlug": null
+      },
+      {
+        "text": "8–10 leaves Curry Leaves",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Wash the poha under running water and drain well. Let it rest for 10 minutes.",
+      "Heat oil in a pan and roast the peanuts until crisp. Remove and keep aside.",
+      "In the same pan, splutter the mustard seeds and curry leaves.",
+      "Add the chopped onion (and green chilli, if desired) and sauté until translucent.",
+      "Add the poha, roasted peanuts, and Mom Masale Poha Masala (Jiravan Masala).",
+      "Mix gently, cover, and cook over low heat for 2 minutes.",
+      "Serve hot."
+    ],
+    "relatedProducts": [],
+    "seo": {
+      "title": "Poha (Seasoned Flattened Rice) Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Poha (Seasoned Flattened Rice) at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "poha (seasoned flattened rice) recipe",
+        "how to make poha (seasoned flattened rice)",
+        "mom masale",
+        "poha masala jiravan masala"
+      ]
+    }
+  },
+  {
+    "slug": "aloo-kachori",
+    "title": "Aloo Kachori",
+    "cuisine": "Indian",
+    "category": "Breakfast",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/aloo-kachori.jpg",
+    "imageAlt": "Aloo Kachori",
+    "description": "Step-by-step Aloo Kachori recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "2 cups Wheat Flour or Refined Flour",
+        "productSlug": null
+      },
+      {
+        "text": "4 Boiled Potatoes, mashed",
+        "productSlug": null
+      },
+      {
+        "text": "1½ tbsp Mom Masale Kachori Masala",
+        "productSlug": "kachauri-masala"
+      },
+      {
+        "text": "For shortening and deep frying Oil or Ghee",
+        "productSlug": null
+      },
+      {
+        "text": "To taste Salt",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Mix flour with salt and 2 teaspoons of oil or ghee. Knead into a firm dough.",
+      "Combine mashed potatoes with Mom Masale Kachori Masala and salt.",
+      "Divide the dough into small balls.",
+      "Stuff each with the potato filling and seal carefully.",
+      "Roll gently.",
+      "Deep fry over low to medium heat until golden brown and crisp.",
+      "Serve with chutney or pickle."
+    ],
+    "relatedProducts": [
+      "kachauri-masala"
+    ],
+    "seo": {
+      "title": "Aloo Kachori Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Aloo Kachori at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "aloo kachori recipe",
+        "how to make aloo kachori",
+        "mom masale",
+        "kachori masala"
+      ]
+    }
+  },
+  {
+    "slug": "dahi-bada",
+    "title": "Dahi Bada",
+    "cuisine": "Indian",
+    "category": "Snack",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/dahi-bada.jpg",
+    "imageAlt": "Dahi Bada",
+    "description": "Step-by-step Dahi Bada recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "1 packet Mom Masale Instant Dahi Bada Premix",
+        "productSlug": null
+      },
+      {
+        "text": "4 cups Fresh Yogurt, whisked",
+        "productSlug": null
+      },
+      {
+        "text": "2 tsp Mom Masale Dahi Bada Masala",
+        "productSlug": "dahi-bada-masala"
+      },
+      {
+        "text": "For frying Oil",
+        "productSlug": null
+      },
+      {
+        "text": "For serving Sweet Tamarind Chutney",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Prepare a thick batter using the premix and water.",
+      "Let it rest for 10 minutes.",
+      "Fry spoonfuls of batter until golden.",
+      "Soak the fried vadas in lukewarm water for about 10 minutes.",
+      "Gently squeeze out excess water.",
+      "Transfer to whisked yogurt.",
+      "Sprinkle Mom Masale Dahi Bada Masala and drizzle sweet tamarind chutney before serving."
+    ],
+    "relatedProducts": [
+      "dahi-bada-masala"
+    ],
+    "seo": {
+      "title": "Dahi Bada Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Dahi Bada at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "dahi bada recipe",
+        "how to make dahi bada",
+        "mom masale",
+        "dahi bada masala",
+        "instant dahi bada premix"
+      ]
+    }
+  },
+  {
+    "slug": "pani-puri",
+    "title": "Pani Puri",
+    "cuisine": "Indian",
+    "category": "Snack",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/pani-puri.jpg",
+    "imageAlt": "Pani Puri",
+    "description": "Step-by-step Pani Puri recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "2 tbsp Mom Masale Jaljeera / Pani Puri Masala",
+        "productSlug": null
+      },
+      {
+        "text": "4 cups Chilled Water",
+        "productSlug": null
+      },
+      {
+        "text": "1 cup Boiled Potatoes and Chickpeas",
+        "productSlug": null
+      },
+      {
+        "text": "24–30 Ready-made Puri Shells",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Mix the masala with chilled water until completely dissolved.",
+      "Mash together the boiled potatoes and chickpeas with a little salt.",
+      "Crack open each puri.",
+      "Fill with the potato mixture.",
+      "Add the prepared spicy water.",
+      "Serve immediately."
+    ],
+    "relatedProducts": [],
+    "seo": {
+      "title": "Pani Puri Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Pani Puri at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "pani puri recipe",
+        "how to make pani puri",
+        "mom masale",
+        "jaljeera pani puri masala"
+      ]
+    }
+  },
+  {
+    "slug": "pav-bhaji",
+    "title": "Pav Bhaji",
+    "cuisine": "Indian",
+    "category": "Snack",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/pav-bhaji.jpg",
+    "imageAlt": "Pav Bhaji",
+    "description": "Step-by-step Pav Bhaji recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "3 cups Mixed Boiled Vegetables (Potatoes, Peas, Cauliflower)",
+        "productSlug": null
+      },
+      {
+        "text": "2 tbsp Mom Masale Pav Bhaji Masala",
+        "productSlug": "pav-bhaji-masala"
+      },
+      {
+        "text": "1 cup each Onion, Tomato & Capsicum (finely chopped)",
+        "productSlug": null
+      },
+      {
+        "text": "4 tbsp Butter",
+        "productSlug": null
+      },
+      {
+        "text": "1 tbsp Ginger-Garlic Paste",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Mash the boiled vegetables thoroughly.",
+      "Melt butter in a pan.",
+      "Sauté onions, ginger-garlic paste, and capsicum.",
+      "Add tomatoes and cook until soft.",
+      "Add the mashed vegetables and Mom Masale Pav Bhaji Masala.",
+      "Pour in a little water and simmer for 10 minutes.",
+      "Toast the pav in butter and serve with the bhaji, chopped onions, and lemon wedges."
+    ],
+    "relatedProducts": [
+      "pav-bhaji-masala"
+    ],
+    "seo": {
+      "title": "Pav Bhaji Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Pav Bhaji at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "pav bhaji recipe",
+        "how to make pav bhaji",
+        "mom masale",
+        "pav bhaji masala"
+      ]
+    }
+  },
+  {
+    "slug": "chatpata-pakora",
+    "title": "Chatpata Pakora",
+    "cuisine": "Indian",
+    "category": "Snack",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/chatpata-pakora.jpg",
+    "imageAlt": "Chatpata Pakora",
+    "description": "Step-by-step Chatpata Pakora recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "1½ cups Gram Flour (Besan)",
+        "productSlug": null
+      },
+      {
+        "text": "2 cups Sliced Onions or Potatoes",
+        "productSlug": null
+      },
+      {
+        "text": "1 tbsp Mom Masale Chatpata Sprinkle Masala",
+        "productSlug": null
+      },
+      {
+        "text": "½ tsp Mom Masale Turmeric Powder",
+        "productSlug": "turmeric-powder"
+      },
+      {
+        "text": "For deep frying Oil",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Prepare a thick batter by mixing gram flour, turmeric, salt, vegetables, and enough water.",
+      "Heat oil in a deep pan.",
+      "Drop spoonfuls of batter into the hot oil.",
+      "Fry until crisp and golden.",
+      "Remove and immediately sprinkle generously with Mom Masale Chatpata Sprinkle Masala.",
+      "Serve hot with tea."
+    ],
+    "relatedProducts": [
+      "turmeric-powder"
+    ],
+    "seo": {
+      "title": "Chatpata Pakora Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Chatpata Pakora at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "chatpata pakora recipe",
+        "how to make chatpata pakora",
+        "mom masale",
+        "chatpata sprinkle masala",
+        "turmeric powder"
+      ]
+    }
+  },
+  {
+    "slug": "fruit-chaat",
+    "title": "Fruit Chaat",
+    "cuisine": "Indian",
+    "category": "Snack",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/fruit-chaat.jpg",
+    "imageAlt": "Fruit Chaat",
+    "description": "Step-by-step Fruit Chaat recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "4 cups Seasonal Fruits (Apple, Banana, Papaya, Pomegranate)",
+        "productSlug": null
+      },
+      {
+        "text": "1 tsp Mom Masale Chaat Masala",
+        "productSlug": "chaat-masala"
+      },
+      {
+        "text": "1 tsp Lemon Juice",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Combine all chopped fruits in a large bowl.",
+      "Add fresh lemon juice.",
+      "Sprinkle Mom Masale Chaat Masala.",
+      "Toss gently.",
+      "Serve immediately."
+    ],
+    "relatedProducts": [
+      "chaat-masala"
+    ],
+    "seo": {
+      "title": "Fruit Chaat Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Fruit Chaat at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "fruit chaat recipe",
+        "how to make fruit chaat",
+        "mom masale",
+        "chaat masala"
+      ]
+    }
+  },
+  {
+    "slug": "mixed-fruit-salad",
+    "title": "Mixed Fruit Salad",
+    "cuisine": "Indian",
+    "category": "Snack",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/mixed-fruit-salad.jpg",
+    "imageAlt": "Mixed Fruit Salad",
+    "description": "Step-by-step Mixed Fruit Salad recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "3 cups Cucumber, Tomato, Carrot & Apple Slices",
+        "productSlug": null
+      },
+      {
+        "text": "1 tsp Mom Masale Fruit & Salad Masala",
+        "productSlug": "fruit-and-salad-masala"
+      }
+    ],
+    "steps": [
+      "Arrange all sliced fruits and vegetables attractively on a serving platter.",
+      "Sprinkle Mom Masale Fruit & Salad Masala evenly just before serving."
+    ],
+    "relatedProducts": [
+      "fruit-and-salad-masala"
+    ],
+    "seo": {
+      "title": "Mixed Fruit Salad Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Mixed Fruit Salad at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "mixed fruit salad recipe",
+        "how to make mixed fruit salad",
+        "mom masale",
+        "fruit salad masala"
+      ]
+    }
+  },
+  {
+    "slug": "booknu-potato-chaat",
+    "title": "Booknu Potato Chaat",
+    "cuisine": "Indian",
+    "category": "Snack",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/booknu-potato-chaat.jpg",
+    "imageAlt": "Booknu Potato Chaat",
+    "description": "Step-by-step Booknu Potato Chaat recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "4 medium Boiled Potatoes, diced",
+        "productSlug": null
+      },
+      {
+        "text": "1 tbsp Ghee or Oil",
+        "productSlug": null
+      },
+      {
+        "text": "1 tsp Mom Masale Booknu",
+        "productSlug": null
+      },
+      {
+        "text": "1 tsp Lemon Juice",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Heat ghee or oil in a pan.",
+      "Sauté the diced potatoes until lightly crisp.",
+      "Transfer to a serving plate.",
+      "Sprinkle Mom Masale Booknu evenly over the potatoes.",
+      "Add lemon juice and toss gently.",
+      "Serve hot as a flavorful digestive snack."
+    ],
+    "relatedProducts": [
+      "kuch-bhi-masala"
+    ],
+    "seo": {
+      "title": "Booknu Potato Chaat Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Booknu Potato Chaat at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "booknu potato chaat recipe",
+        "how to make booknu potato chaat",
+        "mom masale",
+        "booknu"
+      ]
+    }
+  },
+  {
+    "slug": "matar-paneer",
+    "title": "Matar Paneer",
+    "cuisine": "Indian",
+    "category": "Main Course",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/matar-paneer.jpg",
+    "imageAlt": "Matar Paneer",
+    "description": "Step-by-step Matar Paneer recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "250 g Paneer, cubed",
+        "productSlug": null
+      },
+      {
+        "text": "1 cup Green Peas",
+        "productSlug": null
+      },
+      {
+        "text": "1½ tbsp Mom Masale Matar Paneer Masala",
+        "productSlug": "matar-paneer-masala"
+      },
+      {
+        "text": "½ tsp Mom Masale Turmeric Powder",
+        "productSlug": "turmeric-powder"
+      },
+      {
+        "text": "½ tsp Mom Masale Red Chilli Powder",
+        "productSlug": "red-chilli-powder"
+      },
+      {
+        "text": "½ tsp Mom Masale Coriander Powder",
+        "productSlug": "coriander-powder"
+      },
+      {
+        "text": "1 cup Onion-Tomato Paste",
+        "productSlug": null
+      },
+      {
+        "text": "1½ cups Water",
+        "productSlug": null
+      },
+      {
+        "text": "To taste Salt",
+        "productSlug": null
+      },
+      {
+        "text": "As required Oil",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Heat oil in a pan and sauté the onion-tomato paste until well cooked.",
+      "Add Mom Masale Turmeric Powder, Red Chilli Powder, Coriander Powder, and Matar Paneer Masala. Cook over low heat until the oil begins to separate.",
+      "Add the green peas and paneer cubes.",
+      "Pour in 1½ cups of water and season with salt.",
+      "Cover and simmer for about 10 minutes.",
+      "Serve hot with naan, roti, or steamed rice."
+    ],
+    "relatedProducts": [
+      "coriander-powder",
+      "matar-paneer-masala",
+      "red-chilli-powder",
+      "turmeric-powder"
+    ],
+    "seo": {
+      "title": "Matar Paneer Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Matar Paneer at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "matar paneer recipe",
+        "how to make matar paneer",
+        "mom masale",
+        "coriander powder",
+        "matar paneer masala",
+        "red chilli powder",
+        "turmeric powder"
+      ]
     }
   },
   {
@@ -143,34 +977,1025 @@
     "cuisine": "Indian",
     "category": "Main Course",
     "prepTime": "PT10M",
-    "cookTime": "PT25M",
+    "cookTime": "PT20M",
     "servings": 4,
     "image": "images/recipes/shahi-paneer.jpg",
-    "imageAlt": "A bowl of shahi paneer",
-    "description": "A creamy, royal-style paneer curry made easy with Mom Masale Shahi Paneer Masala.",
+    "imageAlt": "Shahi Paneer",
+    "description": "Step-by-step Shahi Paneer recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
-      { "text": "250g paneer, cubed", "productSlug": null },
-      { "text": "2 onions, pureed", "productSlug": null },
-      { "text": "1/2 cup cashew paste or cream", "productSlug": null },
-      { "text": "2 tbsp Shahi Paneer Masala", "productSlug": "shahi-paneer-masala" },
-      { "text": "1 tbsp ginger-garlic paste", "productSlug": null },
-      { "text": "2 tbsp ghee or butter", "productSlug": null },
-      { "text": "Salt to taste", "productSlug": null },
-      { "text": "A pinch of sugar", "productSlug": null }
+      {
+        "text": "250 g Paneer",
+        "productSlug": null
+      },
+      {
+        "text": "1½ tbsp Mom Masale Shahi Paneer Masala",
+        "productSlug": "shahi-paneer-masala"
+      },
+      {
+        "text": "½ cup Tomato-Cashew Paste",
+        "productSlug": null
+      },
+      {
+        "text": "1 cup Milk",
+        "productSlug": null
+      },
+      {
+        "text": "3 tbsp Fresh Cream",
+        "productSlug": null
+      },
+      {
+        "text": "2 tbsp Ghee",
+        "productSlug": null
+      }
     ],
     "steps": [
-      "Heat ghee in a pan and sauté the onion puree until golden.",
-      "Add ginger-garlic paste and cook for a minute until fragrant.",
-      "Stir in the Shahi Paneer Masala and cook for 1-2 minutes.",
-      "Add the cashew paste or cream along with a splash of water, and simmer until the gravy thickens.",
-      "Gently fold in the paneer cubes, season with salt and a pinch of sugar, and simmer for 3-4 minutes.",
-      "Serve hot, garnished with a swirl of cream, alongside naan or rice."
+      "Heat ghee in a pan and sauté the tomato-cashew paste until fragrant.",
+      "Add Mom Masale Shahi Paneer Masala and cook for another minute.",
+      "Pour in the milk instead of water and bring to a gentle boil.",
+      "Add the paneer cubes and fresh cream.",
+      "Simmer over low heat for 5 minutes.",
+      "Serve hot with naan, kulcha, or jeera rice."
     ],
-    "relatedProducts": ["shahi-paneer-masala"],
+    "relatedProducts": [
+      "shahi-paneer-masala"
+    ],
     "seo": {
       "title": "Shahi Paneer Recipe | Mom Masale",
-      "metaDescription": "Make creamy, restaurant-style Shahi Paneer at home with Mom Masale Shahi Paneer Masala. Easy step-by-step recipe.",
-      "keywords": ["shahi paneer recipe", "shahi paneer masala recipe", "how to make shahi paneer"]
+      "metaDescription": "Learn how to make Shahi Paneer at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "shahi paneer recipe",
+        "how to make shahi paneer",
+        "mom masale",
+        "shahi paneer masala"
+      ]
+    }
+  },
+  {
+    "slug": "kadai-paneer",
+    "title": "Kadai Paneer",
+    "cuisine": "Indian",
+    "category": "Main Course",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/kadai-paneer.jpg",
+    "imageAlt": "Kadai Paneer",
+    "description": "Step-by-step Kadai Paneer recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "250 g Paneer",
+        "productSlug": null
+      },
+      {
+        "text": "1 cup Capsicum, diced",
+        "productSlug": null
+      },
+      {
+        "text": "1 cup Onion, diced",
+        "productSlug": null
+      },
+      {
+        "text": "1½ tbsp Mom Masale Kadai Paneer Masala",
+        "productSlug": null
+      },
+      {
+        "text": "1 tsp Mom Masale Kasuri Methi",
+        "productSlug": "kasuri-methi"
+      },
+      {
+        "text": "1 cup Tomato Purée",
+        "productSlug": null
+      },
+      {
+        "text": "½ cup Water",
+        "productSlug": null
+      },
+      {
+        "text": "As required Oil",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Heat oil and stir-fry the capsicum and onions over high heat for about 2 minutes. Remove and set aside.",
+      "In the same pan, cook the tomato purée with Mom Masale Kadai Paneer Masala until aromatic.",
+      "Add the paneer, sautéed vegetables, and water.",
+      "Simmer for about 5 minutes.",
+      "Crush Mom Masale Kasuri Methi between your palms and sprinkle over the curry just before serving."
+    ],
+    "relatedProducts": [
+      "kasuri-methi"
+    ],
+    "seo": {
+      "title": "Kadai Paneer Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Kadai Paneer at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "kadai paneer recipe",
+        "how to make kadai paneer",
+        "mom masale",
+        "kadai paneer masala",
+        "kasuri methi"
+      ]
+    }
+  },
+  {
+    "slug": "chole-masala",
+    "title": "Chole Masala",
+    "cuisine": "Indian",
+    "category": "Main Course",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/chole-masala.jpg",
+    "imageAlt": "Chole Masala",
+    "description": "Step-by-step Chole Masala recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "2 cups Boiled Chickpeas",
+        "productSlug": null
+      },
+      {
+        "text": "2 tbsp Mom Masale Chole Masala",
+        "productSlug": "chhola-masala"
+      },
+      {
+        "text": "½ tsp Mom Masale Amchur Powder",
+        "productSlug": "amchur-powder"
+      },
+      {
+        "text": "1 cup Onion, finely chopped",
+        "productSlug": null
+      },
+      {
+        "text": "1 cup Tomato, finely chopped",
+        "productSlug": null
+      },
+      {
+        "text": "To taste Mom Masale Red Chilli Powder",
+        "productSlug": "red-chilli-powder"
+      },
+      {
+        "text": "To taste Salt",
+        "productSlug": null
+      },
+      {
+        "text": "As required Oil",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Heat oil in a pan and sauté the onions until golden.",
+      "Add the tomatoes and cook until soft.",
+      "Stir in Mom Masale Chole Masala, red chilli powder, and salt.",
+      "Add the boiled chickpeas and Mom Masale Amchur Powder.",
+      "Simmer for about 12 minutes so the chickpeas absorb the flavours.",
+      "Garnish with fresh coriander and serve with bhature, puri, or rice."
+    ],
+    "relatedProducts": [
+      "amchur-powder",
+      "chhola-masala",
+      "red-chilli-powder"
+    ],
+    "seo": {
+      "title": "Chole Masala Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Chole Masala at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "chole masala recipe",
+        "how to make chole masala",
+        "mom masale",
+        "amchur powder",
+        "chole masala",
+        "red chilli powder"
+      ]
+    }
+  },
+  {
+    "slug": "dal-makhani",
+    "title": "Dal Makhani",
+    "cuisine": "Indian",
+    "category": "Main Course",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/dal-makhani.jpg",
+    "imageAlt": "Dal Makhani",
+    "description": "Step-by-step Dal Makhani recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "2 cups Boiled Whole Black Gram & Kidney Beans",
+        "productSlug": null
+      },
+      {
+        "text": "1½ tbsp Mom Masale Dal Makhani Masala",
+        "productSlug": null
+      },
+      {
+        "text": "1 cup Tomato Purée",
+        "productSlug": null
+      },
+      {
+        "text": "1 tbsp Ginger-Garlic Paste",
+        "productSlug": null
+      },
+      {
+        "text": "3 tbsp Butter",
+        "productSlug": null
+      },
+      {
+        "text": "¼ cup Fresh Cream",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Melt butter in a heavy-bottomed pan.",
+      "Sauté the ginger-garlic paste, then add the tomato purée and cook until well blended.",
+      "Add Mom Masale Dal Makhani Masala and mix thoroughly.",
+      "Stir in the cooked lentils and kidney beans.",
+      "Simmer over low heat for about 30 minutes, stirring occasionally.",
+      "Finish with fresh cream and serve hot."
+    ],
+    "relatedProducts": [],
+    "seo": {
+      "title": "Dal Makhani Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Dal Makhani at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "dal makhani recipe",
+        "how to make dal makhani",
+        "mom masale",
+        "dal makhani masala"
+      ]
+    }
+  },
+  {
+    "slug": "dum-aloo",
+    "title": "Dum Aloo",
+    "cuisine": "Indian",
+    "category": "Main Course",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/dum-aloo.jpg",
+    "imageAlt": "Dum Aloo",
+    "description": "Step-by-step Dum Aloo recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "12–15 Small Potatoes, boiled and peeled",
+        "productSlug": null
+      },
+      {
+        "text": "1½ tbsp Mom Masale Dum Aloo Masala",
+        "productSlug": "dam-aloo-masala"
+      },
+      {
+        "text": "1 cup Whisked Yogurt",
+        "productSlug": null
+      },
+      {
+        "text": "½ cup Onion Paste",
+        "productSlug": null
+      },
+      {
+        "text": "As required Oil",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Deep fry the potatoes until lightly golden.",
+      "Heat a little oil in another pan and sauté the onion paste.",
+      "Reduce the heat and stir in the whisked yogurt along with Mom Masale Dum Aloo Masala.",
+      "Add the fried potatoes.",
+      "Cover and cook over low heat for about 10 minutes.",
+      "Serve hot with Indian breads."
+    ],
+    "relatedProducts": [
+      "dam-aloo-masala"
+    ],
+    "seo": {
+      "title": "Dum Aloo Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Dum Aloo at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "dum aloo recipe",
+        "how to make dum aloo",
+        "mom masale",
+        "dum aloo masala"
+      ]
+    }
+  },
+  {
+    "slug": "sambar",
+    "title": "Sambar",
+    "cuisine": "Indian",
+    "category": "Main Course",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/sambar.jpg",
+    "imageAlt": "Sambar",
+    "description": "Step-by-step Sambar recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "1½ cups Cooked Toor Dal (Pigeon Pea Lentils)",
+        "productSlug": null
+      },
+      {
+        "text": "2 tbsp Mom Masale Sambar Masala",
+        "productSlug": "sambhar-masala"
+      },
+      {
+        "text": "1 cup Mixed Vegetables (Drumsticks, Pumpkin, Bottle Gourd, Brinjal, Okra, French Beans, Carrot, Potato)",
+        "productSlug": null
+      },
+      {
+        "text": "3 tbsp Tamarind Pulp",
+        "productSlug": null
+      },
+      {
+        "text": "2 tbsp Oil",
+        "productSlug": null
+      },
+      {
+        "text": "1 tsp Mustard Seeds",
+        "productSlug": null
+      },
+      {
+        "text": "2 Dried Red Chillies",
+        "productSlug": null
+      },
+      {
+        "text": "8–10 Curry Leaves",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Boil the vegetables separately with a little water and salt until tender.",
+      "Add the cooked vegetables, tamarind pulp, and Mom Masale Sambar Masala to the cooked dal.",
+      "Bring to a gentle boil.",
+      "Heat oil in a small pan and prepare a tempering with mustard seeds, dried red chillies, and curry leaves.",
+      "Pour the tempering over the sambar.",
+      "Serve hot with steamed rice, idli, dosa, or vada."
+    ],
+    "relatedProducts": [
+      "sambhar-masala"
+    ],
+    "seo": {
+      "title": "Sambar Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Sambar at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "sambar recipe",
+        "how to make sambar",
+        "mom masale",
+        "sambar masala"
+      ]
+    }
+  },
+  {
+    "slug": "mixed-vegetable-stir-fry",
+    "title": "Mixed Vegetable Stir-Fry",
+    "cuisine": "Indian",
+    "category": "Main Course",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/mixed-vegetable-stir-fry.jpg",
+    "imageAlt": "Mixed Vegetable Stir-Fry",
+    "description": "Step-by-step Mixed Vegetable Stir-Fry recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "3 cups Mixed Vegetables (Cauliflower, Potatoes, Carrots)",
+        "productSlug": null
+      },
+      {
+        "text": "1 tbsp Mom Masale Sabzi Masala",
+        "productSlug": "sabzi-king-masala"
+      },
+      {
+        "text": "½ tsp Mom Masale Turmeric Powder",
+        "productSlug": "turmeric-powder"
+      },
+      {
+        "text": "½ tsp Mom Masale Red Chilli Powder",
+        "productSlug": "red-chilli-powder"
+      },
+      {
+        "text": "½ tsp Mom Masale Coriander Powder",
+        "productSlug": "coriander-powder"
+      },
+      {
+        "text": "1 tsp Cumin Seeds",
+        "productSlug": null
+      },
+      {
+        "text": "2 tbsp Oil",
+        "productSlug": null
+      },
+      {
+        "text": "To taste Salt",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Heat oil in a pan and add the cumin seeds. Allow them to splutter.",
+      "Add the mixed vegetables and sauté for about 5 minutes.",
+      "Stir in Mom Masale Sabzi Masala, Turmeric Powder, Red Chilli Powder, Coriander Powder, and salt.",
+      "Mix well, cover, and cook over low heat until the vegetables are tender.",
+      "Stir occasionally to prevent sticking.",
+      "Serve hot with chapati or dal and rice."
+    ],
+    "relatedProducts": [
+      "coriander-powder",
+      "red-chilli-powder",
+      "sabzi-king-masala",
+      "turmeric-powder"
+    ],
+    "seo": {
+      "title": "Mixed Vegetable Stir-Fry Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Mixed Vegetable Stir-Fry at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "mixed vegetable stir-fry recipe",
+        "how to make mixed vegetable stir-fry",
+        "mom masale",
+        "coriander powder",
+        "red chilli powder",
+        "sabzi masala",
+        "turmeric powder"
+      ]
+    }
+  },
+  {
+    "slug": "stuffed-baby-eggplants-bharwa-baingan",
+    "title": "Stuffed Baby Eggplants (Bharwa Baingan)",
+    "cuisine": "Indian",
+    "category": "Main Course",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/stuffed-baby-eggplants-bharwa-baingan.jpg",
+    "imageAlt": "Stuffed Baby Eggplants (Bharwa Baingan)",
+    "description": "Step-by-step Stuffed Baby Eggplants (Bharwa Baingan) recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "8 Small Eggplants (slit lengthwise)",
+        "productSlug": null
+      },
+      {
+        "text": "3 tbsp Mom Masale Kalonji Stuffing Masala",
+        "productSlug": "kalonji-bharwa-masala"
+      },
+      {
+        "text": "1 tsp Mom Masale Amchur Powder",
+        "productSlug": "amchur-powder"
+      },
+      {
+        "text": "3 tbsp Oil",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "In a bowl, combine Mom Masale Kalonji Stuffing Masala, Mom Masale Amchur Powder, and 1 tablespoon of oil to form a dry stuffing mixture.",
+      "Carefully fill each slit eggplant with the prepared spice mixture.",
+      "Heat the remaining oil in a heavy-bottomed pan.",
+      "Arrange the stuffed eggplants in a single layer.",
+      "Cover and cook over low heat, turning occasionally, until the eggplants become soft and evenly cooked.",
+      "Serve hot with roti or paratha."
+    ],
+    "relatedProducts": [
+      "amchur-powder",
+      "kalonji-bharwa-masala"
+    ],
+    "seo": {
+      "title": "Stuffed Baby Eggplants (Bharwa Baingan) Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Stuffed Baby Eggplants (Bharwa Baingan) at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "stuffed baby eggplants (bharwa baingan) recipe",
+        "how to make stuffed baby eggplants (bharwa baingan)",
+        "mom masale",
+        "amchur powder",
+        "kalonji stuffing masala"
+      ]
+    }
+  },
+  {
+    "slug": "stuffed-okra-bharwa-bhindi",
+    "title": "Stuffed Okra (Bharwa Bhindi)",
+    "cuisine": "Indian",
+    "category": "Main Course",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/stuffed-okra-bharwa-bhindi.jpg",
+    "imageAlt": "Stuffed Okra (Bharwa Bhindi)",
+    "description": "Step-by-step Stuffed Okra (Bharwa Bhindi) recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "250 g Fresh Okra",
+        "productSlug": null
+      },
+      {
+        "text": "2 tbsp Mom Masale Kalonji Stuffing Masala",
+        "productSlug": "kalonji-bharwa-masala"
+      },
+      {
+        "text": "2 tbsp Oil",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Wash the okra thoroughly and dry completely to remove all moisture.",
+      "Make a lengthwise slit in each okra without cutting it into two pieces.",
+      "Fill each okra with Mom Masale Kalonji Stuffing Masala.",
+      "Heat oil in a pan and arrange the stuffed okra in a single layer.",
+      "Cook uncovered over low heat until the okra becomes tender and lightly crisp.",
+      "Turn gently during cooking to avoid breaking the filling.",
+      "Serve hot."
+    ],
+    "relatedProducts": [
+      "kalonji-bharwa-masala"
+    ],
+    "seo": {
+      "title": "Stuffed Okra (Bharwa Bhindi) Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Stuffed Okra (Bharwa Bhindi) at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "stuffed okra (bharwa bhindi) recipe",
+        "how to make stuffed okra (bharwa bhindi)",
+        "mom masale",
+        "kalonji stuffing masala"
+      ]
+    }
+  },
+  {
+    "slug": "stuffed-bitter-gourd-bharwa-karela",
+    "title": "Stuffed Bitter Gourd (Bharwa Karela)",
+    "cuisine": "Indian",
+    "category": "Main Course",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/stuffed-bitter-gourd-bharwa-karela.jpg",
+    "imageAlt": "Stuffed Bitter Gourd (Bharwa Karela)",
+    "description": "Step-by-step Stuffed Bitter Gourd (Bharwa Karela) recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "4 Bitter Gourds, peeled and deseeded",
+        "productSlug": null
+      },
+      {
+        "text": "3 tbsp Mom Masale Kalonji Stuffing Masala",
+        "productSlug": "kalonji-bharwa-masala"
+      },
+      {
+        "text": "1 cup Onion, finely chopped",
+        "productSlug": null
+      },
+      {
+        "text": "3 tbsp Oil",
+        "productSlug": null
+      },
+      {
+        "text": "As required Salt",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Rub the bitter gourds with salt and leave them aside for about 20 minutes to reduce bitterness.",
+      "Rinse thoroughly and pat dry.",
+      "Heat oil in a pan and sauté the chopped onions until lightly golden.",
+      "Add Mom Masale Kalonji Stuffing Masala and mix well.",
+      "Stuff the prepared onion mixture into each bitter gourd.",
+      "Tie each stuffed bitter gourd securely with kitchen thread to prevent the filling from spilling out during cooking.",
+      "Place them in a pan with a little oil, cover, and cook over low heat.",
+      "Turn occasionally until all sides are evenly browned and the bitter gourds are tender.",
+      "Remove the thread before serving."
+    ],
+    "relatedProducts": [
+      "kalonji-bharwa-masala"
+    ],
+    "seo": {
+      "title": "Stuffed Bitter Gourd (Bharwa Karela) Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Stuffed Bitter Gourd (Bharwa Karela) at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "stuffed bitter gourd (bharwa karela) recipe",
+        "how to make stuffed bitter gourd (bharwa karela)",
+        "mom masale",
+        "kalonji stuffing masala"
+      ]
+    }
+  },
+  {
+    "slug": "vegetable-biryani",
+    "title": "Vegetable Biryani",
+    "cuisine": "Indian",
+    "category": "Rice",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/vegetable-biryani.jpg",
+    "imageAlt": "Vegetable Biryani",
+    "description": "Step-by-step Vegetable Biryani recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "2 cups Basmati Rice (80% cooked)",
+        "productSlug": null
+      },
+      {
+        "text": "1½ cups Mixed Vegetables",
+        "productSlug": null
+      },
+      {
+        "text": "2 tbsp Mom Masale Biryani Masala",
+        "productSlug": "biryani-masala"
+      },
+      {
+        "text": "½ cup Yogurt",
+        "productSlug": null
+      },
+      {
+        "text": "2 tbsp Ghee",
+        "productSlug": null
+      },
+      {
+        "text": "¼ cup (for garnish) Fried Onions",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Marinate the mixed vegetables with the yogurt and Mom Masale Biryani Masala for 15 minutes.",
+      "Cook the marinated vegetables until they are tender.",
+      "In a heavy-bottomed pot, spread a layer of the cooked vegetables.",
+      "Add a layer of the partially cooked basmati rice over the vegetables.",
+      "Drizzle with ghee and sprinkle fried onions on top.",
+      "Cover the pot tightly and cook on low heat (\"dum\") for about 10 minutes.",
+      "Gently fluff the biryani before serving.",
+      "Serve hot with raita or pickle."
+    ],
+    "relatedProducts": [
+      "biryani-masala"
+    ],
+    "seo": {
+      "title": "Vegetable Biryani Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Vegetable Biryani at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "vegetable biryani recipe",
+        "how to make vegetable biryani",
+        "mom masale",
+        "biryani masala"
+      ]
+    }
+  },
+  {
+    "slug": "hyderabadi-vegetable-biryani",
+    "title": "Hyderabadi Vegetable Biryani",
+    "cuisine": "Indian",
+    "category": "Rice",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/hyderabadi-vegetable-biryani.jpg",
+    "imageAlt": "Hyderabadi Vegetable Biryani",
+    "description": "Step-by-step Hyderabadi Vegetable Biryani recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "2 cups Basmati Rice",
+        "productSlug": null
+      },
+      {
+        "text": "2 cups Mixed Vegetables",
+        "productSlug": null
+      },
+      {
+        "text": "1 cup Paneer, cubed",
+        "productSlug": null
+      },
+      {
+        "text": "2½ tbsp Mom Masale Hyderabadi Biryani Mix Masala",
+        "productSlug": "biryani-masala"
+      },
+      {
+        "text": "3 tbsp Ghee",
+        "productSlug": null
+      },
+      {
+        "text": "¼ cup Fresh Mint Leaves",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Cook the vegetables and paneer halfway with Mom Masale Hyderabadi Biryani Mix Masala and ghee.",
+      "Spread the partially cooked vegetable mixture evenly in a heavy-bottomed pot.",
+      "Layer the partially cooked basmati rice over the vegetables.",
+      "Sprinkle fresh mint leaves across the top.",
+      "Seal the pot tightly with a lid (or dough for traditional dum cooking).",
+      "Cook over low heat for approximately 15 minutes.",
+      "Allow the biryani to rest for 5 minutes before opening the lid.",
+      "Gently fluff the rice and serve hot with raita, salan, or yogurt."
+    ],
+    "relatedProducts": [
+      "biryani-masala"
+    ],
+    "seo": {
+      "title": "Hyderabadi Vegetable Biryani Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Hyderabadi Vegetable Biryani at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "hyderabadi vegetable biryani recipe",
+        "how to make hyderabadi vegetable biryani",
+        "mom masale",
+        "hyderabadi biryani mix masala"
+      ]
+    }
+  },
+  {
+    "slug": "masala-poori",
+    "title": "Masala Poori",
+    "cuisine": "Indian",
+    "category": "Bread",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/masala-poori.jpg",
+    "imageAlt": "Masala Poori",
+    "description": "Step-by-step Masala Poori recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "2 cups Whole Wheat Flour",
+        "productSlug": null
+      },
+      {
+        "text": "½ tsp Mom Masale Garam Masala",
+        "productSlug": "garam-masala"
+      },
+      {
+        "text": "¼ tsp Mom Masale Turmeric Powder",
+        "productSlug": "turmeric-powder"
+      },
+      {
+        "text": "¼ tsp Mom Masale Red Chilli Powder",
+        "productSlug": "red-chilli-powder"
+      },
+      {
+        "text": "To taste Salt",
+        "productSlug": null
+      },
+      {
+        "text": "2 tsp (for dough) Oil",
+        "productSlug": null
+      },
+      {
+        "text": "For deep frying Oil",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Combine the flour with Mom Masale Garam Masala, turmeric powder, red chilli powder, salt, and 2 teaspoons of oil.",
+      "Knead into a firm dough using water as required.",
+      "Divide the dough into small portions and roll into evenly sized pooris.",
+      "Heat oil in a deep pan.",
+      "Fry each poori until it puffs up and turns golden brown on both sides.",
+      "Serve hot with potato curry, chole, or pickle."
+    ],
+    "relatedProducts": [
+      "garam-masala",
+      "red-chilli-powder",
+      "turmeric-powder"
+    ],
+    "seo": {
+      "title": "Masala Poori Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Masala Poori at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "masala poori recipe",
+        "how to make masala poori",
+        "mom masale",
+        "garam masala",
+        "red chilli powder",
+        "turmeric powder"
+      ]
+    }
+  },
+  {
+    "slug": "aloo-paratha",
+    "title": "Aloo Paratha",
+    "cuisine": "Indian",
+    "category": "Bread",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/aloo-paratha.jpg",
+    "imageAlt": "Aloo Paratha",
+    "description": "Step-by-step Aloo Paratha recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "2 cups Whole Wheat Dough",
+        "productSlug": null
+      },
+      {
+        "text": "4 medium Boiled Potatoes, mashed",
+        "productSlug": null
+      },
+      {
+        "text": "1 tsp Mom Masale Chaat Masala",
+        "productSlug": "chaat-masala"
+      },
+      {
+        "text": "1 tbsp Mom Masale Kasuri Methi (crushed)",
+        "productSlug": "kasuri-methi"
+      },
+      {
+        "text": "As desired Green Chillies, finely chopped",
+        "productSlug": null
+      },
+      {
+        "text": "To taste Salt",
+        "productSlug": null
+      },
+      {
+        "text": "For cooking Ghee or Oil",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Mix the mashed potatoes with salt, green chillies, Mom Masale Chaat Masala, and crushed Mom Masale Kasuri Methi.",
+      "Divide the dough into equal portions.",
+      "Stuff each portion with the potato filling and seal carefully.",
+      "Roll into thick parathas.",
+      "Cook on a hot griddle, applying ghee or oil on both sides.",
+      "Cook until golden brown and crisp.",
+      "Serve with yogurt, pickle, or butter."
+    ],
+    "relatedProducts": [
+      "chaat-masala",
+      "kasuri-methi"
+    ],
+    "seo": {
+      "title": "Aloo Paratha Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Aloo Paratha at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "aloo paratha recipe",
+        "how to make aloo paratha",
+        "mom masale",
+        "chaat masala",
+        "kasuri methi crushed"
+      ]
+    }
+  },
+  {
+    "slug": "booknu-paratha",
+    "title": "Booknu Paratha",
+    "cuisine": "Indian",
+    "category": "Bread",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/booknu-paratha.jpg",
+    "imageAlt": "Booknu Paratha",
+    "description": "Step-by-step Booknu Paratha recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "2 cups Whole Wheat Flour",
+        "productSlug": null
+      },
+      {
+        "text": "2 tsp Mom Masale Booknu",
+        "productSlug": null
+      },
+      {
+        "text": "For roasting Ghee or Oil",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Roll a portion of dough into a thin chapati.",
+      "Spread a thin layer of ghee over the surface.",
+      "Sprinkle about ½ teaspoon of Mom Masale Booknu evenly across the dough.",
+      "Fold into a triangle (or preferred layered shape).",
+      "Roll out gently again.",
+      "Roast on a hot griddle with ghee until both sides become crisp and golden.",
+      "Serve hot with curd, pickle, or tea."
+    ],
+    "relatedProducts": [],
+    "seo": {
+      "title": "Booknu Paratha Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Booknu Paratha at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "booknu paratha recipe",
+        "how to make booknu paratha",
+        "mom masale",
+        "booknu"
+      ]
+    }
+  },
+  {
+    "slug": "gulab-jamun",
+    "title": "Gulab Jamun",
+    "cuisine": "Indian",
+    "category": "Dessert",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/gulab-jamun.jpg",
+    "imageAlt": "Gulab Jamun",
+    "description": "Step-by-step Gulab Jamun recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "1 packet Mom Masale Gulab Jamun Mix",
+        "productSlug": "gulab-jamun-mix"
+      },
+      {
+        "text": "2 cups Sugar",
+        "productSlug": null
+      },
+      {
+        "text": "2 cups Water",
+        "productSlug": null
+      },
+      {
+        "text": "As required (for kneading) Milk or Water",
+        "productSlug": null
+      },
+      {
+        "text": "For deep frying Ghee or Oil",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "In a saucepan, combine the sugar and water.",
+      "Bring to a boil, stirring until the sugar dissolves completely.",
+      "Simmer for a few minutes until a light, slightly sticky syrup forms.",
+      "Keep the syrup warm.",
+      "Transfer the Mom Masale Gulab Jamun Mix to a mixing bowl.",
+      "Gradually add milk (or water) and knead into a soft, smooth dough.",
+      "Divide the dough into equal portions and roll into smooth, crack-free balls.",
+      "Heat ghee or oil over low to medium heat.",
+      "Fry the dough balls gently until they turn an even deep golden brown.",
+      "Remove carefully and immediately immerse them in the warm sugar syrup.",
+      "Allow them to soak for at least 2 hours so they absorb the syrup completely.",
+      "Serve warm or at room temperature."
+    ],
+    "relatedProducts": [
+      "gulab-jamun-mix"
+    ],
+    "seo": {
+      "title": "Gulab Jamun Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Gulab Jamun at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "gulab jamun recipe",
+        "how to make gulab jamun",
+        "mom masale",
+        "gulab jamun mix"
+      ]
+    }
+  },
+  {
+    "slug": "kheer-indian-rice-pudding",
+    "title": "Kheer (Indian Rice Pudding)",
+    "cuisine": "Indian",
+    "category": "Dessert",
+    "prepTime": "PT10M",
+    "cookTime": "PT20M",
+    "servings": 4,
+    "image": "images/recipes/kheer-indian-rice-pudding.jpg",
+    "imageAlt": "Kheer (Indian Rice Pudding)",
+    "description": "Step-by-step Kheer (Indian Rice Pudding) recipe made with Mom Masale ingredients for authentic Indian flavour.",
+    "ingredients": [
+      {
+        "text": "1 packet (approximately 4 tbsp) Mom Masale Kheer Premix",
+        "productSlug": null
+      },
+      {
+        "text": "1 litre Full-Cream Milk",
+        "productSlug": null
+      },
+      {
+        "text": "Chopped almonds",
+        "productSlug": null
+      },
+      {
+        "text": "Chopped pistachios",
+        "productSlug": null
+      },
+      {
+        "text": "Saffron strands (optional)",
+        "productSlug": null
+      }
+    ],
+    "steps": [
+      "Pour 1 litre of full-cream milk into a heavy-bottomed saucepan or kadai.",
+      "Bring the milk to a full boil over medium-high heat.",
+      "Reduce the heat to low.",
+      "Gradually add the Mom Masale Kheer Premix, stirring continuously to prevent lumps from forming.",
+      "Cook over low to medium heat for 12–15 minutes, stirring frequently to prevent the kheer from sticking to the bottom of the pan.",
+      "Continue cooking until the rice is fully cooked and the kheer becomes rich and creamy.",
+      "Keep in mind that the kheer will thicken further as it cools, so avoid over-reducing it.",
+      "Remove from the heat.",
+      "Serve warm, or chill in the refrigerator for 1–2 hours before serving.",
+      "Garnish with chopped almonds or pistachios, if desired."
+    ],
+    "relatedProducts": [],
+    "seo": {
+      "title": "Kheer (Indian Rice Pudding) Recipe | Mom Masale",
+      "metaDescription": "Learn how to make Kheer (Indian Rice Pudding) at home with this easy Mom Masale recipe.",
+      "keywords": [
+        "kheer (indian rice pudding) recipe",
+        "how to make kheer (indian rice pudding)",
+        "mom masale",
+        "kheer premix"
+      ]
     }
   }
 ]

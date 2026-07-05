@@ -256,6 +256,7 @@ function closeProductOverlay() {
 
 document.addEventListener('click', e => {
     if (e.target.closest('#product-modal')) return;
+    if (e.target.closest('.card-goto-btn')) return;
     const card = e.target.closest('.card--collapsed');
     if (!card) return;
     if (card.dataset.justPeeked) {
@@ -469,7 +470,7 @@ async function loadProducts() {
             <img src="${p.image}" alt="${p.name}" loading="lazy" width="400" height="400"
                 onload="this.closest('.card-image').style.animation='none'"
                 onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(p.name)}'">
-            <span class="tap-hint">Tap for details</span>
+            <span class="tap-hint">Preview</span>
         </div>
         <div class="card-body">
             <span class="card-category">${p.category}</span>
@@ -515,6 +516,12 @@ async function loadProducts() {
             <span class="back-hint">Tap to edit</span>
         </div>
       </div>
+      ${p.slug ? `<a class="card-goto-btn" href="products/${p.slug}.html" aria-label="View ${p.name} details" onclick="event.stopPropagation()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>` : ''}
     </div>
 `).join('');
 
@@ -741,21 +748,30 @@ async function loadRecipes() {
         const recipes = await fetch('data/recipes.json').then(r => r.json());
 
         container.innerHTML = recipes.map(r => `
-            <a class="card recipe-card" href="recipes/${r.slug}.html">
-                <div class="card-image">
-                    <img src="${r.image}" alt="${r.imageAlt || r.title}" loading="lazy" width="400" height="400"
-                        onload="this.closest('.card-image').style.animation='none'"
-                        onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(r.title)}'">
+            <a class="card recipe-bar" href="recipes/${r.slug}.html">
+                <div class="recipe-bar-image">
+                    <img src="${r.image}" alt="${r.imageAlt || r.title}" loading="lazy" width="120" height="120"
+                        onload="this.closest('.recipe-bar-image').style.animation='none'"
+                        onerror="this.src='https://placehold.co/120x120/7b1120/fff?text=${encodeURIComponent(r.title)}'">
                 </div>
-                <div class="card-body">
-                    <span class="card-category">${r.category}</span>
-                    <h3>${r.title}</h3>
-                    <p class="recipe-desc">${r.description}</p>
-                    <div class="recipe-meta">
-                        <span>⏱ Prep ${r.prepTime.replace(/PT|M/g, '')} min · Cook ${r.cookTime.replace(/PT|M/g, '')} min</span>
+                <div class="recipe-bar-body">
+                    <div class="recipe-bar-main">
+                        <span class="card-category">${r.category}</span>
+                        <h3 class="recipe-bar-title">${r.title}</h3>
+                        <p class="recipe-desc">${r.description}</p>
+                    </div>
+                    <div class="recipe-meta recipe-bar-meta">
+                        <span>⏱ Prep ${r.prepTime.replace(/PT|M/g, '')} min</span>
+                        <span>🔥 Cook ${r.cookTime.replace(/PT|M/g, '')} min</span>
                         <span>🍽 Serves ${r.servings}</span>
                     </div>
                 </div>
+                <span class="recipe-bar-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </span>
             </a>
         `).join('');
 
