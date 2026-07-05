@@ -256,7 +256,7 @@ function closeProductOverlay() {
 
 document.addEventListener('click', e => {
     if (e.target.closest('#product-modal')) return;
-    if (e.target.closest('.card-goto-btn')) return;
+    if (e.target.closest('.card-name-link')) return;
     const card = e.target.closest('.card--collapsed');
     if (!card) return;
     if (card.dataset.justPeeked) {
@@ -474,7 +474,17 @@ async function loadProducts() {
         </div>
         <div class="card-body">
             <span class="card-category">${p.category}</span>
-            <h3>${p.name}</h3>
+            ${p.slug ? (() => {
+    const words = p.name.split(' ');
+    const lastWord = words.pop();
+    const leadingWords = words.length ? words.join(' ') + ' ' : '';
+    return `<a class="card-name-link" href="products/${p.slug}.html" onclick="event.stopPropagation()">
+        <h3>${leadingWords}<span class="card-name-last">${lastWord}<svg class="card-name-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+        </svg></span></h3>
+    </a>`;
+})() : `<h3>${p.name}</h3>`}
             
             <div class="buy-dropdown">
                 <button class="btn buy-toggle">Buy Now ▴</button>
@@ -516,12 +526,6 @@ async function loadProducts() {
             <span class="back-hint">Tap to edit</span>
         </div>
       </div>
-      ${p.slug ? `<a class="card-goto-btn" href="products/${p.slug}.html" aria-label="View ${p.name} details" onclick="event.stopPropagation()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      </a>` : ''}
     </div>
 `).join('');
 
