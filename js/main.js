@@ -35,11 +35,9 @@ const nav = document.getElementById('nav-menu');
 const overlay = document.getElementById('nav-overlay');
 
 function closeNav() {
-    nav.style.opacity = '0';
-    nav.style.transform = 'translateY(-10px)';
+    nav.style.transform = 'translateX(100%)';
     setTimeout(() => {
         nav.classList.remove('active');
-        nav.style.opacity = '';
         nav.style.transform = '';
     }, 400);
     overlay.classList.remove('active');
@@ -63,6 +61,23 @@ if (hamburger && nav) {
         a.addEventListener('click', () => closeNav());
     });
 }
+
+// ── THEME TOGGLE PLACEMENT (desktop: header corner / mobile: drawer) ──
+function placeThemeToggle() {
+    const toggle = document.getElementById('theme-toggle');
+    const headerEl = document.querySelector('header');
+    const navEl = document.getElementById('nav-menu');
+    if (!toggle || !headerEl || !navEl) return;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+        if (navEl.firstChild !== toggle) navEl.insertBefore(toggle, navEl.firstChild);
+    } else {
+        if (toggle.parentElement !== headerEl) headerEl.appendChild(toggle);
+    }
+}
+placeThemeToggle();
+window.addEventListener('resize', placeThemeToggle);
+
 // ── CART ICON (injected into navbar) ──
 const cartPill = document.createElement('button');
 cartPill.className = 'cart-toggle';

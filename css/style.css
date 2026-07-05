@@ -87,10 +87,6 @@ header {
     gap: 12px;
 }
 
-.theme-toggle {
-    margin-left: auto;
-}
-
 .logo {
     color: var(--white);
     font-size: 1.7rem;
@@ -105,14 +101,24 @@ header {
 nav { display: flex; gap: 8px; align-items: center; }
 
 nav a {
+    display: flex;
+    align-items: center;
+    gap: 7px;
     color: rgba(255,255,255,0.85);
     text-decoration: none;
     font-weight: 500;
     padding: 6px 14px;
     border-radius: 20px;
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.25s ease, color 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     font-size: 0.97rem;
     position: relative;
+    border: 1px solid transparent;
+}
+
+.nav-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
 }
 
 nav a::after {
@@ -131,15 +137,25 @@ nav a:hover::after {
     transform: scaleX(1);
 }
 
-nav a.active::after {
-    transform: scaleX(1);
-}
-
 nav a:hover { background: rgba(255,255,255,0.13); color: var(--white); }
 
+/* Liquid-glass active pill — used on both desktop nav and the mobile drawer */
 nav a.active {
-    background: var(--gold);
-    color: #000;
+    color: var(--white);
+    background: rgba(255,255,255,0.16);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-color: rgba(255,255,255,0.4);
+    box-shadow:
+        0 4px 16px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.55),
+        inset 0 -1px 5px rgba(0,0,0,0.15);
+}
+nav a.active::after {
+    transform: scaleX(0);
+}
+nav a.active:hover {
+    background: rgba(255,255,255,0.22);
 }
 
 /* ── HAMBURGER ANIMATION ── */
@@ -154,6 +170,7 @@ nav a.active {
     width: 36px;
     height: 36px;
     position: relative;
+    z-index: 1002;
     transition: transform 0.3s ease;
     -webkit-tap-highlight-color: transparent;
     outline: none;
@@ -1023,33 +1040,43 @@ footer {
     }
 
     nav {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: rgba(123, 17, 32, 0.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 70%;
+    max-width: 320px;
+    background: rgba(123, 17, 32, 0.92);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    border-left: 1px solid rgba(212, 160, 23, 0.3);
     flex-direction: column;
-    align-items: center;
-    padding: 16px 0;
-    gap: 4px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    transform: translateY(-10px);
-    opacity: 0;
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    align-items: stretch;
+    padding: 76px 18px 24px;
+    gap: 6px;
+    box-shadow: -10px 0 40px rgba(0,0,0,0.4);
+    transform: translateX(100%);
+    opacity: 1;
+    transition: transform 0.4s cubic-bezier(0.4, 0.1, 0.2, 1);
     pointer-events: none;
+    z-index: 1001;
+    overflow-y: auto;
 }
 
     nav.active {
-    display: flex;
-    transform: translateY(0);
-    opacity: 1;
+    transform: translateX(0);
     pointer-events: auto;
 }
 
-    nav a { width: 80%; text-align: center; }
+    nav a {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 1.02rem;
+}
+
 
     .hero { min-height: 60vh; }
     .hero h2 { font-size: 2.3rem; }
@@ -2087,24 +2114,24 @@ footer {
     animation-play-state: paused;
 }
 
-/* ── DARK MODE TOGGLE ── */
+/* ── DARK MODE TOGGLE (icon-only, repositioned by JS between header/drawer) ── */
 .theme-toggle {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    border-radius: 20px;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
     border: 1.5px solid rgba(212,160,23,0.5);
     background: rgba(255,255,255,0.1);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     -webkit-tap-highlight-color: transparent;
     color: var(--white);
-    font-size: 0.82rem;
-    font-weight: 600;
+    font-size: 1.05rem;
     cursor: pointer;
     transition: background 0.3s, border-color 0.3s;
-    white-space: nowrap;
     flex-shrink: 0;
 }
 
@@ -2114,9 +2141,9 @@ footer {
 }
 
 .theme-toggle .toggle-icon {
-    font-size: 1rem;
     transition: transform 0.4s ease;
     display: inline-block;
+    line-height: 1;
 }
 
 .theme-toggle:active .toggle-icon {
@@ -2124,15 +2151,22 @@ footer {
 }
 
 .theme-toggle .toggle-label {
-    letter-spacing: 0.5px;
+    display: none;
 }
 
-@media (max-width: 768px) {
-    .theme-toggle {
-        padding: 4px 10px;
-        font-size: 0.78rem;
-    }
-    
+/* Desktop: pinned to the far edge of the header, outside the centered navbar container */
+header > .theme-toggle {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    z-index: 1001;
+}
+
+/* Mobile: reparented into the nav drawer by JS — sits top-right of the panel */
+nav > .theme-toggle {
+    align-self: flex-end;
+    margin-bottom: 10px;
 }
 .cart-toggle {
     position: fixed;
