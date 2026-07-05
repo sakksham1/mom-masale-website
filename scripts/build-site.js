@@ -52,7 +52,6 @@ const STATIC_PAGES = [
   { loc: '/products.html', priority: '0.9' },
   { loc: '/recipes.html', priority: '0.85' },
   { loc: '/about.html', priority: '0.7' },
-  { loc: '/bulk-orders.html', priority: '0.8' },
   { loc: '/contact.html', priority: '0.6' },
 ];
 
