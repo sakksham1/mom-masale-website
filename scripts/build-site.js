@@ -30,6 +30,8 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+const { execSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const PRODUCTS_DATA_PATH = path.join(ROOT, 'data', 'products.json');
@@ -46,13 +48,14 @@ const RECIPE_TEMPLATE_PATH = path.join(__dirname, 'recipe-template.html');
 
 const SITEMAP_PATH = path.join(ROOT, 'sitemap.xml');
 const SITE_URL = 'https://mommasale.com';
+const LASTMOD_CACHE_PATH = path.join(ROOT, 'data', '.lastmod-cache.json');
 
 const STATIC_PAGES = [
-  { loc: '/', priority: '1.0' },
-  { loc: '/products.html', priority: '0.9' },
-  { loc: '/recipes.html', priority: '0.85' },
-  { loc: '/about.html', priority: '0.7' },
-  { loc: '/contact.html', priority: '0.6' },
+  { loc: '/', priority: '1.0', file: 'index.html' },
+  { loc: '/products.html', priority: '0.9', file: 'products.html' },
+  { loc: '/recipes.html', priority: '0.85', file: 'recipes.html' },
+  { loc: '/about.html', priority: '0.7', file: 'about.html' },
+  { loc: '/contact.html', priority: '0.6', file: 'contact.html' },
 ];
 
 const DISCOUNT_PERCENT = 25;
@@ -74,6 +77,51 @@ function escapeHtml(str) {
 
 function discountedPrice(original) {
   return Math.round(original * (1 - DISCOUNT_PERCENT / 100));
+}
+
+// ── lastmod tracking (content-hash based, persisted across builds) ──
+
+function hashItem(obj) {
+  return crypto.createHash('sha256').update(JSON.stringify(obj)).digest('hex');
+}
+
+function todayISO() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// Real last-commit date for a static file, straight from git history.
+// Falls back to today if the file has no commit history yet (e.g. a
+// brand-new file that hasn't been committed at build time) or if git
+// isn't available in the environment running the build.
+function gitLastmod(relativeFilePath) {
+  try {
+    const out = execSync(`git log -1 --format=%cI -- "${relativeFilePath}"`, {
+      cwd: ROOT,
+      encoding: 'utf8',
+    }).trim();
+    return out ? out.slice(0, 10) : todayISO();
+  } catch (err) {
+    return todayISO();
+  }
+}
+
+function loadLastmodCache() {
+  return fs.existsSync(LASTMOD_CACHE_PATH) ? readJSON(LASTMOD_CACHE_PATH) : {};
+}
+
+// Builds the updated cache for one collection (products or recipes).
+// A slug's lastmod only advances to today when its content hash actually
+// changes from the previous build; unchanged items keep their prior date.
+function computeLastmods(items, prevCache, keyPrefix) {
+  const updated = {};
+  items.forEach(item => {
+    const key = keyPrefix + item.slug;
+    const hash = hashItem(item);
+    const prev = prevCache[key];
+    const lastmod = (prev && prev.hash === hash) ? prev.lastmod : todayISO();
+    updated[key] = { hash, lastmod };
+  });
+  return updated;
 }
 
 // Parses the simple "PT#H#M" / "PT#M" ISO 8601 durations used in this
@@ -402,19 +450,24 @@ function renderRecipe(r, allRecipes, productBySlug, template) {
 
 // ── sitemap ──────────────────────────────────────────────
 
-function buildSitemap(products, recipes) {
-  const urls = STATIC_PAGES.map(pg => `  <url><loc>${SITE_URL}${pg.loc}</loc><priority>${pg.priority}</priority></url>`);
+function buildSitemap(products, recipes, lastmodMap) {
+  const urls = STATIC_PAGES.map(pg => {
+    const lastmod = gitLastmod(pg.file);
+    return `  <url><loc>${SITE_URL}${pg.loc}</loc><lastmod>${lastmod}</lastmod><priority>${pg.priority}</priority></url>`;
+  });
   products
     .slice()
     .sort((a, b) => a.slug.localeCompare(b.slug))
     .forEach(p => {
-      urls.push(`  <url><loc>${SITE_URL}/products/${p.slug}.html</loc><priority>0.75</priority></url>`);
+      const lastmod = lastmodMap[`product:${p.slug}`].lastmod;
+      urls.push(`  <url><loc>${SITE_URL}/products/${p.slug}.html</loc><lastmod>${lastmod}</lastmod><priority>0.75</priority></url>`);
     });
   recipes
     .slice()
     .sort((a, b) => a.slug.localeCompare(b.slug))
     .forEach(r => {
-      urls.push(`  <url><loc>${SITE_URL}/recipes/${r.slug}.html</loc><priority>0.7</priority></url>`);
+      const lastmod = lastmodMap[`recipe:${r.slug}`].lastmod;
+      urls.push(`  <url><loc>${SITE_URL}/recipes/${r.slug}.html</loc><lastmod>${lastmod}</lastmod><priority>0.7</priority></url>`);
     });
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`;
 }
@@ -482,8 +535,15 @@ function main() {
   });
   fs.writeFileSync(RECIPES_MANIFEST_PATH, JSON.stringify({ files: sortedRecipes.map(r => `${r.slug}.html`) }, null, 2) + '\n', 'utf8');
 
+  // ── lastmod tracking ──
+  const prevLastmodCache = loadLastmodCache();
+  const productLastmods = computeLastmods(products, prevLastmodCache, 'product:');
+  const recipeLastmods = computeLastmods(recipes, prevLastmodCache, 'recipe:');
+  const lastmodMap = { ...productLastmods, ...recipeLastmods };
+  fs.writeFileSync(LASTMOD_CACHE_PATH, JSON.stringify(lastmodMap, null, 2) + '\n', 'utf8');
+
   // ── sitemap (covers both collections + static pages) ──
-  fs.writeFileSync(SITEMAP_PATH, buildSitemap(products, recipes), 'utf8');
+  fs.writeFileSync(SITEMAP_PATH, buildSitemap(products, recipes, lastmodMap), 'utf8');
 
   console.log(`\nDone.`);
   console.log(`  products: generated ${sortedProducts.length}, removed ${removedProducts} stale`);
