@@ -683,19 +683,29 @@ async function loadProducts() {
                 }
 
                 // Toggle dropdown open/close
+                const filterOverlayEl = document.getElementById('filter-overlay');
                 if (filterToggle && filterPanel) {
                     filterToggle.addEventListener('click', e => {
                         e.stopPropagation();
                         const isOpen = !filterPanel.hidden;
                         filterPanel.hidden = isOpen;
                         filterToggle.setAttribute('aria-expanded', String(!isOpen));
+                        if (filterOverlayEl) filterOverlayEl.classList.toggle('active', !isOpen);
                     });
                     document.addEventListener('click', () => {
                         if (!filterPanel.hidden) {
                             filterPanel.hidden = true;
                             filterToggle.setAttribute('aria-expanded', 'false');
+                            if (filterOverlayEl) filterOverlayEl.classList.remove('active');
                         }
                     });
+                    if (filterOverlayEl) {
+                        filterOverlayEl.addEventListener('click', () => {
+                            filterPanel.hidden = true;
+                            filterToggle.setAttribute('aria-expanded', 'false');
+                            filterOverlayEl.classList.remove('active');
+                        });
+                    }
                 }
 
                 // Search input handler
@@ -927,19 +937,29 @@ async function loadRecipes() {
             });
         }
 
+        const recipeFilterOverlayEl = document.getElementById('recipe-filter-overlay');
         if (filterToggle && filterPanel) {
             filterToggle.addEventListener('click', e => {
                 e.stopPropagation();
                 const isOpen = !filterPanel.hidden;
                 filterPanel.hidden = isOpen;
                 filterToggle.setAttribute('aria-expanded', String(!isOpen));
+                if (recipeFilterOverlayEl) recipeFilterOverlayEl.classList.toggle('active', !isOpen);
             });
             document.addEventListener('click', () => {
                 if (!filterPanel.hidden) {
                     filterPanel.hidden = true;
                     filterToggle.setAttribute('aria-expanded', 'false');
+                    if (recipeFilterOverlayEl) recipeFilterOverlayEl.classList.remove('active');
                 }
             });
+            if (recipeFilterOverlayEl) {
+                recipeFilterOverlayEl.addEventListener('click', () => {
+                    filterPanel.hidden = true;
+                    filterToggle.setAttribute('aria-expanded', 'false');
+                    recipeFilterOverlayEl.classList.remove('active');
+                });
+            }
         }
 
         if (searchInput) {
@@ -1044,6 +1064,9 @@ function syncCardUI(card) {
 
 function syncAllCardUI() {
     document.querySelectorAll('.card').forEach(syncCardUI);
+}
+if (document.querySelector('.product-detail-card')) {
+    syncAllCardUI();
 }
 
 document.addEventListener('click', e => {
