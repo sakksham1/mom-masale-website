@@ -35,9 +35,11 @@ const nav = document.getElementById('nav-menu');
 const overlay = document.getElementById('nav-overlay');
 
 function closeNav() {
-    nav.style.transform = 'translateX(100%)';
+    nav.style.opacity = '0';
+    nav.style.transform = 'translateX(-50%) translateY(-20px)';
     setTimeout(() => {
         nav.classList.remove('active');
+        nav.style.opacity = '';
         nav.style.transform = '';
     }, 400);
     overlay.classList.remove('active');

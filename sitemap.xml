@@ -9,28 +9,43 @@
   <url><loc>https://mommasale.com/products/biryani-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/chaat-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/chai-masala.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/chatpata-sprinkle-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/chhola-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/chicken-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/coriander-powder.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/dahi-bada-masala.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/dal-makhani-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/dam-aloo-masala.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/dry-fruit-milk-shake.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/fruit-and-salad-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/garam-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/gulab-jamun-mix.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/instant-dahi-bada-mix.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/jaljeera-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/kachauri-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/kalonji-bharwa-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/kasuri-methi.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/kitchen-king-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/kuch-bhi-masala.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/kulfi-premix.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/lemon-tea-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/matar-paneer-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/meat-masala.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/moringa-sattu.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/pav-bhaji-masala.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/poha-masala-jeerawan.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/raita-masala.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/rajma-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/red-chilli-powder.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/rose-sharbat.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/sabzi-king-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/sambhar-masala.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/samosa-masala.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/samosa-sprinkle.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/sattu-powder.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/shahi-paneer-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/shahi-thandai.html</loc><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/shikanji-sharbat.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/tawa-masala.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/turmeric-powder.html</loc><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/recipes/aloo-kachori.html</loc><priority>0.7</priority></url>
@@ -45,6 +60,7 @@
   <url><loc>https://mommasale.com/recipes/dum-aloo.html</loc><priority>0.7</priority></url>
   <url><loc>https://mommasale.com/recipes/fruit-chaat.html</loc><priority>0.7</priority></url>
   <url><loc>https://mommasale.com/recipes/gulab-jamun.html</loc><priority>0.7</priority></url>
+  <url><loc>https://mommasale.com/recipes/haldi-doodh.html</loc><priority>0.7</priority></url>
   <url><loc>https://mommasale.com/recipes/hyderabadi-vegetable-biryani.html</loc><priority>0.7</priority></url>
   <url><loc>https://mommasale.com/recipes/jaljeera-drink.html</loc><priority>0.7</priority></url>
   <url><loc>https://mommasale.com/recipes/kadai-paneer.html</loc><priority>0.7</priority></url>
@@ -61,7 +77,7 @@
   <url><loc>https://mommasale.com/recipes/poha-seasoned-flattened-rice.html</loc><priority>0.7</priority></url>
   <url><loc>https://mommasale.com/recipes/rose-syrup-sharbat.html</loc><priority>0.7</priority></url>
   <url><loc>https://mommasale.com/recipes/sambar.html</loc><priority>0.7</priority></url>
-  <url><loc>https://mommasale.com/recipes/savoury-sattu-sharbat.html</loc><priority>0.7</priority></url>
+  <url><loc>https://mommasale.com/recipes/savoury-sattu-powder.html</loc><priority>0.7</priority></url>
   <url><loc>https://mommasale.com/recipes/shahi-paneer.html</loc><priority>0.7</priority></url>
   <url><loc>https://mommasale.com/recipes/shahi-thandai.html</loc><priority>0.7</priority></url>
   <url><loc>https://mommasale.com/recipes/spiced-buttermilk-chatpata-chaach.html</loc><priority>0.7</priority></url>

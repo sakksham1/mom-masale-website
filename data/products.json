@@ -432,7 +432,7 @@
       "chaa",
       "tea"
     ],
-    "featured": true,
+    "featured": false,
     "prices": {
       "10rs": 10,
       "50g": 50,
@@ -714,7 +714,7 @@
     "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "newArrival": true,
+    "newArrival": false,
     "prices": {
       "10rs": 10,
       "50g": 28,
@@ -723,7 +723,7 @@
     },
     "slug": "jaljeera-masala",
     "imageAlt": "Mom Masale Jaljeera Masala retail pack",
-    "featured": false,
+    "featured": true,
     "bestseller": false,
     "seo": {
       "title": "Buy Jaljeera Masala Online | Premium Quality | Mom Masale",
@@ -980,7 +980,7 @@
     "amazon": "#",
     "flipkart": "#",
     "meesho": "#",
-    "newArrival": true,
+    "newArrival": false,
     "prices": {
       "10rs": 10,
       "50g": 40,
@@ -1520,5 +1520,496 @@
       }
     ],
     "relatedProducts": []
-  }
+  },
+  {
+  "name": "Instant Dahi Bada Mix",
+  "category": "Special Mix",
+  "sizes": ["200g"],
+  "prices": {
+    "200g": 184
+  },
+  "image": "images/products/instant-dahi-bada-mix.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": ["dahi bada premix"],
+  "slug": "instant-dahi-bada-mix",
+  "imageAlt": "Mom Masale Instant Dahi Bada Mix retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": true,
+  "seo": {
+    "title": "Buy Instant Dahi Bada Mix Online | Mom Masale",
+    "metaDescription": "Premium Instant Dahi Bada Mix from Mom Masale.",
+    "shortDescription": "Easy-to-prepare dahi bada premix.",
+    "longDescription": "Convenient instant mix for preparing soft and delicious dahi badas.",
+    "keywords": ["instant dahi bada mix", "dahi bada premix", "mom masale"]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+
+
+{
+  "name": "Lemon Tea Masala",
+  "category": "Special Mix",
+  "sizes": ["50g", "100g"],
+  "prices": {
+    "50g": 85,
+    "100g": 150
+  },
+  "image": "images/products/lemon-tea-masala.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": ["lemon tea premix"],
+  "slug": "lemon-tea-masala",
+  "imageAlt": "Mom Masale Lemon Tea Masala retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": true,
+  "seo": {
+    "title": "Buy Lemon Tea Masala Online | Premium Quality | Mom Masale",
+    "metaDescription": "Buy premium quality Lemon Tea Masala from Mom Masale.",
+    "shortDescription": "Refreshing lemon tea mix with authentic flavour.",
+    "longDescription": "Mom Masale Lemon Tea Masala is hygienically packed to deliver a refreshing cup of lemon tea with consistent taste.",
+    "keywords": ["lemon tea masala", "lemon tea premix", "mom masale"]
+  },
+  "faq": [
+    {
+      "question": "How do I prepare Lemon Tea Masala?",
+      "answer": "Mix with hot water according to the recipe instructions."
+    },
+    {
+      "question": "How should I store Lemon Tea Masala?",
+      "answer": "Store in a cool, dry place away from moisture and sunlight."
+    },
+    {
+      "question": "Does it contain artificial additives?",
+      "answer": "Refer to the product packaging for complete ingredient information."
+    }
+  ],
+  "relatedProducts": []
+},
+{
+  "name": "Moringa Sattu",
+  "category": "Special Mix",
+  "sizes": ["250g", "500g", "1kg"],
+  "prices": {
+    "250g": 150,
+    "500g": 250
+  },
+  "image": "images/products/moringa-sattu.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": [],
+  "slug": "moringa-sattu",
+  "imageAlt": "Mom Masale Moringa Sattu retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": true,
+  "seo": {
+    "title": "Buy Moringa Sattu Online | Premium Quality | Mom Masale",
+    "metaDescription": "Buy premium quality Moringa Sattu from Mom Masale.",
+    "shortDescription": "Nutritious moringa sattu drink mix.",
+    "longDescription": "Mom Masale Moringa Sattu is hygienically packed to preserve freshness and authentic flavour.",
+    "keywords": ["moringa sattu", "mom masale"]
+  },
+  "faq": [
+    {
+      "question": "How do I prepare Moringa Sattu?",
+      "answer": "Mix with chilled water as directed in the recipe."
+    },
+    {
+      "question": "How should I store Moringa Sattu?",
+      "answer": "Store in a cool and dry place."
+    },
+    {
+      "question": "Does it contain artificial additives?",
+      "answer": "Refer to the product packaging."
+    }
+  ],
+  "relatedProducts": []
+},
+
+{
+  "name": "Kulfi Premix",
+  "category": "Special Mix",
+  "sizes": [
+    "200g"
+  ],
+  "prices": {"200g": 150},
+  "image": "images/products/kulfi-premix.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": [
+    "kulfi mix",
+    "kulfi premix"
+  ],
+  "slug": "kulfi-premix",
+  "imageAlt": "Mom Masale Kulfi Premix retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": false,
+  "seo": {
+    "title": "Buy Kulfi Premix Online | Premium Quality | Mom Masale",
+    "metaDescription": "Buy premium quality Kulfi Premix from Mom Masale.",
+    "shortDescription": "Easy-to-use kulfi premix for rich and creamy homemade kulfi.",
+    "longDescription": "Mom Masale Kulfi Premix helps you prepare delicious traditional kulfi with a smooth texture and authentic flavour in just a few simple steps.",
+    "keywords": [
+      "kulfi premix",
+      "kulfi mix",
+      "instant kulfi mix",
+      "mom masale"
+    ]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+
+{
+  "name": "Sattu (Jow & Chana) with Masala",
+  "category": "Special Mix",
+  "sizes": ["500g", "1kg"],
+  "prices": {
+    "500g": 200
+  },
+  "image": "images/products/sattu-powder.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": ["sattu"],
+  "slug": "sattu-powder",
+  "imageAlt": "Mom Masale Sattu with Masala retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": false,
+  "seo": {
+    "title": "Buy Sattu with Masala Online | Mom Masale",
+    "metaDescription": "Premium Sattu JC with Masala from Mom Masale.",
+    "shortDescription": "Traditional sattu mix with seasoning.",
+    "longDescription": "A refreshing and nutritious sattu mix for everyday use.",
+    "keywords": ["sattu", "mom masale"]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+{
+  "name": "Chatpata Sprinkle Masala",
+  "category": "Seasoning",
+  "sizes": ["100g"],
+  "prices": {
+    "100g": 98
+  },
+  "image": "images/products/chatpata-sprinkle-masala.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": ["chatpata sprinkle"],
+  "slug": "chatpata-sprinkle-masala",
+  "imageAlt": "Mom Masale Chatpata Sprinkle Masala retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": true,
+  "seo": {
+    "title": "Buy Chatpata Sprinkle Masala Online | Mom Masale",
+    "metaDescription": "Premium Chatpata Sprinkle Masala from Mom Masale.",
+    "shortDescription": "Tangy sprinkle seasoning.",
+    "longDescription": "Perfect seasoning for snacks and fried foods.",
+    "keywords": ["chatpata sprinkle masala", "mom masale"]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+{
+  "name": "Poha Masala (Jeerawan)",
+  "category": "Seasoning",
+  "sizes": ["100g"],
+  "prices": {
+    "100g": 85
+  },
+  "image": "images/products/poha-masala-jeerawan.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": ["jeerawan", "poha masala"],
+  "slug": "poha-masala-jeerawan",
+  "imageAlt": "Mom Masale Poha Masala (Jeerawan) retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": true,
+  "seo": {
+    "title": "Buy Poha Masala (Jeerawan) Online | Mom Masale",
+    "metaDescription": "Premium Jeerawan Poha Masala from Mom Masale.",
+    "shortDescription": "Traditional Jeerawan seasoning.",
+    "longDescription": "Authentic Jeerawan masala for poha and snack recipes.",
+    "keywords": ["jeerawan", "poha masala", "mom masale"]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+{
+  "name": "Samosa Masala",
+  "category": "Blended Spices",
+  "sizes": [
+    "100g"
+  ],
+  "prices": {
+    "100g": 105
+  },
+  "image": "images/products/samosa-masala.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": [],
+  "slug": "samosa-masala",
+  "imageAlt": "Mom Masale Samosa Masala retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": false,
+  "seo": {
+    "title": "Buy Samosa Masala Online | Premium Quality | Mom Masale",
+    "metaDescription": "Buy premium quality Samosa Masala from Mom Masale.",
+    "shortDescription": "Authentic spice blend for flavourful homemade samosas.",
+    "longDescription": "Mom Masale Samosa Masala is expertly blended to deliver the traditional spicy and aromatic taste of classic Indian samosas.",
+    "keywords": [
+      "samosa masala",
+      "samosa spice",
+      "mom masale"
+    ]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+{
+  "name": "Samosa Sprinkle",
+  "category": "Seasoning",
+  "sizes": [
+    "50g",
+    "100g"
+  ],
+  "prices": {
+    "50g": 72,
+    "100g": 98
+  },
+  "image": "images/products/samosa-sprinkle.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": [
+    "chatpata samosa sprinkle"
+  ],
+  "slug": "samosa-sprinkle",
+  "imageAlt": "Mom Masale Samosa Sprinkle retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": false,
+  "seo": {
+    "title": "Buy Samosa Sprinkle Online | Premium Quality | Mom Masale",
+    "metaDescription": "Buy premium quality Samosa Sprinkle from Mom Masale.",
+    "shortDescription": "Tangy seasoning specially crafted for samosas and fried snacks.",
+    "longDescription": "Mom Masale Samosa Sprinkle adds a delicious chatpata flavour to samosas, kachoris, pakoras, fries and other snacks.",
+    "keywords": [
+      "samosa sprinkle",
+      "sprinkle masala",
+      "snack seasoning",
+      "mom masale"
+    ]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+
+{
+  "name": "Kitchen King Masala",
+  "category": "Blended Spices",
+  "sizes": [
+    "50g",
+    "100g"
+  ],
+  "prices": {
+    "50g": 42,
+    "100g": 82
+  },
+  "image": "images/products/kitchen-king-masala.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": [
+    "kitchen king"
+  ],
+  "slug": "kitchen-king-masala",
+  "imageAlt": "Mom Masale Kitchen King Masala retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": false,
+  "seo": {
+    "title": "Buy Kitchen King Masala Online | Premium Quality | Mom Masale",
+    "metaDescription": "Buy premium quality Kitchen King Masala from Mom Masale.",
+    "shortDescription": "A versatile all-purpose Indian spice blend for everyday cooking.",
+    "longDescription": "Mom Masale Kitchen King Masala is a balanced blend of aromatic spices that enhances the flavour of a wide variety of Indian vegetable and curry dishes.",
+    "keywords": [
+      "kitchen king masala",
+      "all purpose masala",
+      "mom masale"
+    ]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+{
+  "name": "Dal Makhani Masala",
+  "category": "Blended Spices",
+  "sizes": [
+    "50g",
+    "100g",
+    "200g"
+  ],
+  "prices": {},
+  "image": "images/products/dal-makhani-masala.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": [
+    "dal makhani"
+  ],
+  "slug": "dal-makhani-masala",
+  "imageAlt": "Mom Masale Dal Makhani Masala retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": false,
+  "seo": {
+    "title": "Buy Dal Makhani Masala Online | Premium Quality | Mom Masale",
+    "metaDescription": "Buy premium quality Dal Makhani Masala from Mom Masale.",
+    "shortDescription": "Authentic spice blend for rich and creamy dal makhani.",
+    "longDescription": "Mom Masale Dal Makhani Masala delivers authentic restaurant-style flavour for homemade dal makhani.",
+    "keywords": [
+      "dal makhani masala",
+      "mom masale"
+    ]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+{
+  "name": "Rajma Masala",
+  "category": "Blended Spices",
+  "sizes": [
+    "100g",
+    "200g"
+  ],
+  "prices": {},
+  "image": "images/products/rajma-masala.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": [
+    "rajmah masala"
+  ],
+  "slug": "rajma-masala",
+  "imageAlt": "Mom Masale Rajma Masala retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": false,
+  "seo": {
+    "title": "Buy Rajma Masala Online | Premium Quality | Mom Masale",
+    "metaDescription": "Buy premium quality Rajma Masala from Mom Masale.",
+    "shortDescription": "Classic spice blend for authentic rajma curry.",
+    "longDescription": "Mom Masale Rajma Masala is specially blended to prepare rich, aromatic and flavourful rajma dishes.",
+    "keywords": [
+      "rajma masala",
+      "kidney beans masala",
+      "mom masale"
+    ]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+{
+  "name": "Shikanji Sharbat",
+  "category": "Beverage Mix",
+  "sizes": [
+    "500ml"
+  ],
+  "prices": {"500ml": 100},
+  "image": "images/products/shikanji-sharbat.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": [
+    "shikanji syrup",
+    "lemon sharbat"
+  ],
+  "slug": "shikanji-sharbat",
+  "imageAlt": "Mom Masale Shikanji Sharbat retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": true,
+  "seo": {
+    "title": "Buy Shikanji Sharbat Online | Premium Quality | Mom Masale",
+    "metaDescription": "Buy premium quality Shikanji Sharbat from Mom Masale.",
+    "shortDescription": "Refreshing lemon-based sharbat concentrate.",
+    "longDescription": "Mom Masale Shikanji Sharbat is a refreshing concentrate that makes delicious homemade summer drinks in minutes.",
+    "keywords": [
+      "shikanji sharbat",
+      "lemon sharbat",
+      "mom masale"
+    ]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+{
+  "name": "Dry Fruit Milk Shake",
+  "category": "Beverage Mix",
+  "sizes": ["500ml"],
+  "prices": {"500ml": 100},
+  "image": "images/products/dry-fruit-milk-shake.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": ["dry fruit milk shake powder"],
+  "slug": "dry-fruit-milk-shake",
+  "imageAlt": "Mom Masale Dry Fruit Milk Shake retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": false,
+  "seo": {
+    "title": "Buy Dry Fruit Milk Shake Online | Mom Masale",
+    "metaDescription": "Premium Dry Fruit Milk Shake mix from Mom Masale.",
+    "shortDescription": "Creamy dry fruit milk shake mix.",
+    "longDescription": "A delicious dry fruit milk shake mix for refreshing beverages.",
+    "keywords": ["dry fruit milk shake", "mom masale"]
+  },
+  "faq": [],
+  "relatedProducts": []
+},
+{
+  "name": "Rose Sharbat",
+  "category": "Beverage Mix",
+  "sizes": ["500ml"],
+  "prices": {"500ml": 100},
+  "image": "images/products/rose-sharbat.jpg",
+  "amazon": "#",
+  "flipkart": "#",
+  "meesho": "#",
+  "aliases": ["ruhani rose sharbat", "rose syrup"],
+  "slug": "rose-sharbat",
+  "imageAlt": "Mom Masale Rose Sharbat retail pack",
+  "featured": false,
+  "bestseller": false,
+  "newArrival": false,
+  "seo": {
+    "title": "Buy Rose Sharbat Online | Mom Masale",
+    "metaDescription": "Premium Rose Sharbat from Mom Masale.",
+    "shortDescription": "Refreshing rose-flavoured sharbat.",
+    "longDescription": "Classic rose sharbat with refreshing flavour.",
+    "keywords": ["rose sharbat", "rose syrup", "mom masale"]
+  },
+  "faq": [],
+  "relatedProducts": []
+}
+
 ]

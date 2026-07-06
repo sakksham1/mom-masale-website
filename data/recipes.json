@@ -14,7 +14,7 @@
     "ingredients": [
       {
         "text": "4 tbsp Mom Masale Lemon Tea Premix",
-        "productSlug": null
+        "productSlug": "lemon-tea-masala"
       },
       {
         "text": "4 cups (600 ml) Water",
@@ -27,7 +27,7 @@
       "Add 4 tablespoons of Mom Masale Lemon Tea Premix and stir well until fully dissolved.",
       "Strain into serving cups and enjoy hot for a refreshing cup of lemon tea."
     ],
-    "relatedProducts": [],
+    "relatedProducts": ["lemon-tea-masala"],
     "seo": {
       "title": "Lemon Tea Recipe | Mom Masale",
       "metaDescription": "Learn how to make Lemon Tea at home with this easy Mom Masale recipe.",
@@ -108,7 +108,7 @@
     "ingredients": [
       {
         "text": "8 tbsp Mom Masale Rose Syrup",
-        "productSlug": null
+        "productSlug": "rose-sharbat"
       },
       {
         "text": "4 cups Chilled Milk or Water",
@@ -125,7 +125,7 @@
       "Stir thoroughly.",
       "Add ice cubes and serve immediately."
     ],
-    "relatedProducts": [],
+    "relatedProducts": ["rose-sharbat"],
     "seo": {
       "title": "Rose Syrup Sharbat Recipe | Mom Masale",
       "metaDescription": "Learn how to make Rose Syrup Sharbat at home with this easy Mom Masale recipe.",
@@ -151,7 +151,7 @@
     "ingredients": [
       {
         "text": "4 tbsp Mom Masale Dry Fruit Milk Shake Powder",
-        "productSlug": null
+        "productSlug": "dry-fruit-milk-shake"
       },
       {
         "text": "4 cups Chilled Milk",
@@ -164,7 +164,7 @@
       "Blend for 1–2 minutes until smooth, creamy, and frothy.",
       "Pour into glasses and garnish with finely chopped almonds and pistachios before serving."
     ],
-    "relatedProducts": [],
+    "relatedProducts": ["dry-fruit-milk-shake"],
     "seo": {
       "title": "Dry Fruit Milk Shake Recipe | Mom Masale",
       "metaDescription": "Learn how to make Dry Fruit Milk Shake at home with this easy Mom Masale recipe.",
@@ -223,7 +223,7 @@
     }
   },
   {
-    "slug": "savoury-sattu-sharbat",
+    "slug": "savoury-sattu-powder",
     "title": "Savoury Sattu Sharbat",
     "trending": true,
     "cuisine": "Indian",
@@ -237,7 +237,7 @@
     "ingredients": [
       {
         "text": "1 cup Mom Masale Sattu",
-        "productSlug": null
+        "productSlug": "sattu-powder"
       },
       {
         "text": "4 cups Chilled Water",
@@ -268,7 +268,7 @@
       "If desired, garnish with finely chopped onions and green chillies before serving."
     ],
     "relatedProducts": [
-      "chaat-masala"
+      "chaat-masala", "sattu-powder"
     ],
     "seo": {
       "title": "Savoury Sattu Sharbat Recipe | Mom Masale",
@@ -296,7 +296,7 @@
     "ingredients": [
       {
         "text": "1 cup Mom Masale Moringa Sattu",
-        "productSlug": null
+        "productSlug": "moringa-sattu"
       },
       {
         "text": "4 cups Chilled Water",
@@ -317,7 +317,7 @@
       "Add black salt and fresh lemon juice.",
       "Mix well and serve chilled as a healthy, energizing breakfast drink."
     ],
-    "relatedProducts": [],
+    "relatedProducts": ["moringa-sattu"],
     "seo": {
       "title": "Moringa Sattu Energy Drink Recipe | Mom Masale",
       "metaDescription": "Learn how to make Moringa Sattu Energy Drink at home with this easy Mom Masale recipe.",
@@ -442,7 +442,7 @@
       },
       {
         "text": "1½ tbsp Mom Masale Poha Masala (Jiravan Masala)",
-        "productSlug": null
+        "productSlug": "poha-masala-jeerawan"
       },
       {
         "text": "1 large Onion, finely chopped",
@@ -474,7 +474,7 @@
       "Mix gently, cover, and cook over low heat for 2 minutes.",
       "Serve hot."
     ],
-    "relatedProducts": [],
+    "relatedProducts": ["poha-masala-jeerawan"],
     "seo": {
       "title": "Poha (Seasoned Flattened Rice) Recipe | Mom Masale",
       "metaDescription": "Learn how to make Poha (Seasoned Flattened Rice) at home with this easy Mom Masale recipe.",
@@ -556,7 +556,7 @@
     "ingredients": [
       {
         "text": "1 packet Mom Masale Instant Dahi Bada Premix",
-        "productSlug": null
+        "productSlug": "instant-dahi-bada-mix"
       },
       {
         "text": "4 cups Fresh Yogurt, whisked",
@@ -585,7 +585,7 @@
       "Sprinkle Mom Masale Dahi Bada Masala and drizzle sweet tamarind chutney before serving."
     ],
     "relatedProducts": [
-      "dahi-bada-masala"
+      "dahi-bada-masala", "instant-dahi-bada-mix"
     ],
     "seo": {
       "title": "Dahi Bada Recipe | Mom Masale",
@@ -727,7 +727,7 @@
       },
       {
         "text": "1 tbsp Mom Masale Chatpata Sprinkle Masala",
-        "productSlug": null
+        "productSlug": "chatpata-sprinkle-masala"
       },
       {
         "text": "½ tsp Mom Masale Turmeric Powder",
@@ -747,7 +747,7 @@
       "Serve hot with tea."
     ],
     "relatedProducts": [
-      "turmeric-powder"
+      "turmeric-powder", "chatpata-sprinkle-masala"
     ],
     "seo": {
       "title": "Chatpata Pakora Recipe | Mom Masale",
@@ -1195,7 +1195,7 @@
       },
       {
         "text": "1½ tbsp Mom Masale Dal Makhani Masala",
-        "productSlug": null
+        "productSlug": "dal-makhani-masala"
       },
       {
         "text": "1 cup Tomato Purée",
@@ -1222,7 +1222,7 @@
       "Simmer over low heat for about 30 minutes, stirring occasionally.",
       "Finish with fresh cream and serve hot."
     ],
-    "relatedProducts": [],
+    "relatedProducts": ["dal-makhani-masala"],
     "seo": {
       "title": "Dal Makhani Recipe | Mom Masale",
       "metaDescription": "Learn how to make Dal Makhani at home with this easy Mom Masale recipe.",
@@ -2007,6 +2007,39 @@
         "mom masale",
         "kheer premix"
       ]
+    }
+  },
+
+  {
+    "slug": "haldi-doodh",
+    "title": "Haldi Doodh (Turmeric Milk)",
+    "cuisine": "Indian",
+    "category": "Beverage",
+    "prepTime": "PT2M",
+    "cookTime": "PT8M",
+    "servings": 2,
+    "image": "images/recipes/haldi-doodh.jpg",
+    "imageAlt": "A cup of turmeric milk (haldi doodh)",
+    "description": "A warm, comforting turmeric milk — India's original bedtime remedy.",
+    "ingredients": [
+      { "text": "2 cups milk", "productSlug": null },
+      { "text": "1/2 tsp Turmeric Powder", "productSlug": "turmeric-powder" },
+      { "text": "1 small piece ginger, crushed", "productSlug": null },
+      { "text": "1/4 tsp black pepper, crushed", "productSlug": null },
+      { "text": "1 tsp honey or jaggery, to taste", "productSlug": null }
+    ],
+    "steps": [
+      "Pour the milk into a saucepan and place over medium heat.",
+      "Add the Turmeric Powder, crushed ginger and black pepper.",
+      "Whisk gently and bring to a soft simmer, stirring occasionally so it doesn't catch at the bottom.",
+      "Simmer for 5-6 minutes to let the spices infuse into the milk.",
+      "Strain into cups, sweeten with honey or jaggery, and serve warm."
+    ],
+    "relatedProducts": ["turmeric-powder"],
+    "seo": {
+      "title": "Haldi Doodh Recipe (Turmeric Milk) | Mom Masale",
+      "metaDescription": "Learn how to make authentic Haldi Doodh (turmeric milk) at home using Mom Masale Turmeric Powder. A simple, soothing recipe for every season.",
+      "keywords": ["haldi doodh recipe", "turmeric milk recipe", "how to make turmeric milk", "golden milk"]
     }
   }
 ]
