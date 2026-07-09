@@ -339,7 +339,8 @@ nav a.active:hover {
 /* ── PRODUCT GRID & CARDS ── */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 280px));
+    justify-content: center;
     gap: 1.4rem;
 }
 .hscroll-wrap {
@@ -356,7 +357,7 @@ nav a.active:hover {
     scroll-snap-type: x mandatory;
     padding-bottom: 0.6rem;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
     scrollbar-width: thin;
     scrollbar-color: var(--gold) transparent;
 }
@@ -406,7 +407,7 @@ nav a.active:hover {
         padding: 0 0.9rem;
     }
     .hscroll-track .card {
-        width: 70%;
+        width: 210px;
     }
 }
 
