@@ -24,15 +24,18 @@ The website showcases the company's range of authentic Indian spices and blended
 
 - Responsive design for desktop, tablet and mobile
 - Dynamic product catalogue powered by JSON
+- Automatic product page generation via Node.js script
+- Self-triggering deployment structure ensuring pages stay up-to-date with json
+- Single-source of Truth structure, all data depends on Json: High maintainability
 - Product search and category filtering
-- Dark & Light theme
+- Dark & Light theme (localStorage & user-preference)
 - SEO optimized pages
 - Structured data (Schema.org)
 - XML Sitemap & Robots.txt
 - Progressive Web App (PWA) support
-- Bulk enquiry form
-- Google Maps integration
-- WhatsApp quick contact
+- Bulk enquiry form - Google Scripts integration: Feeds data directly into Google Sheets
+- Google Maps Embedded
+- WhatsApp quick contact & Checkout: Auto generated / action-aware typed messages
 - GitHub Pages deployment
 
 ---
@@ -42,8 +45,10 @@ The website showcases the company's range of authentic Indian spices and blended
 - HTML5
 - CSS3
 - Vanilla JavaScript
+- Node.js
 - JSON
 - GitHub Pages
+- Github Actions
 
 ---
 
@@ -53,7 +58,7 @@ The website showcases the company's range of authentic Indian spices and blended
 
 ```text
 
- sakksham1-mom-masale-website/
+└── sakksham1-mom-masale-website/
     ├── README.md
     ├── 404.html
     ├── about.html
@@ -67,11 +72,13 @@ The website showcases the company's range of authentic Indian spices and blended
     ├── site.webmanifest
     ├── sitemap.xml
     ├── data/
-    │   └── recipes.json
-    ├── js/
-    │   └── main.js
+    │   ├── .lastmod-cache.json
+    |   ├── products.json
+    |   ├── recipes.json
     ├── products/...
+    │   
     ├── recipes/...
+    │   
     ├── scripts/
     │   ├── build-site.js
     │   ├── product-template.html
@@ -80,25 +87,6 @@ The website showcases the company's range of authentic Indian spices and blended
         └── workflows/
             └── generate-site.yml
 
-
-```
-
----
-
-## Local Development
-
-Clone the repository:
-
-```bash
-git clone https://github.com/sakksham1/mom-masale-website.git
-```
-
-Open the project folder and launch `index.html` in your browser, or use a local development server.
-
-Example:
-
-```bash
-python -m http.server
 ```
 
 ---
