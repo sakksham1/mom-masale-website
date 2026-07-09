@@ -70,7 +70,7 @@ function placeThemeToggle() {
     const headerEl = document.querySelector('header');
     const navEl = document.getElementById('nav-menu');
     if (!toggle || !headerEl || !navEl) return;
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isMobile = window.matchMedia('(max-width: 1280px)').matches;
     if (isMobile) {
         if (navEl.firstChild !== toggle) navEl.insertBefore(toggle, navEl.firstChild);
     } else {

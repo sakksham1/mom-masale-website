@@ -707,7 +707,7 @@
   },
   {
     "slug": "chatpata-pakora",
-    "title": "Chatpata Pakora",
+    "title": "Chatpata Pakoda",
     "cuisine": "Indian",
     "category": "Snack",
     "prepTime": "PT10M",
@@ -1107,14 +1107,14 @@
   },
   {
     "slug": "chole-masala",
-    "title": "Chole Masala",
+    "title": "Masala Chhole",
     "cuisine": "Indian",
     "category": "Main Course",
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
     "image": "images/recipes/chole-masala.jpg",
-    "imageAlt": "Chole Masala",
+    "imageAlt": "Masala Chhola",
     "description": "Step-by-step Chole Masala recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
       {
