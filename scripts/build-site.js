@@ -217,6 +217,18 @@ function buildProductSchema(p) {
   return schema;
 }
 
+function buildProductBreadcrumbSchema(p) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE_URL}/products.html` },
+      { '@type': 'ListItem', position: 3, name: p.name, item: `${SITE_URL}/products/${p.slug}.html` },
+    ],
+  };
+}
+
 function buildSizeChipsHtml(p) {
   const sizes = p.sizes || [];
   return sizes.map((s, i) => {
@@ -331,6 +343,7 @@ function renderProduct(p, allProducts, recipes, template) {
     '{{KEYWORDS}}': keywords,
     '{{CANONICAL_URL}}': canonical,
     '{{PRODUCT_SCHEMA_JSON}}': schemaJson,
+    '{{PRODUCT_BREADCRUMB_JSON}}': JSON.stringify(buildProductBreadcrumbSchema(p), null, 2),
     '{{PRODUCT_NAME}}': escapeHtml(p.name),
     '{{PRODUCT_CATEGORY}}': escapeHtml(p.category),
     '{{PRODUCT_SLUG}}': p.slug,
@@ -371,6 +384,18 @@ function buildRecipeSchema(r) {
     recipeIngredient: (r.ingredients || []).map(ing => ing.text),
     recipeInstructions: (r.steps || []).map(step => ({ '@type': 'HowToStep', text: step })),
     author: { '@type': 'Organization', name: 'Mom Masale' },
+  };
+}
+
+function buildRecipeBreadcrumbSchema(r) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Recipes', item: `${SITE_URL}/recipes.html` },
+      { '@type': 'ListItem', position: 3, name: r.title, item: `${SITE_URL}/recipes/${r.slug}.html` },
+    ],
   };
 }
 
@@ -452,6 +477,7 @@ function renderRecipe(r, allRecipes, productBySlug, template) {
     '{{KEYWORDS}}': keywords,
     '{{CANONICAL_URL}}': canonical,
     '{{RECIPE_SCHEMA_JSON}}': schemaJson,
+    '{{RECIPE_BREADCRUMB_JSON}}': JSON.stringify(buildRecipeBreadcrumbSchema(r), null, 2),
     '{{RECIPE_TITLE}}': escapeHtml(r.title),
     '{{RECIPE_CATEGORY}}': escapeHtml(r.category || ''),
     '{{RECIPE_CUISINE}}': escapeHtml(r.cuisine || ''),
