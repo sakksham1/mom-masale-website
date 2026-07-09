@@ -3,20 +3,32 @@ const themeToggle = document.getElementById('theme-toggle');
 const toggleIcon = themeToggle?.querySelector('.toggle-icon');
 const toggleLabel = themeToggle?.querySelector('.toggle-label');
 
-function setTheme(dark) {
+function applyTheme(dark) {
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
     if (toggleIcon) toggleIcon.textContent = dark ? '🌙' : '☀️';
     if (toggleLabel) toggleLabel.textContent = dark ? 'Dark' : 'Light';
+}
+
+function setTheme(dark) {
+    applyTheme(dark);
     localStorage.setItem('theme', dark ? 'dark' : 'light');
 }
 
 const savedTheme = localStorage.getItem('theme');
-setTheme(savedTheme === 'dark');
+const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+applyTheme(savedTheme ? savedTheme === 'dark' : prefersDark);
 
 if (themeToggle) {
     themeToggle.addEventListener('click', () => {
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         setTheme(!isDark);
+    });
+}
+
+// Keep following the OS theme live until the visitor makes an explicit choice
+if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (!localStorage.getItem('theme')) applyTheme(e.matches);
     });
 }
 
