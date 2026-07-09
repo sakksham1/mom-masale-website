@@ -68,39 +68,19 @@
 </div>
 
 <div class="container">
-    <div class="card product-detail-card" data-category="{{PRODUCT_CATEGORY}}">
+    <div class="card product-detail-card{{PRODUCT_COMING_SOON_CLASS}}" data-category="{{PRODUCT_CATEGORY}}">
         <div class="card-image">
             <img src="../{{PRODUCT_IMAGE}}" alt="{{PRODUCT_IMAGE_ALT}}" loading="lazy" width="400" height="400"
                 onload="this.closest('.card-image').style.animation='none'"
                 onerror="this.src='https://placehold.co/400x400/7b1120/fff?text={{PRODUCT_NAME}}'">
+            {{PRODUCT_COMING_SOON_RIBBON}}
         </div>
         <div class="card-body">
             <span class="card-category">{{PRODUCT_CATEGORY}}</span>
             <h1 class="product-detail-title">{{PRODUCT_NAME}}</h1>
 
             <p style="color:var(--text-light);font-size:0.98rem;line-height:1.7;margin:0.5rem 0 1rem">{{PRODUCT_LONG_DESCRIPTION}}</p>
-
-            <div class="purchase-row" style="display:flex">
-                <div class="product-controls">
-                    <div class="size-chip-row" data-selected="{{PRODUCT_FIRST_SIZE}}" data-selected-price="{{PRODUCT_FIRST_PRICE}}" data-selected-original="{{PRODUCT_FIRST_ORIGINAL}}">
-                        {{PRODUCT_SIZE_CHIPS}}
-                    </div>
-                    <div class="add-to-cart-block">
-                        <div class="price-display">
-                            {{PRODUCT_INITIAL_PRICE_DISPLAY}}
-                        </div>
-                        <div class="cart-action">
-                            <button type="button" class="btn add-to-cart-btn" data-name="{{PRODUCT_NAME}}">Add to Cart</button>
-                            <div class="card-qty-stepper" hidden>
-                                <button type="button" class="card-qty-btn" data-action="dec">−</button>
-                                <span class="card-qty-value">1</span>
-                                <button type="button" class="card-qty-btn" data-action="inc">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="other-size-note" hidden></div>
+            {{PRODUCT_PURCHASE_BLOCK}}
         </div>
     </div>
 </div>

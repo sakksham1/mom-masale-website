@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://mommasale.com/</loc><lastmod>2026-07-06</lastmod><priority>1.0</priority></url>
-  <url><loc>https://mommasale.com/products.html</loc><lastmod>2026-07-06</lastmod><priority>0.9</priority></url>
-  <url><loc>https://mommasale.com/recipes.html</loc><lastmod>2026-07-06</lastmod><priority>0.85</priority></url>
-  <url><loc>https://mommasale.com/about.html</loc><lastmod>2026-07-06</lastmod><priority>0.7</priority></url>
-  <url><loc>https://mommasale.com/contact.html</loc><lastmod>2026-07-06</lastmod><priority>0.6</priority></url>
+  <url><loc>https://mommasale.com/</loc><lastmod>2026-07-09</lastmod><priority>1.0</priority></url>
+  <url><loc>https://mommasale.com/products.html</loc><lastmod>2026-07-09</lastmod><priority>0.9</priority></url>
+  <url><loc>https://mommasale.com/recipes.html</loc><lastmod>2026-07-09</lastmod><priority>0.85</priority></url>
+  <url><loc>https://mommasale.com/about.html</loc><lastmod>2026-07-09</lastmod><priority>0.7</priority></url>
+  <url><loc>https://mommasale.com/contact.html</loc><lastmod>2026-07-09</lastmod><priority>0.6</priority></url>
   <url><loc>https://mommasale.com/products/amchur-powder.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/biryani-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/chaat-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
@@ -14,9 +14,9 @@
   <url><loc>https://mommasale.com/products/chicken-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/coriander-powder.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/dahi-bada-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
-  <url><loc>https://mommasale.com/products/dal-makhani-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/dal-makhani-masala.html</loc><lastmod>2026-07-09</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/dam-aloo-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
-  <url><loc>https://mommasale.com/products/dry-fruit-milk-shake.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/dry-fruit-milk-shake.html</loc><lastmod>2026-07-09</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/fruit-and-salad-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/garam-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/gulab-jamun-mix.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
@@ -35,9 +35,9 @@
   <url><loc>https://mommasale.com/products/pav-bhaji-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/poha-masala-jeerawan.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/raita-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
-  <url><loc>https://mommasale.com/products/rajma-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/rajma-masala.html</loc><lastmod>2026-07-09</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/red-chilli-powder.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
-  <url><loc>https://mommasale.com/products/rose-sharbat.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/rose-sharbat.html</loc><lastmod>2026-07-09</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/sabzi-king-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/sambhar-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/samosa-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
@@ -45,7 +45,7 @@
   <url><loc>https://mommasale.com/products/sattu-powder.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/shahi-paneer-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/shahi-thandai.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
-  <url><loc>https://mommasale.com/products/shikanji-sharbat.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
+  <url><loc>https://mommasale.com/products/shikanji-sharbat.html</loc><lastmod>2026-07-09</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/tawa-masala.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/products/turmeric-powder.html</loc><lastmod>2026-07-06</lastmod><priority>0.75</priority></url>
   <url><loc>https://mommasale.com/recipes/aloo-kachori.html</loc><lastmod>2026-07-06</lastmod><priority>0.7</priority></url>

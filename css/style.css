@@ -1779,6 +1779,50 @@ nav a.active {
     gap: 14px;
 }
 
+/* ── COMING SOON ── */
+.card--coming-soon .card-image {
+    opacity: 0.55;
+    filter: grayscale(35%);
+    overflow: hidden;
+}
+.launching-ribbon {
+    position: absolute;
+    top: 14px;
+    left: -34px;
+    width: 140px;
+    transform: rotate(-45deg);
+    background: var(--maroon);
+    color: var(--white);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+    padding: 4px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    z-index: 2;
+    pointer-events: none;
+}
+[data-theme="dark"] .launching-ribbon {
+    background: var(--gold);
+    color: #000;
+}
+.launching-soon-panel {
+    margin: 10px 1.1rem 1.1rem;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    background: rgba(212,160,23,0.15);
+    color: var(--maroon);
+    border: 1.5px dashed var(--gold);
+}
+[data-theme="dark"] .launching-soon-panel {
+    background: rgba(212,160,23,0.08);
+    color: var(--gold);
+}
+
 /* ── BUY DROPDOWN ── */
 .buy-dropdown {
     display: none;

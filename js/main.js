@@ -469,24 +469,26 @@ function discountedPrice(original) {
 async function loadProducts() {
     const containers = document.querySelectorAll('#products-container');
     const homeSections = {
-        featured: { el: document.getElementById('featured-container'), wrap: document.getElementById('featured-section'), filter: p => p.featured },
-        bestsellers: { el: document.getElementById('bestsellers-container'), wrap: document.getElementById('bestsellers-section'), filter: p => p.bestseller },
-        newarrivals: { el: document.getElementById('newarrivals-container'), wrap: document.getElementById('newarrivals-section'), filter: p => p.newArrival },
+        featured: { el: document.getElementById('featured-container'), wrap: document.getElementById('featured-section'), filter: p => p.featured && !p.comingSoon },
+        bestsellers: { el: document.getElementById('bestsellers-container'), wrap: document.getElementById('bestsellers-section'), filter: p => p.bestseller && !p.comingSoon },
+        newarrivals: { el: document.getElementById('newarrivals-container'), wrap: document.getElementById('newarrivals-section'), filter: p => p.newArrival && !p.comingSoon },
     };
     const hasHomeSections = Object.values(homeSections).some(s => s.el);
     if (!containers.length && !hasHomeSections) return;
 
     try {
         const data = await fetch('data/products.json').then(r => r.json());
-
-        const renderCards = (items) => items.map(p => `
-    <div class="card card--collapsed" data-category="${p.category}">
+        const renderCards = (items) => items.map(p => {
+    const comingSoon = !!p.comingSoon;
+    return `
+    <div class="card card--collapsed${comingSoon ? ' card--coming-soon' : ''}" data-category="${p.category}">
       <div class="card-flip-inner">
         <div class="card-face card-face-front">
         <div class="card-image">
             <img src="${p.image}" alt="${p.name}" loading="lazy" width="400" height="400"
                 onload="this.closest('.card-image').style.animation='none'"
                 onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(p.name)}'">
+            ${comingSoon ? '<span class="launching-ribbon">Launching Soon</span>' : ''}
             <span class="tap-hint">Preview</span>
         </div>
         <div class="card-body">
@@ -503,6 +505,9 @@ async function loadProducts() {
     </a>`;
 })() : `<h3>${p.name}</h3>`}
             
+            ${comingSoon ? `
+            <div class="launching-soon-panel">🚀 Launching Soon</div>
+            ` : `
             <div class="buy-dropdown">
                 <button class="btn buy-toggle">Buy Now ▴</button>
                 <div class="buy-links">
@@ -533,6 +538,7 @@ async function loadProducts() {
                     </div>
                 </div>
             <div class="other-size-note" hidden></div>
+            `}
             ${p.slug ? `<a class="product-detail-link" href="products/${p.slug}.html">View Full Details →</a>` : ''}
             </div>
         </div>
@@ -544,7 +550,8 @@ async function loadProducts() {
         </div>
       </div>
     </div>
-`).join('');
+`;
+}).join('');
 
         containers.forEach(c => {
             {

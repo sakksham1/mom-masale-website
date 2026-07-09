@@ -613,8 +613,8 @@
     "description": "Step-by-step Pani Puri recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
       {
-        "text": "2 tbsp Mom Masale Jaljeera / Pani Puri Masala",
-        "productSlug": null
+        "text": "2 tbsp Mom Masala Jaljeera / Pani Puri Masala",
+        "productSlug": "jaljeera-masala"
       },
       {
         "text": "4 cups Chilled Water",
@@ -637,7 +637,7 @@
       "Add the prepared spicy water.",
       "Serve immediately."
     ],
-    "relatedProducts": [],
+    "relatedProducts": ["jaljeera-masala"],
     "seo": {
       "title": "Pani Puri Recipe | Mom Masale",
       "metaDescription": "Learn how to make Pani Puri at home with this easy Mom Masale recipe.",

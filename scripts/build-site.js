@@ -226,6 +226,35 @@ function buildSizeChipsHtml(p) {
   }).join('');
 }
 
+function buildPurchaseBlockHtml(p) {
+  if (p.comingSoon) {
+    return `
+            <div class="launching-soon-panel">🚀 Launching Soon</div>`;
+  }
+  return `
+            <div class="purchase-row" style="display:flex">
+                <div class="product-controls">
+                    <div class="size-chip-row" data-selected="${(p.sizes && p.sizes[0]) || ''}" data-selected-price="${(p.prices && p.sizes && p.prices[p.sizes[0]]) ? discountedPrice(p.prices[p.sizes[0]]) : ''}" data-selected-original="${(p.prices && p.sizes && p.prices[p.sizes[0]]) || ''}">
+                        ${buildSizeChipsHtml(p)}
+                    </div>
+                    <div class="add-to-cart-block">
+                        <div class="price-display">
+                            ${buildInitialPriceDisplay(p)}
+                        </div>
+                        <div class="cart-action">
+                            <button type="button" class="btn add-to-cart-btn" data-name="${escapeHtml(p.name)}">Add to Cart</button>
+                            <div class="card-qty-stepper" hidden>
+                                <button type="button" class="card-qty-btn" data-action="dec">−</button>
+                                <span class="card-qty-value">1</span>
+                                <button type="button" class="card-qty-btn" data-action="inc">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="other-size-note" hidden></div>`;
+}
+
 function buildInitialPriceDisplay(p) {
   const sizes = p.sizes || [];
   if (!sizes.length || !p.prices) return '';
@@ -308,11 +337,9 @@ function renderProduct(p, allProducts, recipes, template) {
     '{{PRODUCT_IMAGE}}': escapeHtml(p.image),
     '{{PRODUCT_IMAGE_ALT}}': escapeHtml(p.imageAlt || p.name),
     '{{PRODUCT_LONG_DESCRIPTION}}': longDesc,
-    '{{PRODUCT_SIZE_CHIPS}}': buildSizeChipsHtml(p),
-    '{{PRODUCT_INITIAL_PRICE_DISPLAY}}': buildInitialPriceDisplay(p),
-    '{{PRODUCT_FIRST_SIZE}}': (p.sizes && p.sizes[0]) || '',
-    '{{PRODUCT_FIRST_PRICE}}': (p.prices && p.sizes && p.prices[p.sizes[0]]) ? discountedPrice(p.prices[p.sizes[0]]) : '',
-    '{{PRODUCT_FIRST_ORIGINAL}}': (p.prices && p.sizes && p.prices[p.sizes[0]]) || '',
+    '{{PRODUCT_COMING_SOON_CLASS}}': p.comingSoon ? ' card--coming-soon' : '',
+    '{{PRODUCT_COMING_SOON_RIBBON}}': p.comingSoon ? '<span class="launching-ribbon">Launching Soon</span>' : '',
+    '{{PRODUCT_PURCHASE_BLOCK}}': buildPurchaseBlockHtml(p),
     '{{PRODUCT_FAQ_BLOCK}}': buildFaqHtml(p),
     '{{PRODUCT_RELATED_BLOCK}}': buildRelatedProductsForProductHtml(p, allProducts),
     '{{PRODUCT_RELATED_RECIPES_BLOCK}}': buildRelatedRecipesForProductHtml(p, recipes),
