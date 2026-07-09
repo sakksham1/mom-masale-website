@@ -148,6 +148,34 @@ function showCartToast(message) {
     clearTimeout(toast._hideTimer);
     toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 1600);
 }
+
+// ── SHARE BUTTON ──
+async function shareLink(title, url) {
+    if (navigator.share) {
+        try {
+            await navigator.share({ title, url });
+        } catch (err) {
+            // user cancelled the native share sheet — no-op
+        }
+        return;
+    }
+    try {
+        await navigator.clipboard.writeText(url);
+        showCartToast('Link copied to clipboard!');
+    } catch (err) {
+        window.prompt('Copy this link:', url);
+    }
+}
+
+document.addEventListener('click', e => {
+    const shareBtn = e.target.closest('.share-btn');
+    if (!shareBtn) return;
+    e.stopPropagation();
+    const title = shareBtn.dataset.shareTitle || document.title;
+    const url = shareBtn.dataset.shareUrl || location.href;
+    shareLink(title, url);
+});
+
 // ── CART DRAWER ──
 const FREE_SHIPPING_THRESHOLD = 499; // change this if the real number is different
 
@@ -264,6 +292,22 @@ function openProductOverlay(cardEl) {
     clone.innerHTML = (front || cardEl).innerHTML;
     const hint = clone.querySelector('.tap-hint');
     if (hint) hint.remove();
+
+    const cardImage = clone.querySelector('.card-image');
+    const nameLink = clone.querySelector('.card-name-link');
+    const titleEl = clone.querySelector('.card-body h3');
+    if (cardImage && titleEl) {
+        const productUrl = nameLink ? new URL(nameLink.getAttribute('href'), location.href).href : location.href;
+        const shareBtn = document.createElement('button');
+        shareBtn.type = 'button';
+        shareBtn.className = 'share-btn';
+        shareBtn.setAttribute('aria-label', 'Share this product');
+        shareBtn.dataset.shareTitle = titleEl.textContent.trim();
+        shareBtn.dataset.shareUrl = productUrl;
+        shareBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>`;
+        cardImage.appendChild(shareBtn);
+    }
+
     body.innerHTML = '';
     body.appendChild(clone);
     syncCardUI(clone);

@@ -1744,6 +1744,39 @@ nav a.active {
     .wa-float { bottom: 20px; right: 16px; }
     .wa-label { display: none; }
 }
+
+/* ── SHARE BUTTON ── */
+.share-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.85);
+    color: var(--maroon);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    transition: background 0.18s, color 0.18s, transform 0.15s;
+}
+.share-btn svg { width: 16px; height: 16px; }
+@media (hover: hover) {
+    .share-btn:hover { background: var(--maroon); color: var(--white); transform: scale(1.08); }
+}
+[data-theme="dark"] .share-btn {
+    background: rgba(20,26,40,0.85);
+    color: var(--gold);
+}
+[data-theme="dark"] .share-btn:hover {
+    background: var(--gold);
+    color: #000;
+}
+
 /* ── FSSAI BADGE ── */
 .footer-fssai {
     display: flex;
@@ -3391,6 +3424,7 @@ nav > .theme-toggle {
     flex-direction: column;
 }
 .recipe-detail-image {
+    position: relative;
     aspect-ratio: 1 / 1;
     background: var(--cream-dark);
     display: flex;
