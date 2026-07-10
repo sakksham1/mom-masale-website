@@ -5,7 +5,18 @@
     <meta name="description" content="Try authentic Indian recipes made with Mom Masale spices — from Masala Chai to Chicken Biryani. Step-by-step, home-style recipes.">
     <meta name="robots" content="index, follow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+            try {
+            var saved = localStorage.getItem('theme');
+            var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+            } catch (e) {}
+        })();
+    </script>
     <link rel="canonical" href="https://mommasale.com/recipes.html">
+    <link rel="preload" href="data/recipes.json" as="fetch" crossorigin>
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -19,7 +30,7 @@
     <meta name="twitter:title" content="Recipes – Mom Masale">
     <meta name="twitter:description" content="Authentic Indian recipes made with Mom Masale spices.">
     <meta name="twitter:image" content="https://mommasale.com/images/hero/hero1.jpg">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.min.css">
 </head>
 
 
@@ -203,6 +214,6 @@
         <circle class="progress-ring" cx="26" cy="26" r="23"/>
     </svg>
 </button>
-<script src="js/main.js" defer></script>
+<script src="js/main.min.js" defer></script>
 </body>
 </html>

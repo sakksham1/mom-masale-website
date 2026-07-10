@@ -127,10 +127,14 @@ function pulseCartPill(type) {
     const pill = document.getElementById('cart-toggle');
     if (!pill) return;
     pill.classList.remove('pill-pop-add', 'pill-pop-remove');
-    void pill.offsetWidth; // force reflow so animation restarts if triggered rapidly
-    pill.classList.add(type === 'remove' ? 'pill-pop-remove' : 'pill-pop-add');
+    // double rAF restarts the animation on the next paint cycle instead
+    // of forcing a synchronous layout via offsetWidth
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            pill.classList.add(type === 'remove' ? 'pill-pop-remove' : 'pill-pop-add');
+        });
+    });
 }
-
 function showCartToast(message) {
     let toast = document.getElementById('cart-toast');
     if (!toast) {
@@ -143,8 +147,11 @@ function showCartToast(message) {
     }
     toast.textContent = message;
     toast.classList.remove('show');
-    void toast.offsetWidth;
-    toast.classList.add('show');
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+    });
     clearTimeout(toast._hideTimer);
     toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 1600);
 }
@@ -542,7 +549,7 @@ async function loadProducts() {
         <div class="card-face card-face-front">
         <div class="card-image">
             <img src="${p.image}" alt="${p.name}" loading="lazy" width="400" height="400"
-                onload="this.closest('.card-image').style.animation='none'"
+                onload="this.closest('.card-image').classList.add('img-loaded')"
                 onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(p.name)}'">
             ${comingSoon ? '<span class="launching-ribbon">Launching Soon</span>' : ''}
             <span class="tap-hint">Preview</span>
@@ -845,7 +852,7 @@ async function loadRecipes() {
             <a class="card recipe-bar" href="recipes/${r.slug}.html">
                 <div class="recipe-bar-image">
                     <img src="${r.image}" alt="${r.imageAlt || r.title}" loading="lazy" width="120" height="120"
-                        onload="this.closest('.recipe-bar-image').style.animation='none'"
+                        onload="this.closest('.recipe-bar-image').classList.add('img-loaded')"
                         onerror="this.src='https://placehold.co/120x120/7b1120/fff?text=${encodeURIComponent(r.title)}'">
                 </div>
                 <div class="recipe-bar-body">
@@ -873,7 +880,7 @@ async function loadRecipes() {
             <a class="card recipe-trending-card" href="recipes/${r.slug}.html">
                 <div class="card-image">
                     <img src="${r.image}" alt="${r.imageAlt || r.title}" loading="lazy" width="200" height="200"
-                        onload="this.closest('.card-image').style.animation='none'"
+                        onload="this.closest('.card-image').classList.add('img-loaded')"
                         onerror="this.src='https://placehold.co/200x200/7b1120/fff?text=${encodeURIComponent(r.title)}'">
                 </div>
                 <div class="card-body">

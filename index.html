@@ -4,6 +4,15 @@
     <title>Mom Masale – Pure Indian Spices by Sakksham Enterprises, Unnao</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+    <script>
+        (function() {
+            try {
+            var saved = localStorage.getItem('theme');
+            var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+            } catch (e) {}
+        })();
+    </script>
     <link rel="preload" as="image" href="images/hero/hero1.webp" fetchpriority="high">
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
@@ -12,6 +21,7 @@
     <meta name="description" content="Shop Mom Masale's range of 30+ pure, natural Indian spices and blended masalas. No additives, no preservatives — made in Unnao, UP by Sakksham Enterprises.">
     <meta name="keywords" content="Mom Masale, Indian spices, masala, turmeric powder, garam masala, Unnao, Sakksham Enterprises, buy spices online">
     <meta name="robots" content="index, follow">
+    <link rel="preload" href="data/products.json" as="fetch" crossorigin>
     <link rel="canonical" href="https://mommasale.com/">
 
     <meta property="og:title" content="Mom Masale – Pure Indian Spices">
@@ -19,7 +29,7 @@
     <meta property="og:image" content="https://mommasale.com/images/hero/hero1.webp">
     <meta property="og:url" content="https://mommasale.com/">
     <meta property="og:type" content="website">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.min.css">
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -389,6 +399,6 @@
         <circle class="progress-ring" cx="26" cy="26" r="23"/>
     </svg>
 </button>
-<script src="js/main.js" defer></script>
+<script src="js/main.min.js" defer></script>
 </body>
 </html>

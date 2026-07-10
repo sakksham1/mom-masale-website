@@ -443,14 +443,25 @@ nav a.active:hover {
 .card-image {
     position: relative;
     aspect-ratio: 1 / 1;
-    background: linear-gradient(90deg, #f0e8d5 25%, #e0d4b8 50%, #f0e8d5 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.2s infinite;
+    background: #f0e8d5;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 16px;
     border-bottom: 1px solid #eee;
+}
+.card-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    transform: translateX(-100%);
+    animation: shimmer-sweep 1.2s infinite;
+    pointer-events: none;
+}
+.card-image.img-loaded::after {
+    display: none;
 }
 
 .card-image img {
@@ -608,9 +619,8 @@ nav a.active:hover {
     letter-spacing: 0.3px;
 }
 
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+@keyframes shimmer-sweep {
+    100% { transform: translateX(100%); }
 }
 
 .card-body {
@@ -3288,12 +3298,23 @@ nav > .theme-toggle {
     height: 96px;
     border-radius: 8px;
     overflow: hidden;
-    background: linear-gradient(90deg, #f0e8d5 25%, #e0d4b8 50%, #f0e8d5 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.2s infinite;
+    position: relative;
+    background: #f0e8d5;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.recipe-bar-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    transform: translateX(-100%);
+    animation: shimmer-sweep 1.2s infinite;
+    pointer-events: none;
+}
+.recipe-bar-image.img-loaded::after {
+    display: none;
 }
 .recipe-bar-image img {
     width: 100%;

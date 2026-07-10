@@ -4,11 +4,19 @@
     <title>About Us – Mom Masale | Sakksham Enterprises, Shuklaganj Unnao</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+    <script>
+        (function() {
+            try {
+            var saved = localStorage.getItem('theme');
+            var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+            } catch (e) {}
+        })();
+    </script>
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
-    
     <meta name="description" content="Learn about Mom Masale — a brand by Sakksham Enterprises from Shuklaganj, Unnao. We make 100% natural Indian spices using traditional recipes with no artificial additives.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://mommasale.com/about.html">
@@ -21,7 +29,7 @@
     <meta name="twitter:title" content="About Us – Mom Masale">
     <meta name="twitter:description" content="The story behind Mom Masale — 100% natural spices from Shuklaganj, Unnao.">
     <meta name="twitter:image" content="https://mommasale.com/images/hero/hero1.webp">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.min.css">
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -331,6 +339,6 @@
         <circle class="progress-ring" cx="26" cy="26" r="23"/>
     </svg>
 </button>
-<script src="js/main.js" defer></script>
+<script src="js/main.min.js" defer></script>
 </body>
 </html>

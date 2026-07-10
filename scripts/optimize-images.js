@@ -4,24 +4,12 @@
  * Mom Masale — One-time Image Migration to WebP
  * ------------------------------------------------
  * Converts JPG/PNG source images to WebP at sensible target widths,
- * deletes the original files, and updates every reference across:
- *   - data/products.json   (image field)
- *   - data/recipes.json    (image field)
- *   - index.html           (hero1.jpg .. hero5.jpg backgrounds + preload link)
- *   - about.html           (event1.jpg .. event8.jpg gallery)
  *
  * Favicons / apple-touch-icon / android-chrome icons / site.webmanifest
  * are intentionally left untouched — already tiny, and favicons need
  * broad format support.
  *
  * This is a MIGRATION script, not part of the regular build pipeline.
- * Run it once, review the diff, commit. For new images added later,
- * either save them as .webp directly, or re-run this script (it will
- * just skip any file that's already .webp).
- *
- * Usage:
- *   npm install sharp --save-dev
- *   node scripts/optimize-images.js
  */
 
 const fs = require('fs');
@@ -30,9 +18,6 @@ const sharp = require('sharp');
 
 const ROOT = path.resolve(__dirname, '..');
 
-// folder -> { maxWidth, quality }
-// widths chosen from the largest size each image is actually rendered at
-// in the codebase (see card-image / product-detail-card / hero-slider CSS).
 const TARGETS = {
   'images/products': { maxWidth: 500, quality: 82 },
   'images/recipes': { maxWidth: 500, quality: 82 },
@@ -110,9 +95,7 @@ function updateHtmlRefs(relPath) {
   }
   const original = fs.readFileSync(fullPath, 'utf8');
   let count = 0;
-  // Matches images/hero/hero1.jpg, images/events/event1.jpg, etc.
-  // Deliberately scoped to the folders we actually converted, so it
-  // won't touch favicon/manifest references that live elsewhere.
+
   const updated = original.replace(
     /(images\/(?:hero|events|products|recipes)\/[a-zA-Z0-9_-]+)\.(jpe?g|png)/gi,
     (match, base, ext) => {
