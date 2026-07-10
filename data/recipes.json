@@ -8,7 +8,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/lemon-tea.jpg",
+    "image": "images/recipes/lemon-tea.webp",
     "imageAlt": "Lemon Tea",
     "description": "Step-by-step Lemon Tea recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -48,7 +48,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/kadak-masala-chai.jpg",
+    "image": "images/recipes/kadak-masala-chai.webp",
     "imageAlt": "Kadak Masala Chai",
     "description": "Step-by-step Kadak Masala Chai recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -102,7 +102,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/rose-syrup-sharbat.jpg",
+    "image": "images/recipes/rose-syrup-sharbat.webp",
     "imageAlt": "Rose Syrup Sharbat",
     "description": "Step-by-step Rose Syrup Sharbat recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -145,7 +145,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/dry-fruit-milk-shake.jpg",
+    "image": "images/recipes/dry-fruit-milk-shake.webp",
     "imageAlt": "Dry Fruit Milk Shake",
     "description": "Step-by-step Dry Fruit Milk Shake recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -185,7 +185,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/shahi-thandai.jpg",
+    "image": "images/recipes/shahi-thandai.webp",
     "imageAlt": "Shahi Thandai",
     "description": "Step-by-step Shahi Thandai recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -231,7 +231,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/savoury-sattu-sharbat.jpg",
+    "image": "images/recipes/savoury-sattu-sharbat.webp",
     "imageAlt": "Savoury Sattu Sharbat",
     "description": "Step-by-step Savoury Sattu Sharbat recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -290,7 +290,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/moringa-sattu-energy-drink.jpg",
+    "image": "images/recipes/moringa-sattu-energy-drink.webp",
     "imageAlt": "Moringa Sattu Energy Drink",
     "description": "Step-by-step Moringa Sattu Energy Drink recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -337,7 +337,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/jaljeera-drink.jpg",
+    "image": "images/recipes/jaljeera-drink.webp",
     "imageAlt": "Jaljeera Drink",
     "description": "Step-by-step Jaljeera Drink recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -388,7 +388,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/spiced-buttermilk-chatpata-chaach.jpg",
+    "image": "images/recipes/spiced-buttermilk-chatpata-chaach.webp",
     "imageAlt": "Spiced Buttermilk (Chatpata Chaach)",
     "description": "Step-by-step Spiced Buttermilk (Chatpata Chaach) recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -432,7 +432,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/poha-seasoned-flattened-rice.jpg",
+    "image": "images/recipes/poha-seasoned-flattened-rice.webp",
     "imageAlt": "Poha (Seasoned Flattened Rice)",
     "description": "Step-by-step Poha (Seasoned Flattened Rice) recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -494,7 +494,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/aloo-kachori.jpg",
+    "image": "images/recipes/aloo-kachori.webp",
     "imageAlt": "Aloo Kachori",
     "description": "Step-by-step Aloo Kachori recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -550,7 +550,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/dahi-bada.jpg",
+    "image": "images/recipes/dahi-bada.webp",
     "imageAlt": "Dahi Bada",
     "description": "Step-by-step Dahi Bada recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -608,7 +608,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/pani-puri.jpg",
+    "image": "images/recipes/pani-puri.webp",
     "imageAlt": "Pani Puri",
     "description": "Step-by-step Pani Puri recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -657,7 +657,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/pav-bhaji.jpg",
+    "image": "images/recipes/pav-bhaji.webp",
     "imageAlt": "Pav Bhaji",
     "description": "Step-by-step Pav Bhaji recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -713,7 +713,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/chatpata-pakora.jpg",
+    "image": "images/recipes/chatpata-pakora.webp",
     "imageAlt": "Chatpata Pakora",
     "description": "Step-by-step Chatpata Pakora recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -769,7 +769,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/fruit-chaat.jpg",
+    "image": "images/recipes/fruit-chaat.webp",
     "imageAlt": "Fruit Chaat",
     "description": "Step-by-step Fruit Chaat recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -815,7 +815,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/mixed-fruit-salad.jpg",
+    "image": "images/recipes/mixed-fruit-salad.webp",
     "imageAlt": "Mixed Fruit Salad",
     "description": "Step-by-step Mixed Fruit Salad recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -854,7 +854,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/booknu-potato-chaat.jpg",
+    "image": "images/recipes/booknu-potato-chaat.webp",
     "imageAlt": "Booknu Potato Chaat",
     "description": "Step-by-step Booknu Potato Chaat recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -905,7 +905,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/matar-paneer.jpg",
+    "image": "images/recipes/matar-paneer.webp",
     "imageAlt": "Matar Paneer",
     "description": "Step-by-step Matar Paneer recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -987,7 +987,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/shahi-paneer.jpg",
+    "image": "images/recipes/shahi-paneer.webp",
     "imageAlt": "Shahi Paneer",
     "description": "Step-by-step Shahi Paneer recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1046,7 +1046,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/kadai-paneer.jpg",
+    "image": "images/recipes/kadai-paneer.webp",
     "imageAlt": "Kadai Paneer",
     "description": "Step-by-step Kadai Paneer recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1113,7 +1113,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/chole-masala.jpg",
+    "image": "images/recipes/chole-masala.webp",
     "imageAlt": "Masala Chhola",
     "description": "Step-by-step Chole Masala recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1185,7 +1185,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/dal-makhani.jpg",
+    "image": "images/recipes/dal-makhani.webp",
     "imageAlt": "Dal Makhani",
     "description": "Step-by-step Dal Makhani recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1242,7 +1242,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/dum-aloo.jpg",
+    "image": "images/recipes/dum-aloo.webp",
     "imageAlt": "Dum Aloo",
     "description": "Step-by-step Dum Aloo recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1297,7 +1297,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/sambar.jpg",
+    "image": "images/recipes/sambar.webp",
     "imageAlt": "Sambar",
     "description": "Step-by-step Sambar recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1364,7 +1364,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/mixed-vegetable-stir-fry.jpg",
+    "image": "images/recipes/mixed-vegetable-stir-fry.webp",
     "imageAlt": "Mixed Vegetable Stir-Fry",
     "description": "Step-by-step Mixed Vegetable Stir-Fry recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1437,7 +1437,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/stuffed-baby-eggplants-bharwa-baingan.jpg",
+    "image": "images/recipes/stuffed-baby-eggplants-bharwa-baingan.webp",
     "imageAlt": "Stuffed Baby Eggplants (Bharwa Baingan)",
     "description": "Step-by-step Stuffed Baby Eggplants (Bharwa Baingan) recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1490,7 +1490,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/stuffed-okra-bharwa-bhindi.jpg",
+    "image": "images/recipes/stuffed-okra-bharwa-bhindi.webp",
     "imageAlt": "Stuffed Okra (Bharwa Bhindi)",
     "description": "Step-by-step Stuffed Okra (Bharwa Bhindi) recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1538,7 +1538,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/stuffed-bitter-gourd-bharwa-karela.jpg",
+    "image": "images/recipes/stuffed-bitter-gourd-bharwa-karela.webp",
     "imageAlt": "Stuffed Bitter Gourd (Bharwa Karela)",
     "description": "Step-by-step Stuffed Bitter Gourd (Bharwa Karela) recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1597,7 +1597,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/vegetable-biryani.jpg",
+    "image": "images/recipes/vegetable-biryani.webp",
     "imageAlt": "Vegetable Biryani",
     "description": "Step-by-step Vegetable Biryani recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1659,7 +1659,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/hyderabadi-vegetable-biryani.jpg",
+    "image": "images/recipes/hyderabadi-vegetable-biryani.webp",
     "imageAlt": "Hyderabadi Vegetable Biryani",
     "description": "Step-by-step Hyderabadi Vegetable Biryani recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1720,7 +1720,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/masala-poori.jpg",
+    "image": "images/recipes/masala-poori.webp",
     "imageAlt": "Masala Poori",
     "description": "Step-by-step Masala Poori recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1787,7 +1787,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/aloo-paratha.jpg",
+    "image": "images/recipes/aloo-paratha.webp",
     "imageAlt": "Aloo Paratha",
     "description": "Step-by-step Aloo Paratha recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1853,7 +1853,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/booknu-paratha.jpg",
+    "image": "images/recipes/booknu-paratha.webp",
     "imageAlt": "Booknu Paratha",
     "description": "Step-by-step Booknu Paratha recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1899,7 +1899,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/gulab-jamun.jpg",
+    "image": "images/recipes/gulab-jamun.webp",
     "imageAlt": "Gulab Jamun",
     "description": "Step-by-step Gulab Jamun recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -1960,7 +1960,7 @@
     "prepTime": "PT10M",
     "cookTime": "PT20M",
     "servings": 4,
-    "image": "images/recipes/kheer-indian-rice-pudding.jpg",
+    "image": "images/recipes/kheer-indian-rice-pudding.webp",
     "imageAlt": "Kheer (Indian Rice Pudding)",
     "description": "Step-by-step Kheer (Indian Rice Pudding) recipe made with Mom Masale ingredients for authentic Indian flavour.",
     "ingredients": [
@@ -2018,7 +2018,7 @@
     "prepTime": "PT2M",
     "cookTime": "PT8M",
     "servings": 2,
-    "image": "images/recipes/haldi-doodh.jpg",
+    "image": "images/recipes/haldi-doodh.webp",
     "imageAlt": "A cup of turmeric milk (haldi doodh)",
     "description": "A warm, comforting turmeric milk — India's original bedtime remedy.",
     "ingredients": [
