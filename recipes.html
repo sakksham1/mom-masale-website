@@ -107,17 +107,27 @@
         </div>
     </div>
 
-    <div class="recipe-section-block" id="trending-section" hidden>
+    <div class="recipe-section-block" id="trending-section">
         <h2 class="section-title">🔥 Trending Now</h2>
         <div class="hscroll-wrap">
-            <div id="trending-container" class="hscroll-track"></div>
+            <div id="trending-container" class="hscroll-track">
+                <div class="skeleton-card" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+                <div class="skeleton-card" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+                <div class="skeleton-card" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+                <div class="skeleton-card" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+            </div>
         </div>
     </div>
 
-    <div class="recipe-section-block" id="essentials-section" hidden>
+    <div class="recipe-section-block" id="essentials-section">
         <h2 class="section-title">⭐ Essentials</h2>
         <div class="hscroll-wrap">
-            <div id="essentials-container" class="hscroll-track"></div>
+            <div id="essentials-container" class="hscroll-track">
+                <div class="skeleton-card" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+                <div class="skeleton-card" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+                <div class="skeleton-card" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+                <div class="skeleton-card" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+            </div>
         </div>
     </div>
 
@@ -125,7 +135,13 @@
         <p>😕 No recipes found for "<span id="recipe-no-results-term"></span>".</p>
         <button class="btn btn-outline" onclick="document.getElementById('recipe-search').value=''; document.getElementById('recipe-search').dispatchEvent(new Event('input'));">Clear Search</button>
     </div>
-    <div id="recipes-container"></div>
+
+    <div id="recipes-container">
+        <div class="skeleton-bar" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+        <div class="skeleton-bar" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+        <div class="skeleton-bar" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+        <div class="skeleton-bar" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+    </div>
 </div>
 </main>
 <footer>

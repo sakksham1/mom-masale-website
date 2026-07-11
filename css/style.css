@@ -3613,6 +3613,7 @@ nav > .theme-toggle {
     overflow: hidden;
     min-height: 2.5em;
 }
+
 .trending-recipe-meta {
     display: flex;
     gap: 10px;
@@ -3624,3 +3625,75 @@ nav > .theme-toggle {
     padding-top: 4px;
 }
 [data-theme="dark"] .trending-recipe-meta { color: var(--gold); }
+
+/* ── SKELETON LOADING STATES (recipes.html) — reserve real layout space so
+   trending/essentials/recipes containers don't pop from 0 → full height
+   once data/recipes.json resolves. This is the actual CLS fix: the browser
+   lays out these dimensions on first paint, before any JS runs. ── */
+.skeleton-card {
+    flex: 0 0 auto;
+    width: 230px;
+    border-radius: var(--radius);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    overflow: hidden;
+}
+.skeleton-card .skeleton-image {
+    aspect-ratio: 1 / 1;
+    background: var(--cream-dark);
+    position: relative;
+    overflow: hidden;
+}
+.skeleton-card .skeleton-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    transform: translateX(-100%);
+    animation: shimmer-sweep 1.2s infinite;
+}
+.skeleton-card .skeleton-lines {
+    padding: 0.9rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.skeleton-line {
+    height: 10px;
+    border-radius: 4px;
+    background: var(--cream-dark);
+}
+.skeleton-line.short { width: 55%; margin: 0 auto; }
+[data-theme="dark"] .skeleton-card { background: rgba(255,255,255,0.03); }
+[data-theme="dark"] .skeleton-image,
+[data-theme="dark"] .skeleton-line { background: rgba(255,255,255,0.06); }
+
+.skeleton-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 0.9rem 1.4rem 0.9rem 0.9rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+}
+.skeleton-bar .skeleton-image {
+    width: 96px;
+    height: 96px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: var(--cream-dark);
+    position: relative;
+    overflow: hidden;
+}
+.skeleton-bar .skeleton-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    transform: translateX(-100%);
+    animation: shimmer-sweep 1.2s infinite;
+}
+.skeleton-bar .skeleton-lines { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+[data-theme="dark"] .skeleton-bar { background: rgba(255,255,255,0.03); }

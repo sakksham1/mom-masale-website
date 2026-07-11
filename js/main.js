@@ -846,10 +846,10 @@ async function loadRecipes() {
             </a>
         `;
 
-        const renderTrendingCard = (r) => `
+        const renderTrendingCard = (r, isPriority) => `
             <a class="card recipe-trending-card" href="recipes/${r.slug}.html">
                 <div class="card-image">
-                    <img src="${r.image}" alt="${r.imageAlt || r.title}" loading="lazy" width="200" height="200"
+                    <img src="${r.image}" alt="${r.imageAlt || r.title}" ${isPriority ? 'fetchpriority="high"' : 'loading="lazy"'} width="200" height="200"
                         onload="this.closest('.card-image').classList.add('img-loaded')"
                         onerror="this.src='https://placehold.co/200x200/7b1120/fff?text=${encodeURIComponent(r.title)}'">
                 </div>
@@ -865,20 +865,27 @@ async function loadRecipes() {
         `;
 
         // ── Trending Now / Essentials strips ──
-        function renderHscrollSection(sectionId, containerId, filterFn) {
+        // Sections ship visible with skeleton placeholders already in the markup
+        // (see recipes.html), so there's no 0-height → full-height jump once this
+        // fetch resolves. We only hide a section for the rare case where a filter
+        // genuinely returns zero items.
+        function renderHscrollSection(sectionId, containerId, filterFn, prioritizeFirst) {
             const section = document.getElementById(sectionId);
             const scrollContainer = document.getElementById(containerId);
             if (!scrollContainer || !section) return;
             const items = recipes.filter(filterFn).sort((a, b) => a.slug.localeCompare(b.slug));
             if (items.length) {
                 section.hidden = false;
-                scrollContainer.innerHTML = items.map(renderTrendingCard).join('');
+                scrollContainer.innerHTML = items.map((r, i) => renderTrendingCard(r, prioritizeFirst && i === 0)).join('');
             } else {
                 section.hidden = true;
             }
         }
-        renderHscrollSection('trending-section', 'trending-container', r => r.trending);
-        renderHscrollSection('essentials-section', 'essentials-container', r => r.essentials);
+        // Only the trending strip's first card is realistically this page's LCP
+        // element — that's the one image that gets fetchpriority="high" and
+        // skips loading="lazy". Everything else stays lazy as before.
+        renderHscrollSection('trending-section', 'trending-container', r => r.trending, true);
+        renderHscrollSection('essentials-section', 'essentials-container', r => r.essentials, false);
 
         // ── Search + category filter + grouped list ──
         const categories = [...new Set(recipes.map(r => r.category))].sort();
