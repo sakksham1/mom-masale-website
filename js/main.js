@@ -491,36 +491,6 @@ document.addEventListener('click', e => {
         pulseCartPill('remove');
     }
 });
-// ── HERO SLIDER ──
-const slides = document.querySelectorAll('.slide');
-const dots = document.querySelectorAll('.dot');
-
-if (slides.length) {
-    let current = 0;
-
-    function goToSlide(index) {
-        slides[current].classList.remove('active');
-        dots[current].classList.remove('active');
-        current = index;
-        slides[current].classList.add('active');
-        dots[current].classList.add('active');
-
-    }
-
-    let timer = setInterval(() => {
-        goToSlide((current + 1) % slides.length);
-    }, 5000);
-
-    dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-            clearInterval(timer);
-            goToSlide(parseInt(dot.dataset.index));
-            timer = setInterval(() => {
-                goToSlide((current + 1) % slides.length);
-            }, 5000);
-        });
-    });
-}
 
 // ── DISCOUNT ──
 const DISCOUNT_PERCENT = 25;

@@ -13,7 +13,6 @@
             } catch (e) {}
         })();
     </script>
-    <link rel="preload" as="image" href="images/hero/hero1.webp" fetchpriority="high">
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -110,80 +109,47 @@
 <div class="nav-overlay" id="nav-overlay"></div>
 <div class="promo-banner">🚚 Free Shipping &amp; Same-Day Delivery in Kanpur</div>
 <main>
-<!-- HERO SLIDER -->
-<section class="hero-slider">
-    <div class="slides">
-        <div class="slide active">
-            <div class="slide-bg" style="background-image: url('images/hero/hero1.webp')"></div>
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Traditional Indian Spices</h2>
-                <p>Authentic flavours, handcrafted for every kitchen.</p>
-                <a class="btn" href="products.html">Explore Products</a>
-            </div>
-        </div>
-        <div class="slide">
-            <div class="slide-bg" style="background-image: url('images/hero/hero2.webp')"></div>
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Pure. Natural. Flavourful.</h2>
-                <p>No additives, no shortcuts — just real spices.</p>
-                <a class="btn" href="products.html">Explore Products</a>
-            </div>
-        </div>
-        <div class="slide">
-            <div class="slide-bg" style="background-image: url('images/hero/hero3.webp')"></div>
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Blended with Tradition</h2>
-                <p>Recipes passed down through generations.</p>
-                <a class="btn" href="products.html">Explore Products</a>
-            </div>
-        </div>
-        <div class="slide">
-            <div class="slide-bg" style="background-image: url('images/hero/hero4.webp')"></div>
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>Made in Unnao, UP</h2>
-                <p>Proudly local, loved across kitchens.</p>
-                <a class="btn" href="contact.html#bulk-orders-form">Bulk Orders</a>
-            </div>
-        </div>
-        <div class="slide">
-            <div class="slide-bg" style="background-image: url('images/hero/hero5.webp')"></div>
-            <div class="slide-overlay"></div>
-            <div class="slide-content">
-                <h2>For Every Kitchen</h2>
-                <p>From homes to hotels — quality you can taste.</p>
-                <a class="btn" href="contact.html">Get in Touch</a>
-            </div>
-        </div>
+<!-- HERO -->
+<section class="hero-modern">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-blob hero-blob-3"></div>
+
+    <div class="hero-ribbon-wrap" aria-hidden="true">
+        <svg class="hero-ribbon" viewBox="0 0 140 560" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="ribbonPaper" x="-40%" y="-20%" width="180%" height="140%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.85 0.04" numOctaves="2" seed="11" result="n"/>
+                    <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+                </filter>
+            </defs>
+            <g class="hero-ribbon-swing">
+                <path class="hero-ribbon-path" filter="url(#ribbonPaper)"
+                    d="M70,-40
+                       C58,-8 84,14 64,40
+                       C46,64 20,80 14,110
+                       C10,140 16,170 12,200
+                       C10,220 14,230 12,238
+                       C12,278 46,300 70,330
+                       C94,300 128,278 128,238
+                       C128,196 94,175 70,200
+                       C46,175 12,196 12,238
+                       C12,278 46,300 70,330
+                       C84,352 58,376 70,400
+                       C82,422 58,446 70,470
+                       C84,492 58,512 70,530
+                       C80,546 62,556 70,560"
+                    fill="none" stroke="#d4a017" stroke-width="11"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    pathLength="100" stroke-dasharray="46 54"/>
+            </g>
+        </svg>
     </div>
 
-    <div class="hero-stat-strip">
-        <div class="hero-stat">
-            <span class="hero-stat-num">30+</span>
-            <span class="hero-stat-label">Products</span>
-        </div>
-        <div class="hero-stat">
-            <span class="hero-stat-num">100%</span>
-            <span class="hero-stat-label">Natural</span>
-        </div>
-        <div class="hero-stat">
-            <span class="hero-stat-num">FSSAI</span>
-            <span class="hero-stat-label">Certified</span>
-        </div>
+    <div class="hero-modern-content">
+        <h2>Hand-crafted for Every Kitchen</h2>
+        <a class="btn" href="products.html">Explore Spices</a>
     </div>
-
-    <!-- Dot indicators -->
-    <div class="slider-dots">
-        <span class="dot active" data-index="0"></span>
-        <span class="dot" data-index="1"></span>
-        <span class="dot" data-index="2"></span>
-        <span class="dot" data-index="3"></span>
-        <span class="dot" data-index="4"></span>
-    </div>
-
 </section>
 <div class="marquee-strip" aria-hidden="true">
     <div class="marquee-track">
