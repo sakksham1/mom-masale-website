@@ -855,7 +855,7 @@ async function loadRecipes() {
                 </div>
                 <div class="card-body">
                     <span class="card-category">${r.category}</span>
-                    <h3>${r.title}</h3>
+                    <h3 class="marquee-title">${r.title}</h3>
                     <div class="trending-recipe-meta">
                         <span>⏱ ${r.prepTime.replace(/PT|M/g, '')} min</span>
                         <span>🍽 ${r.servings}</span>
@@ -869,10 +869,14 @@ async function loadRecipes() {
         // (see recipes.html), so there's no 0-height → full-height jump once this
         // fetch resolves. We only hide a section for the rare case where a filter
         // genuinely returns zero items.
+        // Find:
+        let trendingHasItems = false;
+        let essentialsHasItems = false;
+
         function renderHscrollSection(sectionId, containerId, filterFn, prioritizeFirst) {
             const section = document.getElementById(sectionId);
             const scrollContainer = document.getElementById(containerId);
-            if (!scrollContainer || !section) return;
+            if (!scrollContainer || !section) return false;
             const items = recipes.filter(filterFn).sort((a, b) => a.slug.localeCompare(b.slug));
             if (items.length) {
                 section.hidden = false;
@@ -880,12 +884,13 @@ async function loadRecipes() {
             } else {
                 section.hidden = true;
             }
+            return items.length > 0;
         }
         // Only the trending strip's first card is realistically this page's LCP
         // element — that's the one image that gets fetchpriority="high" and
         // skips loading="lazy". Everything else stays lazy as before.
-        renderHscrollSection('trending-section', 'trending-container', r => r.trending, true);
-        renderHscrollSection('essentials-section', 'essentials-container', r => r.essentials, false);
+        trendingHasItems = renderHscrollSection('trending-section', 'trending-container', r => r.trending, true);
+        essentialsHasItems = renderHscrollSection('essentials-section', 'essentials-container', r => r.essentials, false);
 
         // ── Search + category filter + grouped list ──
         const categories = [...new Set(recipes.map(r => r.category))].sort();
@@ -924,9 +929,15 @@ async function loadRecipes() {
                     r.category.toLowerCase().includes(q) ||
                     (r.cuisine && r.cuisine.toLowerCase().includes(q)) ||
                     (r.description && r.description.toLowerCase().includes(q)) ||
+                    (r.aliases && r.aliases.some(a => a.toLowerCase().includes(q))) ||
                     (r.ingredients && r.ingredients.some(i => i.text.toLowerCase().includes(q)))
                 );
             }
+
+            const trendingSection = document.getElementById('trending-section');
+            const essentialsSection = document.getElementById('essentials-section');
+            if (trendingSection) trendingSection.hidden = !!searchTerm || !trendingHasItems;
+            if (essentialsSection) essentialsSection.hidden = !!searchTerm || !essentialsHasItems;
 
             updateFilterCount();
 
@@ -1269,6 +1280,28 @@ if (backToTop) {
 })();
 
 // ── CARD ENTRANCE ANIMATION ──
+function setupTitleMarquees() {
+    document.querySelectorAll('.recipe-trending-card .marquee-title').forEach(title => {
+        // Store the plain title text once, so re-runs (e.g. on resize) always
+        // measure against the real text rather than an already-duplicated track.
+        if (!title.dataset.title) title.dataset.title = title.textContent.trim();
+        const text = title.dataset.title;
+
+        title.classList.remove('marquee-active');
+        title.style.removeProperty('--marquee-dur');
+        title.textContent = text;
+
+        if (title.scrollWidth > title.clientWidth + 2) {
+            title.innerHTML = `<span class="marquee-title-track"><span class="marquee-title-seg">${text}</span><span class="marquee-title-seg" aria-hidden="true">${text}</span></span>`;
+            const track = title.querySelector('.marquee-title-track');
+            const singleSegWidth = track.scrollWidth / 2;
+            const dur = Math.max(5, singleSegWidth / 40);
+            title.style.setProperty('--marquee-dur', `${dur}s`);
+            title.classList.add('marquee-active');
+        }
+    });
+}
+
 function observeCards() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry, i) => {
@@ -1283,7 +1316,13 @@ function observeCards() {
 
     document.querySelectorAll('.card').forEach(card => observer.observe(card));
     syncAllCardUI();
+    setupTitleMarquees();
 }
+
+window.addEventListener('resize', () => {
+    clearTimeout(window._marqueeResizeTimer);
+    window._marqueeResizeTimer = setTimeout(setupTitleMarquees, 200);
+});syncAllCardUI();
 
 // ── WHY CHOOSE US FLIP CARDS ──
 const WHY_FUN_FACTS = [
