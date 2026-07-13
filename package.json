@@ -1,0 +1,29 @@
+{
+  "name": "mom-masale-website",
+  "version": "1.0.0",
+  "description": "![GitHub Pages](https://img.shields.io/badge/Deployment-GitHub%20Pages-success)\r ![Responsive](https://img.shields.io/badge/Responsive-Yes-blue)\r ![Vanilla JS](https://img.shields.io/badge/JavaScript-Vanilla-yellow)\r ![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sakksham1/mom-masale-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sakksham1/mom-masale-website/issues"
+  },
+  "homepage": "https://github.com/sakksham1/mom-masale-website#readme",
+  "devDependencies": {
+    "wrangler": "^4.110.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "sharp@0.34.5": true,
+    "workerd@1.20260708.1": true
+  }
+}

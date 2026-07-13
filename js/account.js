@@ -1,0 +1,250 @@
+// js/account.js
+// Runs only on account.html. Loaded after main.min.js, so it can use the
+// global getCart()/openCart() helpers already defined there.
+
+(function () {
+    const authSection = document.getElementById('auth-section');
+    const profileSection = document.getElementById('profile-section');
+
+    // ── TAB SWITCHING (Login / Sign Up) ──
+    const tabBtns = document.querySelectorAll('.auth-tab-btn');
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const showLogin = btn.dataset.tab === 'login';
+            loginForm.hidden = !showLogin;
+            signupForm.hidden = showLogin;
+        });
+    });
+
+    // ── INIT: check session, show the right section ──
+    init();
+
+    async function init() {
+        try {
+            const res = await fetch('/api/auth/me');
+            const data = await res.json();
+            if (data.user) {
+                showProfile(data.user);
+            } else {
+                showAuth();
+            }
+        } catch (err) {
+            // API unreachable — fall back to showing login rather than a blank page.
+            showAuth();
+        }
+    }
+
+    function showAuth() {
+        authSection.hidden = false;
+        profileSection.hidden = true;
+    }
+
+    function showProfile(user) {
+        authSection.hidden = true;
+        profileSection.hidden = false;
+
+        document.getElementById('profile-name').textContent = user.name;
+        document.getElementById('profile-email').textContent = user.email;
+        document.getElementById('profile-phone').textContent = user.phone ? `📞 ${user.phone}` : '';
+        document.getElementById('profile-avatar').textContent = (user.name || '?').trim().charAt(0).toUpperCase();
+
+        loadOrders();
+        renderProfileCart();
+    }
+
+    // ── LOGIN ──
+    loginForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('login-error');
+        errorEl.classList.remove('show');
+
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+
+        const submitBtn = loginForm.querySelector('.auth-submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Logging in…';
+
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                errorEl.textContent = data.error || 'Something went wrong. Please try again.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            showProfile(data);
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Log In';
+        }
+    });
+
+    // ── SIGN UP ──
+    signupForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('signup-error');
+        errorEl.classList.remove('show');
+
+        const name = document.getElementById('signup-name').value.trim();
+        const email = document.getElementById('signup-email').value.trim();
+        const phone = document.getElementById('signup-phone').value.trim();
+        const password = document.getElementById('signup-password').value;
+
+        const submitBtn = signupForm.querySelector('.auth-submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating account…';
+
+        try {
+            const res = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, phone, password }),
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                errorEl.textContent = data.error || 'Something went wrong. Please try again.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            showProfile(data);
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Account';
+        }
+    });
+
+    // ── LOGOUT ──
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (err) {
+            // even if the request fails, drop the user back to the login view
+        }
+        showAuth();
+        loginForm.reset();
+        signupForm.reset();
+    });
+
+    // ── ORDER HISTORY ──
+    async function loadOrders() {
+        const listEl = document.getElementById('orders-list');
+        const emptyEl = document.getElementById('orders-empty');
+        listEl.innerHTML = '';
+        emptyEl.hidden = true;
+
+        try {
+            const res = await fetch('/api/orders');
+            if (res.status === 401) {
+                // session expired between page load and this call
+                showAuth();
+                return;
+            }
+            const data = await res.json();
+            const orders = data.orders || [];
+
+            if (orders.length === 0) {
+                emptyEl.hidden = false;
+                return;
+            }
+
+            listEl.innerHTML = orders.map(renderOrderCard).join('');
+        } catch (err) {
+            listEl.innerHTML = '<p class="empty-state-msg">Could not load your orders right now.</p>';
+        }
+    }
+
+    function renderOrderCard(order) {
+        const date = new Date(order.created_at).toLocaleDateString('en-IN', {
+            day: 'numeric', month: 'short', year: 'numeric',
+        });
+        const itemsHtml = (order.items || []).map(item => `
+            <div class="order-item-row">
+                <span>${escapeHtml(item.product_name)} (${escapeHtml(item.size)}) × ${item.qty}</span>
+                <span>₹${item.unit_price * item.qty}</span>
+            </div>
+        `).join('');
+
+        return `
+            <div class="order-card">
+                <div class="order-card-header">
+                    <div>
+                        <span class="order-id">Order #${order.id}</span>
+                        <span class="order-date">${date}</span>
+                    </div>
+                    <div class="order-badges">
+                        <span class="order-status-badge order-status-${escapeHtml(order.status)}">${escapeHtml(order.status)}</span>
+                        <span class="order-status-badge order-payment-${escapeHtml(order.payment_status)}">${escapeHtml(order.payment_status)}</span>
+                    </div>
+                </div>
+                <div class="order-items-list">${itemsHtml}</div>
+                <div class="order-card-footer">
+                    <span>Total</span>
+                    <span class="order-total">₹${order.total}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    // ── CART SUMMARY (reuses getCart()/openCart() from main.js) ──
+    function renderProfileCart() {
+        const summaryEl = document.getElementById('profile-cart-summary');
+        const emptyEl = document.getElementById('cart-empty-msg');
+        const openBtn = document.getElementById('open-cart-from-profile-btn');
+        const browseBtn = document.getElementById('browse-products-btn');
+
+        const cart = typeof getCart === 'function' ? getCart() : [];
+
+        if (cart.length === 0) {
+            summaryEl.innerHTML = '';
+            emptyEl.hidden = false;
+            openBtn.hidden = true;
+            browseBtn.hidden = false;
+            return;
+        }
+
+        emptyEl.hidden = true;
+        openBtn.hidden = false;
+        browseBtn.hidden = true;
+
+        const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+        const totalPrice = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
+
+        summaryEl.innerHTML = `
+            <div class="profile-cart-line">${totalQty} item${totalQty === 1 ? '' : 's'} in your cart</div>
+            ${totalPrice ? `<div class="profile-cart-line profile-cart-total">Total: ₹${totalPrice}</div>` : ''}
+        `;
+
+        openBtn.onclick = () => {
+            if (typeof openCart === 'function') openCart();
+        };
+    }
+})();

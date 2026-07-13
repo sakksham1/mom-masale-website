@@ -40,6 +40,31 @@ document.querySelectorAll('nav a').forEach(a => {
         a.classList.add('active');
     }
 });
+// ── ACCOUNT NAV LINK (injected so every page gets it without editing
+// every HTML file — same pattern as the cart pill below) ──
+(function() {
+    const navMenu = document.getElementById('nav-menu');
+    if (!navMenu) return;
+
+    const inSubdir = /\/(products|recipes)\//.test(location.pathname);
+    const href = (inSubdir ? '../' : '') + 'account.html';
+
+    const accountLink = document.createElement('a');
+    accountLink.href = href;
+    accountLink.id = 'account-nav-link';
+    accountLink.innerHTML = `<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg><span>Account</span>`;
+    if (location.pathname.endsWith('/account.html') || location.pathname.endsWith('account.html')) {
+        accountLink.classList.add('active');
+    }
+    navMenu.appendChild(accountLink);
+
+    fetch('/api/auth/me').then(r => r.json()).then(data => {
+        if (data.user) {
+            const label = accountLink.querySelector('span');
+            if (label) label.textContent = data.user.name.split(' ')[0];
+        }
+    }).catch(() => {});
+})();
 
 // ── HAMBURGER MENU ──
 const hamburger = document.getElementById('hamburger');

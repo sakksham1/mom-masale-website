@@ -3724,3 +3724,232 @@ nav > .theme-toggle {
 }
 .skeleton-bar .skeleton-lines { flex: 1; display: flex; flex-direction: column; gap: 8px; }
 [data-theme="dark"] .skeleton-bar { background: rgba(255,255,255,0.03); }
+
+.account-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+/* ── AUTH TABS (Login / Sign Up) ── */
+.account-auth-card {
+    max-width: none;
+}
+.auth-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.4rem;
+    border-bottom: 2px solid var(--cream-dark);
+}
+[data-theme="dark"] .auth-tabs {
+    border-bottom-color: rgba(255,255,255,0.08);
+}
+.auth-tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 0.7rem 0.5rem;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--text-light);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.18s, border-color 0.18s;
+}
+.auth-tab-btn.active {
+    color: var(--maroon);
+    border-bottom-color: var(--gold);
+}
+[data-theme="dark"] .auth-tab-btn.active {
+    color: var(--gold);
+}
+.auth-form[hidden] {
+    display: none;
+}
+.auth-submit-btn {
+    width: 100%;
+    margin-top: 0.4rem;
+}
+
+/* ── PROFILE INFO CARD ── */
+.profile-info-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    max-width: none;
+}
+.profile-info-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.profile-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--maroon);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+[data-theme="dark"] .profile-avatar {
+    background: var(--gold);
+    color: #000;
+}
+.profile-name {
+    font-size: 1.15rem;
+    color: var(--brown);
+    margin-bottom: 2px;
+}
+[data-theme="dark"] .profile-name {
+    color: var(--gold);
+}
+.profile-email,
+.profile-phone {
+    font-size: 0.88rem;
+    color: var(--text-light);
+}
+
+/* ── ORDER HISTORY ── */
+.profile-orders-card,
+.profile-cart-card {
+    max-width: none;
+}
+.order-card {
+    background: var(--cream-dark);
+    border-radius: var(--radius);
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+}
+[data-theme="dark"] .order-card {
+    background: rgba(255,255,255,0.04);
+}
+.order-card:last-child {
+    margin-bottom: 0;
+}
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 0.7rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid rgba(123,17,32,0.12);
+}
+[data-theme="dark"] .order-card-header {
+    border-bottom-color: rgba(255,255,255,0.08);
+}
+.order-id {
+    display: block;
+    font-weight: 700;
+    color: var(--brown);
+    font-size: 0.95rem;
+}
+[data-theme="dark"] .order-id {
+    color: var(--gold);
+}
+.order-date {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-top: 2px;
+}
+.order-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.order-status-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: rgba(212,160,23,0.15);
+    color: var(--maroon);
+    border: 1px solid rgba(212,160,23,0.4);
+    white-space: nowrap;
+}
+[data-theme="dark"] .order-status-badge {
+    color: var(--gold);
+    background: rgba(212,160,23,0.08);
+}
+.order-status-delivered,
+.order-payment-paid {
+    background: rgba(37,211,102,0.15);
+    color: #1ebe5b;
+    border-color: rgba(37,211,102,0.4);
+}
+.order-status-cancelled,
+.order-payment-failed {
+    background: rgba(192,57,43,0.12);
+    color: #c0392b;
+    border-color: rgba(192,57,43,0.35);
+}
+.order-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 0.7rem;
+}
+.order-item-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+.order-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    padding-top: 0.6rem;
+    border-top: 1px solid rgba(123,17,32,0.12);
+}
+[data-theme="dark"] .order-card-footer {
+    border-top-color: rgba(255,255,255,0.08);
+}
+.order-total {
+    color: var(--maroon);
+    font-size: 1.05rem;
+}
+[data-theme="dark"] .order-total {
+    color: var(--gold);
+}
+
+.empty-state-msg {
+    color: var(--text-light);
+    font-size: 0.92rem;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* ── CART SUMMARY (profile page) ── */
+.profile-cart-line {
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+.profile-cart-total {
+    font-weight: 700;
+    color: var(--maroon);
+    margin-bottom: 1rem;
+}
+[data-theme="dark"] .profile-cart-total {
+    color: var(--gold);
+}
+#open-cart-from-profile-btn,
+#browse-products-btn {
+    width: 100%;
+    text-align: center;
+}
