@@ -1,8 +1,8 @@
 # ── Cloudflare / Wrangler ──
-.wrangler/                 # local D1 state, dev cache — machine-specific, never shared
-.dev.vars                  # local secret env vars (Razorpay keys etc) — NEVER commit this
+.wrangler/
+.dev.vars
 .dev.vars.*
-!.dev.vars.example          # template file is fine to commit (see below)
+!.dev.vars.example
 
 # ── Node ──
 node_modules/
