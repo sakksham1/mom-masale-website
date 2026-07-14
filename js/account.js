@@ -6,6 +6,25 @@
     const authSection = document.getElementById('auth-section');
     const profileSection = document.getElementById('profile-section');
 
+    // ── REDIRECT-AFTER-AUTH (e.g. ?redirect=checkout from checkout.html) ──
+    const urlParams = new URLSearchParams(location.search);
+    const redirectTarget = urlParams.get('redirect');
+
+    function redirectAfterAuth() {
+        if (redirectTarget === 'checkout') {
+            window.location.href = 'checkout.html';
+            return true;
+        }
+        return false;
+    }
+
+    if (redirectTarget === 'checkout') {
+        const banner = document.createElement('p');
+        banner.style.cssText = 'text-align:center;color:var(--maroon);font-weight:600;font-size:0.9rem;margin-bottom:1rem';
+        banner.textContent = 'Log in or sign up to continue to checkout.';
+        authSection.parentElement.insertBefore(banner, authSection);
+    }
+
     // ── TAB SWITCHING (Login / Sign Up) ──
     const tabBtns = document.querySelectorAll('.auth-tab-btn');
     const loginForm = document.getElementById('login-form');
@@ -84,6 +103,7 @@
                 return;
             }
 
+            if (redirectAfterAuth()) return;
             showProfile(data);
         } catch (err) {
             errorEl.textContent = 'Could not reach the server. Please try again.';
@@ -123,6 +143,7 @@
                 return;
             }
 
+             if (redirectAfterAuth()) return;
             showProfile(data);
         } catch (err) {
             errorEl.textContent = 'Could not reach the server. Please try again.';
@@ -247,4 +268,131 @@
             if (typeof openCart === 'function') openCart();
         };
     }
+
+    // ── PASSWORD CHECKLIST (signup) ──
+    attachPasswordChecklist(
+        document.getElementById('signup-password'),
+        document.getElementById('signup-password-checklist'),
+        signupForm.querySelector('.auth-submit-btn')
+    );
+
+    // ── FORGOT PASSWORD FLOW ──
+    const forgotLink = document.getElementById('forgot-password-link');
+    const backToLoginLink = document.getElementById('back-to-login-link');
+    const forgotSection = document.getElementById('forgot-password-section');
+    const forgotEmailForm = document.getElementById('forgot-email-form');
+    const forgotOtpForm = document.getElementById('forgot-otp-form');
+    const forgotNewpassForm = document.getElementById('forgot-newpass-form');
+    let forgotEmailValue = '';
+    let resetTokenValue = '';
+
+    attachPasswordChecklist(
+        document.getElementById('forgot-newpass'),
+        document.getElementById('forgot-newpass-checklist'),
+        forgotNewpassForm.querySelector('.auth-submit-btn')
+    );
+
+    function showAuthForms() {
+        forgotSection.hidden = true;
+        loginForm.hidden = false;
+    }
+    function showForgotStep(step) {
+        forgotEmailForm.hidden = step !== 'email';
+        forgotOtpForm.hidden = step !== 'otp';
+        forgotNewpassForm.hidden = step !== 'newpass';
+    }
+
+    forgotLink?.addEventListener('click', e => {
+        e.preventDefault();
+        loginForm.hidden = true;
+        signupForm.hidden = true;
+        forgotSection.hidden = false;
+        showForgotStep('email');
+    });
+    backToLoginLink?.addEventListener('click', e => {
+        e.preventDefault();
+        showAuthForms();
+        tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === 'login'));
+    });
+
+    forgotEmailForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('forgot-email-error');
+        errorEl.classList.remove('show');
+        forgotEmailValue = document.getElementById('forgot-email').value.trim();
+
+        const btn = forgotEmailForm.querySelector('.auth-submit-btn');
+        btn.disabled = true; btn.textContent = 'Sending…';
+        try {
+            await fetch('/api/auth/forgot-password', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: forgotEmailValue }),
+            });
+            showForgotStep('otp');
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            btn.disabled = false; btn.textContent = 'Send OTP';
+        }
+    });
+
+    forgotOtpForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('forgot-otp-error');
+        errorEl.classList.remove('show');
+        const otp = document.getElementById('forgot-otp').value.trim();
+
+        const btn = forgotOtpForm.querySelector('.auth-submit-btn');
+        btn.disabled = true; btn.textContent = 'Verifying…';
+        try {
+            const res = await fetch('/api/auth/verify-reset-otp', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: forgotEmailValue, otp }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                errorEl.textContent = data.error || 'Incorrect code.';
+                errorEl.classList.add('show');
+                return;
+            }
+            resetTokenValue = data.resetToken;
+            showForgotStep('newpass');
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            btn.disabled = false; btn.textContent = 'Verify Code';
+        }
+    });
+
+    forgotNewpassForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('forgot-newpass-error');
+        errorEl.classList.remove('show');
+        const newPassword = document.getElementById('forgot-newpass').value;
+
+        const btn = forgotNewpassForm.querySelector('.auth-submit-btn');
+        btn.disabled = true; btn.textContent = 'Resetting…';
+        try {
+            const res = await fetch('/api/auth/reset-password', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: forgotEmailValue, resetToken: resetTokenValue, newPassword }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                errorEl.textContent = data.error || 'Could not reset password.';
+                errorEl.classList.add('show');
+                btn.disabled = false; btn.textContent = 'Reset Password';
+                return;
+            }
+            showAuthForms();
+            loginForm.reset();
+            alert('Password reset! Please log in with your new password.');
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+            btn.disabled = false; btn.textContent = 'Reset Password';
+        }
+    });
 })();

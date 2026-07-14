@@ -13,13 +13,33 @@
     const DISPLAY_FLAT_SHIPPING_FEE = 40;
 
     const emptyEl = document.getElementById('checkout-empty');
+    const loginRequiredEl = document.getElementById('checkout-login-required');
     const formEl = document.getElementById('checkout-form');
     const summaryEl = document.getElementById('checkout-summary');
     const itemsListEl = document.getElementById('checkout-items-list');
     const errorEl = document.getElementById('checkout-error');
     const placeOrderBtn = document.getElementById('place-order-btn');
 
-    renderCartSummary();
+    checkAuthThenRender();
+
+    async function checkAuthThenRender() {
+        try {
+            const res = await fetch('/api/auth/me');
+            const data = await res.json();
+            if (!data.user) { showLoginRequired(); return; }
+        } catch (err) {
+            showLoginRequired();
+            return;
+        }
+        renderCartSummary();
+    }
+
+    function showLoginRequired() {
+        if (loginRequiredEl) loginRequiredEl.hidden = false;
+        emptyEl.hidden = true;
+        formEl.hidden = true;
+        summaryEl.hidden = true;
+    }
 
     function getCartItems() {
         return typeof getCart === 'function' ? getCart() : [];

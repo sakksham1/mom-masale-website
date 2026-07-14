@@ -61,6 +61,11 @@ export async function onRequestPost(context) {
   if (!name || !category || !prices || Object.keys(prices).length === 0) {
     return jsonError('name, category, and at least one size/price are required');
   }
+  for (const [size, price] of Object.entries(prices)) {
+    if (!Number.isFinite(price) || price <= 0) {
+      return jsonError(`Invalid price for size "${size}" — prices must be positive numbers`);
+    }
+  }
 
   try {
     const { content, sha } = await readRepoFile(env, PRODUCTS_PATH);
@@ -129,6 +134,14 @@ export async function onRequestPatch(context) {
     const products = JSON.parse(content);
     const idx = products.findIndex(p => p.slug === slug);
     if (idx === -1) return jsonError('Product not found', 404);
+
+    if (updates.prices) {
+      for (const [size, price] of Object.entries(updates.prices)) {
+        if (!Number.isFinite(price) || price <= 0) {
+          return jsonError(`Invalid price for size "${size}" — prices must be positive numbers`);
+        }
+      }
+    }
 
     for (const key of EDITABLE_FIELDS) {
       if (key in updates) products[idx][key] = updates[key];

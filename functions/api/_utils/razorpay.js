@@ -12,6 +12,17 @@ async function hmacSha256Hex(message, secret) {
   return [...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+// Constant-time-ish string compare, mirroring the approach used for password
+// verification in crypto.js — avoids leaking anything via timing.
+function timingSafeEqual(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return diff === 0;
+}
+
 // Creates a Razorpay Order (server-side) for the given amount (in paise).
 // Throws on failure — caller is responsible for catching and responding.
 export async function createRazorpayOrder(env, amountInPaise, receipt) {
@@ -43,7 +54,7 @@ export async function createRazorpayOrder(env, amountInPaise, receipt) {
 // the more trustworthy server-to-server backup for the same event.
 export async function verifyPaymentSignature(env, razorpayOrderId, razorpayPaymentId, signature) {
   const expected = await hmacSha256Hex(`${razorpayOrderId}|${razorpayPaymentId}`, env.RAZORPAY_KEY_SECRET);
-  return expected === signature;
+  return timingSafeEqual(expected, signature);
 }
 
 // Verifies the X-Razorpay-Signature header on incoming webhook events,
@@ -52,5 +63,5 @@ export async function verifyPaymentSignature(env, razorpayOrderId, razorpayPayme
 export async function verifyWebhookSignature(env, rawBody, signatureHeader) {
   if (!env.RAZORPAY_WEBHOOK_SECRET) return false;
   const expected = await hmacSha256Hex(rawBody, env.RAZORPAY_WEBHOOK_SECRET);
-  return expected === signatureHeader;
+  return timingSafeEqual(expected, signatureHeader);
 }

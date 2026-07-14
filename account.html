@@ -86,7 +86,44 @@
                 </div>
                 <div class="field-error" id="login-error"></div>
                 <button type="submit" class="btn auth-submit-btn">Log In</button>
+                <p style="text-align:center;margin-top:0.8rem">
+                    <a href="#" id="forgot-password-link" style="color:var(--maroon);font-size:0.88rem;font-weight:600">Forgot password?</a>
+                </p>
             </form>
+
+            <div id="forgot-password-section" hidden>
+                <form id="forgot-email-form" class="auth-form" novalidate>
+                    <div class="form-group">
+                        <label for="forgot-email">Enter your account email</label>
+                        <input id="forgot-email" type="email" required>
+                    </div>
+                    <div class="field-error" id="forgot-email-error"></div>
+                    <button type="submit" class="btn auth-submit-btn">Send OTP</button>
+                </form>
+
+                <form id="forgot-otp-form" class="auth-form" hidden novalidate>
+                    <div class="form-group">
+                        <label for="forgot-otp">Enter the 6-digit code emailed to you</label>
+                        <input id="forgot-otp" type="text" inputmode="numeric" maxlength="6" required>
+                    </div>
+                    <div class="field-error" id="forgot-otp-error"></div>
+                    <button type="submit" class="btn auth-submit-btn">Verify Code</button>
+                </form>
+
+                <form id="forgot-newpass-form" class="auth-form" hidden novalidate>
+                    <div class="form-group">
+                        <label for="forgot-newpass">New Password</label>
+                        <input id="forgot-newpass" type="password" autocomplete="new-password" required>
+                        <ul id="forgot-newpass-checklist" style="margin-top:8px;display:flex;flex-direction:column;gap:4px"></ul>
+                    </div>
+                    <div class="field-error" id="forgot-newpass-error"></div>
+                    <button type="submit" class="btn auth-submit-btn" disabled>Reset Password</button>
+                </form>
+
+                <p style="text-align:center;margin-top:0.8rem">
+                    <a href="#" id="back-to-login-link" style="color:var(--maroon);font-size:0.88rem;font-weight:600">← Back to Log In</a>
+                </p>
+            </div>
 
             <form id="signup-form" class="auth-form" hidden novalidate>
                 <div class="form-group">
@@ -104,6 +141,7 @@
                 <div class="form-group">
                     <label for="signup-password">Password</label>
                     <input id="signup-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" required>
+                    <ul id="signup-password-checklist" style="margin-top:8px;display:flex;flex-direction:column;gap:4px"></ul>
                 </div>
                 <div class="field-error" id="signup-error"></div>
                 <button type="submit" class="btn auth-submit-btn">Create Account</button>
@@ -231,6 +269,7 @@
     </svg>
 </button>
 <script src="js/main.min.js" defer></script>
+<script src="js/password-rules.js" defer></script>
 <script src="js/account.js" defer></script>
 </body>
 </html>

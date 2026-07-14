@@ -3,6 +3,7 @@
 // Body: { name, email, password, phone? }
 
 import { hashPassword, generateSessionToken } from '../_utils/crypto.js';
+import { validatePassword } from '../_utils/password.js';
 import { setSessionCookie, newExpiry } from '../_utils/session.js';
 
 function isValidEmail(email) {
@@ -33,7 +34,8 @@ export async function onRequestPost(context) {
 
   if (!name) return jsonError('Name is required');
   if (!isValidEmail(email)) return jsonError('A valid email is required');
-  if (password.length < 8) return jsonError('Password must be at least 8 characters');
+  const passwordCheck = validatePassword(password);
+  if (!passwordCheck.valid) return jsonError(`Password requirements not met: ${passwordCheck.errors.join(', ')}`);
 
   const existing = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(email).first();
   if (existing) return jsonError('An account with this email already exists', 409);

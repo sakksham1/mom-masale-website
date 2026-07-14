@@ -441,10 +441,10 @@ function renderCartItems() {
 
     container.innerHTML = cart.map((item, i) => `
         <div class="cart-item">
-            <img class="cart-item-img" src="${item.image || 'https://placehold.co/60x60/7b1120/fff?text=' + encodeURIComponent(item.name[0])}" alt="${item.name}" loading="lazy">
+            <img class="cart-item-img" src="${escapeHtml(item.image || 'https://placehold.co/60x60/7b1120/fff?text=' + encodeURIComponent(item.name[0]))}" alt="${escapeHtml(item.name)}" loading="lazy">
             <div class="cart-item-info">
-                <span class="cart-item-name">${item.name}</span>
-                <span class="cart-item-size">${item.size}${item.price ? ` · ₹${item.price} each` : ''}</span>
+                <span class="cart-item-name">${escapeHtml(item.name)}</span>
+                <span class="cart-item-size">${escapeHtml(item.size)}${item.price ? ` · ₹${item.price} each` : ''}</span>
                 ${item.price ? `<span class="cart-item-subtotal">₹${item.price * item.qty}</span>` : ''}
             </div>
             <div class="cart-item-controls">
@@ -524,6 +524,15 @@ function discountedPrice(original) {
     return Math.round(original * (1 - DISCOUNT_PERCENT / 100));
 }
 
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // ── LOAD PRODUCTS ──
 async function loadProducts() {
     const containers = document.querySelectorAll('#products-container');
@@ -540,29 +549,29 @@ async function loadProducts() {
         const renderCards = (items) => items.map(p => {
     const comingSoon = !!p.comingSoon;
     return `
-    <div class="card card--collapsed${comingSoon ? ' card--coming-soon' : ''}" data-category="${p.category}">
+    <div class="card card--collapsed${comingSoon ? ' card--coming-soon' : ''}" data-category="${escapeHtml(p.category)}">
       <div class="card-flip-inner">
         <div class="card-face card-face-front">
         <div class="card-image">
-            <img src="${p.image}" alt="${p.name}" loading="lazy" width="400" height="400"
+            <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" width="400" height="400"
                 onload="this.closest('.card-image').classList.add('img-loaded')"
                 onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(p.name)}'">
             ${comingSoon ? '<span class="launching-ribbon">Launching Soon</span>' : ''}
             <span class="tap-hint">Preview</span>
         </div>
         <div class="card-body">
-            <span class="card-category">${p.category}</span>
+            <span class="card-category">${escapeHtml(p.category)}</span>
             ${p.slug ? (() => {
     const words = p.name.split(' ');
     const lastWord = words.pop();
     const leadingWords = words.length ? words.join(' ') + ' ' : '';
     return `<a class="card-name-link" href="products/${p.slug}.html" onclick="event.stopPropagation()">
-        <h3>${leadingWords}<span class="card-name-last">${lastWord}<svg class="card-name-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <h3>${escapeHtml(leadingWords)}<span class="card-name-last">${escapeHtml(lastWord)}<svg class="card-name-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
         </svg></span></h3>
     </a>`;
-})() : `<h3>${p.name}</h3>`}
+})() : `<h3>${escapeHtml(p.name)}</h3>`}
             
             ${comingSoon ? `
             <div class="launching-soon-panel">🚀 Launching Soon</div>
@@ -570,23 +579,23 @@ async function loadProducts() {
             <div class="buy-dropdown">
                 <button class="btn buy-toggle">Buy Now ▴</button>
                 <div class="buy-links">
-                    <a href="${p.amazon}" target="_blank" rel="noopener">🛒 Amazon</a>
-                    <a href="${p.flipkart}" target="_blank" rel="noopener">🛍 Flipkart</a>
-                    <a href="${p.meesho}" target="_blank" rel="noopener">🏷 Meesho</a>
+                    <a href="${escapeHtml(p.amazon)}" target="_blank" rel="noopener">🛒 Amazon</a>
+                    <a href="${escapeHtml(p.flipkart)}" target="_blank" rel="noopener">🛍 Flipkart</a>
+                    <a href="${escapeHtml(p.meesho)}" target="_blank" rel="noopener">🏷 Meesho</a>
                 </div>
             </div>
             <div class="purchase-row">
                 <div class="coming-soon-badge">Available Soon on ecom platforms</div>
                     <div class="product-controls">
-                        <div class="size-chip-row" data-selected="${p.sizes[0]}" data-selected-price="${p.prices?.[p.sizes[0]] ? discountedPrice(p.prices[p.sizes[0]]) : ''}" data-selected-original="${p.prices?.[p.sizes[0]] || ''}">
-                            ${p.sizes.map((s, i) => `<button type="button" class="size-chip${i === 0 ? ' active' : ''}" data-size="${s}" data-price="${p.prices?.[s] ? discountedPrice(p.prices[s]) : ''}" data-original="${p.prices?.[s] || ''}">${s}</button>`).join('')}
+                        <div class="size-chip-row" data-selected="${escapeHtml(p.sizes[0])}" data-selected-price="${p.prices?.[p.sizes[0]] ? discountedPrice(p.prices[p.sizes[0]]) : ''}" data-selected-original="${p.prices?.[p.sizes[0]] || ''}">
+                            ${p.sizes.map((s, i) => `<button type="button" class="size-chip${i === 0 ? ' active' : ''}" data-size="${escapeHtml(s)}" data-price="${p.prices?.[s] ? discountedPrice(p.prices[s]) : ''}" data-original="${p.prices?.[s] || ''}">${escapeHtml(s)}</button>`).join('')}
                         </div>
                         <div class="add-to-cart-block">
                             <div class="price-display">
                                 ${p.prices?.[p.sizes[0]] ? `<span class="price-original">₹${p.prices[p.sizes[0]]}</span><span class="price-discounted">₹${discountedPrice(p.prices[p.sizes[0]])}</span><span class="discount-badge">25% OFF</span>` : ''}
                             </div>
                             <div class="cart-action">
-                                <button type="button" class="btn add-to-cart-btn" data-name="${p.name}">Add to Cart</button>
+                                <button type="button" class="btn add-to-cart-btn" data-name="${escapeHtml(p.name)}">Add to Cart</button>
                                 <div class="card-qty-stepper" hidden>
                                     <button type="button" class="card-qty-btn" data-action="dec">−</button>
                                     <span class="card-qty-value">1</span>
@@ -602,8 +611,8 @@ async function loadProducts() {
             </div>
         </div>
         <div class="card-face card-face-back">
-            <img class="back-thumb" src="${p.image}" alt="${p.name}" loading="lazy">
-            <h3 class="back-name">${p.name}</h3>
+            <img class="back-thumb" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">
+            <h3 class="back-name">${escapeHtml(p.name)}</h3>
             <div class="back-cart-info"></div>
             <span class="back-hint">Tap to edit</span>
         </div>
@@ -847,15 +856,15 @@ async function loadRecipes() {
         const renderRecipeBar = (r) => `
             <a class="card recipe-bar" href="recipes/${r.slug}.html">
                 <div class="recipe-bar-image">
-                    <img src="${r.image}" alt="${r.imageAlt || r.title}" loading="lazy" width="120" height="120"
+                    <img src="${escapeHtml(r.image)}" alt="${escapeHtml(r.imageAlt || r.title)}" loading="lazy" width="120" height="120"
                         onload="this.closest('.recipe-bar-image').classList.add('img-loaded')"
                         onerror="this.src='https://placehold.co/120x120/7b1120/fff?text=${encodeURIComponent(r.title)}'">
                 </div>
                 <div class="recipe-bar-body">
                     <div class="recipe-bar-main">
-                        <span class="card-category">${r.category}</span>${r.trending ? ' <span class="trending-chip">🔥 Trending</span>' : ''}${r.essentials ? ' <span class="essentials-chip">⭐ Essential</span>' : ''}
-                        <h3 class="recipe-bar-title">${r.title}</h3>
-                        <p class="recipe-desc">${r.description}</p>
+                        <span class="card-category">${escapeHtml(r.category)}</span>${r.trending ? ' <span class="trending-chip">🔥 Trending</span>' : ''}${r.essentials ? ' <span class="essentials-chip">⭐ Essential</span>' : ''}
+                        <h3 class="recipe-bar-title">${escapeHtml(r.title)}</h3>
+                        <p class="recipe-desc">${escapeHtml(r.description)}</p>
                     </div>
                     <div class="recipe-meta recipe-bar-meta">
                         <span>⏱ Prep ${r.prepTime.replace(/PT|M/g, '')} min</span>
@@ -875,13 +884,13 @@ async function loadRecipes() {
         const renderTrendingCard = (r, isPriority) => `
             <a class="card recipe-trending-card" href="recipes/${r.slug}.html">
                 <div class="card-image">
-                    <img src="${r.image}" alt="${r.imageAlt || r.title}" ${isPriority ? 'fetchpriority="high"' : 'loading="lazy"'} width="200" height="200"
+                    <img src="${escapeHtml(r.image)}" alt="${escapeHtml(r.imageAlt || r.title)}" ${isPriority ? 'fetchpriority="high"' : 'loading="lazy"'} width="200" height="200"
                         onload="this.closest('.card-image').classList.add('img-loaded')"
                         onerror="this.src='https://placehold.co/200x200/7b1120/fff?text=${encodeURIComponent(r.title)}'">
                 </div>
                 <div class="card-body">
-                    <span class="card-category">${r.category}</span>
-                    <h3 class="marquee-title">${r.title}</h3>
+                    <span class="card-category">${escapeHtml(r.category)}</span>
+                    <h3 class="marquee-title">${escapeHtml(r.title)}</h3>
                     <div class="trending-recipe-meta">
                         <span>⏱ ${r.prepTime.replace(/PT|M/g, '')} min</span>
                         <span>🍽 ${r.servings}</span>
@@ -1121,7 +1130,7 @@ function syncCardUI(card) {
     const backInfo = card.querySelector('.back-cart-info');
     if (backInfo) {
         backInfo.innerHTML = anyInCart
-            ? `<span class="back-cart-label">In Cart</span>` + itemsInCart.map(i => `<span class="back-cart-item">${i.size} ×${i.qty}</span>`).join('')
+            ? `<span class="back-cart-label">In Cart</span>` + itemsInCart.map(i => `<span class="back-cart-item">${escapeHtml(i.size)} ×${i.qty}</span>`).join('')
             : '';
     }
 

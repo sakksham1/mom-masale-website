@@ -81,7 +81,9 @@ export async function onRequestPost(context) {
     }
 
     const originalPrice = product.prices && product.prices[item.size];
-    if (!originalPrice) return jsonError(`Invalid size "${item.size}" for ${product.name}`);
+    if (!Number.isFinite(originalPrice) || originalPrice <= 0) {
+      return jsonError(`Invalid size "${item.size}" for ${product.name}`);
+    }
 
     const unitPrice = Math.round(originalPrice * (1 - DISCOUNT_PERCENT / 100));
     subtotal += unitPrice * qty;
@@ -98,7 +100,10 @@ export async function onRequestPost(context) {
   const shippingFee = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING_FEE;
   const total = subtotal + shippingFee;
 
-  const user = await getUserFromSession(request, env);
+   const user = await getUserFromSession(request, env);
+  if (!user) {
+    return jsonError('Please log in to place an order.', 401);
+  }
   const initialPaymentStatus = paymentMethod === 'cod' ? 'cod' : 'created';
 
   const insertResult = await env.DB.prepare(
