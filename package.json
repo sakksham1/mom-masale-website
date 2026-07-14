@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/sakksham1/mom-masale-website#readme",
   "devDependencies": {
+    "clean-css": "^5.3.3",
+    "terser": "^5.49.0",
     "wrangler": "^4.110.0"
   },
   "allowScripts": {

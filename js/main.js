@@ -236,8 +236,9 @@ function buildCartDrawer() {
                 </div>
                 <div class="cart-total" id="cart-total"></div>
             </div>
+            <a href="/checkout.html" class="btn cart-checkout-online-btn">Checkout &amp; Pay Online</a>
             <button class="btn btn-outline cart-clear-btn" id="cart-clear-btn">Clear Cart</button>
-            <button class="btn cart-checkout-btn" id="cart-checkout-btn">Checkout via WhatsApp</button>
+            <button class="btn btn-outline cart-checkout-btn" id="cart-checkout-btn">Or Checkout via WhatsApp</button>
         </div>
     `;
 
