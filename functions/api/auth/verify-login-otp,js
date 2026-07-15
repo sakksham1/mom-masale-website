@@ -1,0 +1,52 @@
+// functions/api/auth/verify-login-otp.js
+// POST /api/auth/verify-login-otp  { email, otp } — on success, logs the user in directly.
+import { generateSessionToken } from '../_utils/crypto.js';
+import { setSessionCookie, newExpiry } from '../_utils/session.js';
+
+const MAX_ATTEMPTS = 5;
+
+function jsonError(message, status = 400) {
+  return new Response(JSON.stringify({ error: message }), { status, headers: { 'Content-Type': 'application/json' } });
+}
+async function sha256Hex(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+export async function onRequestPost(context) {
+  const { request, env } = context;
+  let body; try { body = await request.json(); } catch { return jsonError('Invalid request body'); }
+
+  const email = (body.email || '').trim().toLowerCase();
+  const otp = (body.otp || '').trim();
+  if (!email || !otp) return jsonError('Email and code are required');
+
+  const user = await env.DB.prepare('SELECT id, name, email, phone FROM users WHERE email = ?').bind(email).first();
+  if (!user) return jsonError('Invalid or expired code', 400);
+
+  const row = await env.DB.prepare(
+    `SELECT id, otp_hash, attempts, expires_at FROM password_resets
+     WHERE user_id = ? AND used = 0 ORDER BY created_at DESC LIMIT 1`
+  ).bind(user.id).first();
+
+  if (!row) return jsonError('Invalid or expired code', 400);
+  if (new Date(row.expires_at) < new Date()) return jsonError('This code has expired. Please request a new one.', 400);
+  if (row.attempts >= MAX_ATTEMPTS) return jsonError('Too many attempts. Please request a new code.', 429);
+
+  const otpHash = await sha256Hex(otp);
+  if (otpHash !== row.otp_hash) {
+    await env.DB.prepare('UPDATE password_resets SET attempts = attempts + 1 WHERE id = ?').bind(row.id).run();
+    return jsonError('Incorrect code', 400);
+  }
+
+  await env.DB.prepare('UPDATE password_resets SET used = 1 WHERE id = ?').bind(row.id).run();
+
+  const token = generateSessionToken();
+  const expiresAt = newExpiry();
+  await env.DB.prepare('INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)').bind(token, user.id, expiresAt).run();
+
+  return new Response(JSON.stringify({ id: user.id, name: user.name, email: user.email, phone: user.phone }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json', 'Set-Cookie': setSessionCookie(token, expiresAt) },
+  });
+}

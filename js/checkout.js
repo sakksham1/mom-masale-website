@@ -23,6 +23,7 @@
     checkAuthThenRender();
 
     async function checkAuthThenRender() {
+        await window.cartReady;
         try {
             const res = await fetch('/api/auth/me');
             const data = await res.json();

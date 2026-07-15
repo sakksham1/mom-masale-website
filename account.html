@@ -70,6 +70,8 @@
     <!-- ── LOGGED OUT: login / signup ── -->
     <div id="auth-section" hidden>
         <div class="form-card account-auth-card">
+            <div id="google-signin-container" style="display:flex;justify-content:center;margin-bottom:1.2rem"></div>
+            <div style="text-align:center;color:var(--text-light);font-size:0.85rem;margin-bottom:1.2rem">— or use email —</div>
             <div class="auth-tabs">
                 <button type="button" class="auth-tab-btn active" data-tab="login">Log In</button>
                 <button type="button" class="auth-tab-btn" data-tab="signup">Sign Up</button>
@@ -91,6 +93,9 @@
                 <button type="submit" class="btn auth-submit-btn">Log In</button>
                 <p style="text-align:center;margin-top:0.8rem">
                     <a href="#" id="forgot-password-link" style="color:var(--maroon);font-size:0.88rem;font-weight:600">Forgot password?</a>
+                </p>
+                <p style="text-align:center;margin-top:0.5rem">
+                    <a href="#" id="otp-login-link" style="color:var(--maroon);font-size:0.88rem;font-weight:600">Log in with a code emailed to you</a>
                 </p>
             </form>
 
@@ -128,6 +133,27 @@
 
                 <p style="text-align:center;margin-top:0.8rem">
                     <a href="#" id="back-to-login-link" style="color:var(--maroon);font-size:0.88rem;font-weight:600">← Back to Log In</a>
+                </p>
+            </div>
+            <div id="otp-login-section" hidden>
+                <form id="otp-login-email-form" class="auth-form" novalidate>
+                    <div class="form-group">
+                        <label for="otp-login-email">Your account email</label>
+                        <input id="otp-login-email" type="email" required>
+                    </div>
+                    <div class="field-error" id="otp-login-email-error"></div>
+                    <button type="submit" class="btn auth-submit-btn">Send Code</button>
+                </form>
+                <form id="otp-login-code-form" class="auth-form" hidden novalidate>
+                    <div class="form-group">
+                        <label for="otp-login-code">Enter the 6-digit code emailed to you</label>
+                        <input id="otp-login-code" type="text" inputmode="numeric" maxlength="6" required>
+                    </div>
+                    <div class="field-error" id="otp-login-code-error"></div>
+                    <button type="submit" class="btn auth-submit-btn">Log In</button>
+                </form>
+                <p style="text-align:center;margin-top:0.8rem">
+                    <a href="#" id="otp-back-to-login-link" style="color:var(--maroon);font-size:0.88rem;font-weight:600">← Back to Log In</a>
                 </p>
             </div>
 
@@ -280,5 +306,6 @@
 <script src="js/main.min.js" defer></script>
 <script src="js/password-rules.js" defer></script>
 <script src="js/account.js" defer></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 </html>

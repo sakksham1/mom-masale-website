@@ -1,3 +1,10 @@
+// ── CART STATE (declared early — updateCartBadge() below can run before
+// the ── CART ── section further down the file is reached, and `let`
+// bindings are in the temporal dead zone until their declaration line
+// executes, so these must be hoisted above every call site) ──
+let cartCache = [];
+let cartIsLoggedIn = false;
+
 // ── DARK MODE ──
 const themeToggle = document.getElementById('theme-toggle');
 const toggleIcon = themeToggle?.querySelector('.toggle-icon');
@@ -139,7 +146,7 @@ function updateCartBadge() {
     const badge = document.getElementById('cart-badge');
     const priceEl = document.getElementById('cart-price');
     if (!pill || !badge) return;
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const cart = getCart();
     const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
     const totalPrice = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
     badge.textContent = totalQty;
@@ -938,9 +945,20 @@ async function loadRecipes() {
         const filterCountBadge = document.getElementById('recipe-filter-count-badge');
         const filterClearBtn = document.getElementById('recipe-filter-clear-btn');
         const categoryList = document.getElementById('recipe-filter-category-list');
+        const scopeHint = document.getElementById('recipe-search-scope-hint');
+        const scopeCategory = document.getElementById('recipe-scope-category');
+        const scopeReset = document.getElementById('recipe-scope-reset');
 
         let selectedCategories = new Set();
         let searchTerm = '';
+
+        if (scopeReset) {
+            scopeReset.addEventListener('click', () => {
+                selectedCategories.clear();
+                categoryList?.querySelectorAll('input').forEach(cb => cb.checked = false);
+                applyFilters();
+            });
+        }
 
         function updateFilterCount() {
             if (filterCountBadge) {
@@ -971,8 +989,18 @@ async function loadRecipes() {
 
             const trendingSection = document.getElementById('trending-section');
             const essentialsSection = document.getElementById('essentials-section');
-            if (trendingSection) trendingSection.hidden = !!searchTerm || !trendingHasItems;
-            if (essentialsSection) essentialsSection.hidden = !!searchTerm || !essentialsHasItems;
+            const hideStrips = !!searchTerm || selectedCategories.size > 0;
+            if (trendingSection) trendingSection.hidden = hideStrips || !trendingHasItems;
+            if (essentialsSection) essentialsSection.hidden = hideStrips || !essentialsHasItems;
+
+            if (scopeHint) {
+                if (selectedCategories.size > 0 && searchTerm) {
+                    scopeCategory.textContent = [...selectedCategories].join(', ');
+                    scopeHint.hidden = false;
+                } else {
+                    scopeHint.hidden = true;
+                }
+            }
 
             updateFilterCount();
 
@@ -1084,13 +1112,63 @@ async function loadRecipes() {
 loadRecipes();
 
 // ── CART ──
+// Cart now lives server-side in D1, keyed by user_id, instead of localStorage
+// (localStorage carts have nowhere to attach to an account or survive a
+// device switch). `cartCache` is an in-memory mirror kept in sync with the
+// server so every existing call site that reads getCart() synchronously
+// keeps working unchanged. (cartCache/cartIsLoggedIn are declared at the
+// top of this file — see note there.)
+
 function getCart() {
-    return JSON.parse(localStorage.getItem('cart') || '[]');
+    return cartCache;
 }
+
 function saveCart(cart) {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    cartCache = cart;
+    persistCart(cart);
 }
+
+async function persistCart(cart) {
+    if (!cartIsLoggedIn) return;
+    try {
+        await fetch('/api/cart', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: cart }),
+        });
+    } catch (err) {
+        // best-effort — cartCache already reflects the intended state client-side
+    }
+}
+
+// Resolves once the server cart has been loaded, so pages that render a
+// cart summary on load (checkout, account) can await it before reading getCart().
+window.cartReady = (async function initCart() {
+    try {
+        const res = await fetch('/api/cart');
+        const data = await res.json();
+        cartIsLoggedIn = !!data.loggedIn;
+        cartCache = data.items || [];
+    } catch (err) {
+        cartCache = [];
+    }
+    updateCartBadge();
+    syncAllCardUI();
+    if (document.getElementById('cart-drawer')?.classList.contains('open')) renderCartItems();
+})();
+
+function goToAccountForLogin() {
+    const inSubdir = /\/(products|recipes)\//.test(location.pathname);
+    const returnTo = encodeURIComponent(location.pathname + location.search);
+    window.location.href = (inSubdir ? '../' : '') + `account?redirect=cart-login&return=${returnTo}`;
+}
+
 function addToCart(name, size, price, image) {
+    if (!cartIsLoggedIn) {
+        showCartToast('Please log in to add items to your cart');
+        setTimeout(goToAccountForLogin, 900);
+        return;
+    }
     const cart = getCart();
     const existing = cart.find(i => i.name === name && i.size === size);
     if (existing) {

@@ -6,22 +6,72 @@
     const authSection = document.getElementById('auth-section');
     const profileSection = document.getElementById('profile-section');
 
-    // ── REDIRECT-AFTER-AUTH (e.g. ?redirect=checkout from checkout.html) ──
+    // ── GOOGLE SIGN-IN ──
+    const GOOGLE_CLIENT_ID = '1032815088680-e28jfn9hvjrfkm57js1vlul37tb0rf7k.apps.googleusercontent.com';
+
+    function initGoogleSignIn() {
+        if (!window.google?.accounts?.id) { setTimeout(initGoogleSignIn, 200); return; }
+        google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleGoogleCredential,
+        });
+        google.accounts.id.renderButton(
+            document.getElementById('google-signin-container'),
+            { theme: 'outline', size: 'large', width: 280 }
+        );
+    }
+
+    async function handleGoogleCredential(response) {
+        try {
+            const res = await fetch('/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ credential: response.credential }),
+            });
+            const data = await res.json();
+            if (!res.ok) { alert(data.error || 'Google sign-in failed.'); return; }
+            if (redirectAfterAuth()) return;
+            showProfile(data);
+        } catch (err) {
+            alert('Could not reach the server. Please try again.');
+        }
+    }
+
+    initGoogleSignIn();
+
+    // ── REDIRECT-AFTER-AUTH (e.g. ?redirect=checkout from checkout.html,
+    // or ?redirect=cart-login&return=<path> from tapping "Add to Cart"
+    // while logged out — sends the person back to the exact product page
+    // they were on, not just the generic profile view) ──
     const urlParams = new URLSearchParams(location.search);
     const redirectTarget = urlParams.get('redirect');
+    const returnPath = urlParams.get('return');
 
     function redirectAfterAuth() {
         if (redirectTarget === 'checkout') {
             window.location.href = 'checkout';
             return true;
         }
+        if (redirectTarget === 'cart-login' && returnPath) {
+            const decoded = decodeURIComponent(returnPath);
+            // only ever navigate to a same-site path — never an absolute/external URL
+            if (decoded.startsWith('/') && !decoded.startsWith('//')) {
+                window.location.href = decoded;
+                return true;
+            }
+        }
         return false;
     }
 
-    if (redirectTarget === 'checkout') {
+    const REDIRECT_BANNER_TEXT = {
+        'checkout': 'Log in or sign up to continue to checkout.',
+        'cart-login': 'Log in or sign up to add items to your cart.',
+    };
+
+    if (REDIRECT_BANNER_TEXT[redirectTarget]) {
         const banner = document.createElement('p');
         banner.style.cssText = 'text-align:center;color:var(--maroon);font-weight:600;font-size:0.9rem;margin-bottom:1rem';
-        banner.textContent = 'Log in or sign up to continue to checkout.';
+        banner.textContent = REDIRECT_BANNER_TEXT[redirectTarget];
         authSection.parentElement.insertBefore(banner, authSection);
     }
 
@@ -44,6 +94,7 @@
     init();
 
     async function init() {
+        await window.cartReady;
         try {
             const res = await fetch('/api/auth/me');
             const data = await res.json();
@@ -334,6 +385,81 @@
             errorEl.classList.add('show');
         } finally {
             btn.disabled = false; btn.textContent = 'Send OTP';
+        }
+    });
+
+    // ── OTP LOGIN ──
+    const otpLoginLink = document.getElementById('otp-login-link');
+    const otpBackLink = document.getElementById('otp-back-to-login-link');
+    const otpLoginSection = document.getElementById('otp-login-section');
+    const otpEmailForm = document.getElementById('otp-login-email-form');
+    const otpCodeForm = document.getElementById('otp-login-code-form');
+    let otpLoginEmailValue = '';
+
+    otpLoginLink?.addEventListener('click', e => {
+        e.preventDefault();
+        loginForm.hidden = true;
+        signupForm.hidden = true;
+        otpLoginSection.hidden = false;
+        otpEmailForm.hidden = false;
+        otpCodeForm.hidden = true;
+    });
+    otpBackLink?.addEventListener('click', e => {
+        e.preventDefault();
+        otpLoginSection.hidden = true;
+        loginForm.hidden = false;
+        tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === 'login'));
+    });
+
+    otpEmailForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('otp-login-email-error');
+        errorEl.classList.remove('show');
+        otpLoginEmailValue = document.getElementById('otp-login-email').value.trim();
+
+        const btn = otpEmailForm.querySelector('.auth-submit-btn');
+        btn.disabled = true; btn.textContent = 'Sending…';
+        try {
+            await fetch('/api/auth/send-login-otp', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: otpLoginEmailValue }),
+            });
+            otpEmailForm.hidden = true;
+            otpCodeForm.hidden = false;
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            btn.disabled = false; btn.textContent = 'Send Code';
+        }
+    });
+
+    otpCodeForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('otp-login-code-error');
+        errorEl.classList.remove('show');
+        const otp = document.getElementById('otp-login-code').value.trim();
+
+        const btn = otpCodeForm.querySelector('.auth-submit-btn');
+        btn.disabled = true; btn.textContent = 'Verifying…';
+        try {
+            const res = await fetch('/api/auth/verify-login-otp', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: otpLoginEmailValue, otp }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                errorEl.textContent = data.error || 'Incorrect code.';
+                errorEl.classList.add('show');
+                return;
+            }
+            if (redirectAfterAuth()) return;
+            showProfile(data);
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            btn.disabled = false; btn.textContent = 'Log In';
         }
     });
 

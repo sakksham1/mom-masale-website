@@ -3717,6 +3717,31 @@ nav > .theme-toggle {
 .skeleton-bar .skeleton-lines { flex: 1; display: flex; flex-direction: column; gap: 8px; }
 [data-theme="dark"] .skeleton-bar { background: rgba(255,255,255,0.03); }
 
+/* ── PRODUCT GRID SKELETONS — stretch to fill the grid cell (unlike the
+   fixed-width hscroll skeleton cards) and add extra lines to approximate
+   the size-chip row + Add to Cart button real product cards render. ── */
+.grid .skeleton-card {
+    width: 100%;
+}
+.skeleton-product-card .skeleton-lines {
+    padding: 1rem 1.1rem;
+}
+.skeleton-product-card .skeleton-chip-row {
+    display: flex;
+    gap: 6px;
+    margin: 4px 0 2px;
+}
+.skeleton-product-card .skeleton-chip-row .skeleton-line {
+    height: 22px;
+    border-radius: 20px;
+    flex: 1;
+}
+.skeleton-product-card .skeleton-btn-line {
+    height: 34px;
+    border-radius: 6px;
+    margin-top: 4px;
+}
+
 .account-page {
     display: flex;
     flex-direction: column;
