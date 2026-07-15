@@ -33,10 +33,10 @@ if (window.matchMedia) {
 }
 
 // ── ACTIVE NAV LINK ──
-const currentPage = location.pathname.split('/').pop() || 'index.html';
+const currentPage = location.pathname.split('/').pop() || '/';
 document.querySelectorAll('nav a').forEach(a => {
     const href = a.getAttribute('href');
-    if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+    if (href === currentPage || (currentPage === '' && href === '/')) {
         a.classList.add('active');
     }
 });
@@ -47,13 +47,13 @@ document.querySelectorAll('nav a').forEach(a => {
     if (!navMenu) return;
 
     const inSubdir = /\/(products|recipes)\//.test(location.pathname);
-    const href = (inSubdir ? '../' : '') + 'account.html';
+    const href = (inSubdir ? '../' : '') + 'account';
 
     const accountLink = document.createElement('a');
     accountLink.href = href;
     accountLink.id = 'account-nav-link';
     accountLink.innerHTML = `<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg><span>Account</span>`;
-    if (location.pathname.endsWith('/account.html') || location.pathname.endsWith('account.html')) {
+    if (location.pathname.endsWith('/account') || location.pathname.endsWith('account')) {
         accountLink.classList.add('active');
     }
     navMenu.appendChild(accountLink);
@@ -236,7 +236,7 @@ function buildCartDrawer() {
                 </div>
                 <div class="cart-total" id="cart-total"></div>
             </div>
-            <a href="/checkout.html" class="btn cart-checkout-online-btn">Checkout &amp; Pay Online</a>
+            <a href="/checkout" class="btn cart-checkout-online-btn">Checkout &amp; Pay Online</a>
             <button class="btn btn-outline cart-clear-btn" id="cart-clear-btn">Clear Cart</button>
             <button class="btn btn-outline cart-checkout-btn" id="cart-checkout-btn">Or Checkout via WhatsApp</button>
         </div>
@@ -429,7 +429,7 @@ function renderCartItems() {
                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                 </svg>
                 <p>Your cart is empty.</p>
-                <a href="products.html" class="btn cart-browse-btn">Browse Products</a>
+                <a href="products" class="btn cart-browse-btn">Browse Products</a>
             </div>
         `;
         if (footer) footer.hidden = true;
@@ -565,7 +565,7 @@ async function loadProducts() {
     const words = p.name.split(' ');
     const lastWord = words.pop();
     const leadingWords = words.length ? words.join(' ') + ' ' : '';
-    return `<a class="card-name-link" href="products/${p.slug}.html" onclick="event.stopPropagation()">
+    return `<a class="card-name-link" href="products/${p.slug}" onclick="event.stopPropagation()">
         <h3>${escapeHtml(leadingWords)}<span class="card-name-last">${escapeHtml(lastWord)}<svg class="card-name-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
@@ -607,7 +607,7 @@ async function loadProducts() {
                 </div>
             <div class="other-size-note" hidden></div>
             `}
-            ${p.slug ? `<a class="product-detail-link" href="products/${p.slug}.html">View Full Details →</a>` : ''}
+            ${p.slug ? `<a class="product-detail-link" href="products/${p.slug}">View Full Details →</a>` : ''}
             </div>
         </div>
         <div class="card-face card-face-back">
@@ -845,7 +845,7 @@ async function loadProducts() {
 
 loadProducts();
 
-// ── LOAD RECIPES (recipes.html) ──
+// ── LOAD RECIPES (recipes) ──
 async function loadRecipes() {
     const container = document.getElementById('recipes-container');
     if (!container) return;
@@ -854,7 +854,7 @@ async function loadRecipes() {
         const recipes = await fetch('data/recipes.json').then(r => r.json());
 
         const renderRecipeBar = (r) => `
-            <a class="card recipe-bar" href="recipes/${r.slug}.html">
+            <a class="card recipe-bar" href="recipes/${r.slug}">
                 <div class="recipe-bar-image">
                     <img src="${escapeHtml(r.image)}" alt="${escapeHtml(r.imageAlt || r.title)}" loading="lazy" width="120" height="120"
                         onload="this.closest('.recipe-bar-image').classList.add('img-loaded')"
@@ -882,7 +882,7 @@ async function loadRecipes() {
         `;
 
         const renderTrendingCard = (r, isPriority) => `
-            <a class="card recipe-trending-card" href="recipes/${r.slug}.html">
+            <a class="card recipe-trending-card" href="recipes/${r.slug}">
                 <div class="card-image">
                     <img src="${escapeHtml(r.image)}" alt="${escapeHtml(r.imageAlt || r.title)}" ${isPriority ? 'fetchpriority="high"' : 'loading="lazy"'} width="200" height="200"
                         onload="this.closest('.card-image').classList.add('img-loaded')"

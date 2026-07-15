@@ -101,7 +101,7 @@
     function completeOrder(orderId) {
         saveCart([]);
         updateCartBadge();
-        window.location.href = `order-confirmation.html?order=${encodeURIComponent(orderId)}`;
+        window.location.href = `order-confirmation?order=${encodeURIComponent(orderId)}`;
     }
 
     formEl.addEventListener('submit', async e => {

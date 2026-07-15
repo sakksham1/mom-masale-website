@@ -42,5 +42,16 @@ function attachPasswordChecklist(inputEl, checklistEl, submitBtn) {
   return update;
 }
 
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.password-toggle-btn');
+  if (!btn) return;
+  const input = btn.parentElement.querySelector('input');
+  if (!input) return;
+  const showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+  btn.textContent = showing ? '👁' : '🙈';
+  btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+});
+
 window.passwordIsValid = passwordIsValid;
 window.attachPasswordChecklist = attachPasswordChecklist;

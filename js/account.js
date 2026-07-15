@@ -12,7 +12,7 @@
 
     function redirectAfterAuth() {
         if (redirectTarget === 'checkout') {
-            window.location.href = 'checkout.html';
+            window.location.href = 'checkout';
             return true;
         }
         return false;

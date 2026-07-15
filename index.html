@@ -90,18 +90,18 @@
 </a>
 <header>
     <div class="navbar">
-        <a class="logo" href="index.html">MOM <span>MASALE</span></a>
+        <a class="logo" href="/">MOM <span>MASALE</span></a>
         <button class="hamburger" id="hamburger" aria-label="Toggle menu">
             <span class="bar"></span>
             <span class="bar"></span>
             <span class="bar"></span>
         </button>
         <nav id="nav-menu">
-            <a href="index.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9"/></svg><span>Home</span></a>
-            <a href="products.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l1 13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>Products</span></a>
-            <a href="recipes.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h6v18H6a2 2 0 0 1-2-2V5Z"/><path d="M20 5a2 2 0 0 0-2-2h-6v18h6a2 2 0 0 0 2-2V5Z"/></svg><span>Recipes</span></a>
-            <a href="about.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor" stroke="none"/></svg><span>About</span></a>
-            <a href="contact.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Contact</span></a>
+            <a href="/"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9"/></svg><span>Home</span></a>
+            <a href="products"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l1 13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>Products</span></a>
+            <a href="recipes"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h6v18H6a2 2 0 0 1-2-2V5Z"/><path d="M20 5a2 2 0 0 0-2-2h-6v18h6a2 2 0 0 0 2-2V5Z"/></svg><span>Recipes</span></a>
+            <a href="about"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor" stroke="none"/></svg><span>About</span></a>
+            <a href="contact"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Contact</span></a>
         </nav>
     </div>
     <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"><span class="toggle-icon">☀️</span><span class="toggle-label">Light</span></button>
@@ -115,40 +115,9 @@
     <div class="hero-blob hero-blob-2"></div>
     <div class="hero-blob hero-blob-3"></div>
 
-    <div class="hero-ribbon-wrap" aria-hidden="true">
-        <svg class="hero-ribbon" viewBox="0 0 140 560" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <filter id="ribbonPaper" x="-40%" y="-20%" width="180%" height="140%">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.85 0.04" numOctaves="2" seed="11" result="n"/>
-                    <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
-                </filter>
-            </defs>
-            <g class="hero-ribbon-swing">
-                <path class="hero-ribbon-path" filter="url(#ribbonPaper)"
-                    d="M70,-40
-                       C58,-8 84,14 64,40
-                       C46,64 20,80 14,110
-                       C10,140 16,170 12,200
-                       C10,220 14,230 12,238
-                       C12,278 46,300 70,330
-                       C94,300 128,278 128,238
-                       C128,196 94,175 70,200
-                       C46,175 12,196 12,238
-                       C12,278 46,300 70,330
-                       C84,352 58,376 70,400
-                       C82,422 58,446 70,470
-                       C84,492 58,512 70,530
-                       C80,546 62,556 70,560"
-                    fill="none" stroke="#d4a017" stroke-width="11"
-                    stroke-linecap="round" stroke-linejoin="round"
-                    pathLength="100" stroke-dasharray="46 54"/>
-            </g>
-        </svg>
-    </div>
-
     <div class="hero-modern-content">
         <h2>Hand-crafted for Every Kitchen</h2>
-        <a class="btn" href="products.html">Explore Spices</a>
+        <a class="btn" href="products">Explore Spices</a>
     </div>
 </section>
 <div class="marquee-strip" aria-hidden="true">
@@ -238,7 +207,7 @@
         <div id="featured-container" class="hscroll-track"></div>
     </div>
     <div style="text-align:center; margin-top:1.5rem;">
-        <a href="products.html" class="btn">View All Products</a>
+        <a href="products" class="btn">View All Products</a>
     </div>
 </div>
 
@@ -282,7 +251,7 @@
 <footer>
     <div class="footer-inner">
         <div class="footer-brand">
-            <a class="logo" href="index.html">MOM <span>MASALE</span></a>
+            <a class="logo" href="/">MOM <span>MASALE</span></a>
             <p>Authentic Indian spices brought to you by Sakksham Enterprises.</p>
             
             <div class="footer-social">
@@ -306,10 +275,10 @@
 
         <div class="footer-links">
             <h3>Quick Links</h3>
-            <a href="products.html">Products</a>
-            <a href="about.html">About Us</a>
-            <a href="recipes.html">Recipes</a>
-            <a href="contact.html">Contact</a>
+            <a href="products">Products</a>
+            <a href="about">About Us</a>
+            <a href="recipes">Recipes</a>
+            <a href="contact">Contact</a>
         </div>
 
         <div class="footer-links">
