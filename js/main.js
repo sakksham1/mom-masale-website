@@ -1111,6 +1111,67 @@ async function loadRecipes() {
 
 loadRecipes();
 
+// ── LOAD SPICE GUIDE (spice-guide.html) ──
+// Fixed order intentionally, not alphabetical — matches the site's category
+// hierarchy. Only categories with at least one item render; this is how
+// half-empty categories (Buying Guides, Cooking Tips, etc.) stay hidden
+// until you actually add content for them.
+const BLOG_CATEGORY_ORDER = ['Articles', 'FAQs', 'Buying Guides', 'Cooking Tips', 'Ingredient Comparisons'];
+
+async function loadBlogGuide() {
+    const container = document.getElementById('guide-container');
+    if (!container) return;
+
+    try {
+        const posts = await fetch('data/blog.json').then(r => r.json());
+
+        const renderGuideBar = (p) => `
+            <a class="card recipe-bar" href="guide/${p.slug}.html">
+                <div class="recipe-bar-image">
+                    <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.imageAlt || p.title)}" loading="lazy" width="120" height="120"
+                        onload="this.closest('.recipe-bar-image').classList.add('img-loaded')"
+                        onerror="this.src='https://placehold.co/120x120/7b1120/fff?text=${encodeURIComponent(p.title)}'">
+                </div>
+                <div class="recipe-bar-body">
+                    <div class="recipe-bar-main">
+                        <span class="card-category">${escapeHtml(p.category)}</span>
+                        <h3 class="recipe-bar-title">${escapeHtml(p.title)}</h3>
+                        <p class="recipe-desc">${escapeHtml(p.description)}</p>
+                    </div>
+                </div>
+                <span class="recipe-bar-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </span>
+            </a>
+        `;
+
+        const grouped = {};
+        posts.forEach(p => {
+            if (!grouped[p.category]) grouped[p.category] = [];
+            grouped[p.category].push(p);
+        });
+
+        const sections = BLOG_CATEGORY_ORDER
+            .filter(cat => grouped[cat] && grouped[cat].length > 0)
+            .map(cat => `
+                <div class="recipe-category-block">
+                    <h2 class="section-title recipe-category-heading">${escapeHtml(cat)}</h2>
+                    <div class="recipes-list">${grouped[cat].map(renderGuideBar).join('')}</div>
+                </div>
+            `).join('');
+
+        container.innerHTML = sections || '<p class="empty-state-msg">More guides coming soon.</p>';
+        observeCards();
+    } catch (e) {
+        container.innerHTML = '<p style="color:#888;padding:1rem">Could not load the spice guide.</p>';
+    }
+}
+
+loadBlogGuide();
+
 // ── CART ──
 // Cart now lives server-side in D1, keyed by user_id, instead of localStorage
 // (localStorage carts have nowhere to attach to an account or survive a
@@ -1158,7 +1219,7 @@ window.cartReady = (async function initCart() {
 })();
 
 function goToAccountForLogin() {
-    const inSubdir = /\/(products|recipes)\//.test(location.pathname);
+    const inSubdir = /\/(products|recipes|guide)\//.test(location.pathname);
     const returnTo = encodeURIComponent(location.pathname + location.search);
     window.location.href = (inSubdir ? '../' : '') + `account?redirect=cart-login&return=${returnTo}`;
 }

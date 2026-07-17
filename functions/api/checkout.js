@@ -9,6 +9,7 @@
 
 import { getUserFromSession } from './_utils/session.js';
 import { createRazorpayOrder } from './_utils/razorpay.js';
+import { notifyOrderPlaced } from './_utils/notify.js';
 
 const FREE_SHIPPING_THRESHOLD = 499;
 const FLAT_SHIPPING_FEE = 40;
@@ -134,6 +135,10 @@ export async function onRequestPost(context) {
   }
 
   if (paymentMethod === 'cod') {
+    context.waitUntil(notifyOrderPlaced(env, {
+      orderId, customerName: String(customer.name).trim(), phone, total,
+      paymentMethod: 'cod', items: validatedItems,
+    }));
     return new Response(JSON.stringify({
       orderId, subtotal, shippingFee, total, paymentMethod: 'cod',
     }), { status: 201, headers: { 'Content-Type': 'application/json' } });
@@ -145,6 +150,11 @@ export async function onRequestPost(context) {
 
     await env.DB.prepare(`UPDATE orders SET razorpay_order_id = ? WHERE id = ?`)
       .bind(razorpayOrder.id, orderId).run();
+
+    context.waitUntil(notifyOrderPlaced(env, {
+      orderId, customerName: String(customer.name).trim(), phone, total,
+      paymentMethod: 'razorpay', items: validatedItems,
+    }));
 
     return new Response(JSON.stringify({
       orderId,

@@ -8,6 +8,7 @@
 // Checkout.js success handler fires, this is what still marks the order paid.
 
 import { verifyWebhookSignature } from './_utils/razorpay.js';
+import { notifyPaymentConfirmed } from './_utils/notify.js';
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -39,13 +40,25 @@ export async function onRequestPost(context) {
     const razorpayPaymentId = paymentEntity?.id;
 
     if (razorpayOrderId) {
-      await env.DB.prepare(
+      const result = await env.DB.prepare(
         `UPDATE orders
          SET payment_status = 'paid',
              razorpay_payment_id = COALESCE(razorpay_payment_id, ?),
              updated_at = datetime('now')
-         WHERE razorpay_order_id = ? AND payment_status != 'paid'`
-      ).bind(razorpayPaymentId || null, razorpayOrderId).run();
+         WHERE razorpay_order_id = ? AND payment_status != 'paid'
+         RETURNING id, customer_name, total`
+      ).bind(razorpayPaymentId || null, razorpayOrderId).all();
+
+      // RETURNING only yields a row if this UPDATE was the one that actually
+      // flipped payment_status — i.e. verify-payment.js hasn't already done
+      // it. That's what prevents a duplicate notification when both paths
+      // fire for the same order (see the CRITICAL note in checkout.js).
+      const row = result.results && result.results[0];
+      if (row) {
+        context.waitUntil(notifyPaymentConfirmed(env, {
+          orderId: row.id, customerName: row.customer_name, total: row.total,
+        }));
+      }
     }
   }
 

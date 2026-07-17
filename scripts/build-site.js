@@ -36,15 +36,19 @@ const { execSync } = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
 const PRODUCTS_DATA_PATH = path.join(ROOT, 'data', 'products.json');
 const RECIPES_DATA_PATH = path.join(ROOT, 'data', 'recipes.json');
+const BLOG_DATA_PATH = path.join(ROOT, 'data', 'blog.json');
 
 const PRODUCTS_OUTPUT_DIR = path.join(ROOT, 'products');
 const RECIPES_OUTPUT_DIR = path.join(ROOT, 'recipes');
+const BLOG_OUTPUT_DIR = path.join(ROOT, 'guide');
 
 const PRODUCTS_MANIFEST_PATH = path.join(PRODUCTS_OUTPUT_DIR, '.generated-manifest.json');
 const RECIPES_MANIFEST_PATH = path.join(RECIPES_OUTPUT_DIR, '.generated-manifest.json');
+const BLOG_MANIFEST_PATH = path.join(BLOG_OUTPUT_DIR, '.generated-manifest.json');
 
 const PRODUCT_TEMPLATE_PATH = path.join(__dirname, 'product-template.html');
 const RECIPE_TEMPLATE_PATH = path.join(__dirname, 'recipe-template.html');
+const BLOG_TEMPLATE_PATH = path.join(__dirname, 'blog-template.html');
 
 const SITEMAP_PATH = path.join(ROOT, 'sitemap.xml');
 const SITE_URL = 'https://mommasale.com';
@@ -54,6 +58,7 @@ const STATIC_PAGES = [
   { loc: '/', priority: '1.0', file: 'index.html' },
   { loc: '/products', priority: '0.9', file: 'products.html' },
   { loc: '/recipes', priority: '0.85', file: 'recipes.html' },
+  { loc: '/spice-guide.html', priority: '0.8', file: 'spice-guide.html' },
   { loc: '/about', priority: '0.7', file: 'about.html' },
   { loc: '/contact', priority: '0.6', file: 'contact.html' },
 ];
@@ -179,7 +184,33 @@ function validateRecipes(recipes, productSlugSet) {
   });
 }
 
-// ── cross-reference logic (the actual interlinking) ──────
+const BLOG_CATEGORIES = ['Articles', 'FAQs', 'Buying Guides', 'Cooking Tips', 'Ingredient Comparisons'];
+
+function validateBlog(blogPosts, productSlugSet, recipeSlugSet) {
+  const seen = new Set();
+  blogPosts.forEach((b, i) => {
+    if (!b.title) throw new Error(`Blog post at index ${i} is missing "title"`);
+    if (!b.slug) throw new Error(`Blog post "${b.title}" is missing "slug" — add one before building`);
+    if (!/^[a-z0-9-]+$/.test(b.slug)) throw new Error(`Blog post "${b.title}" has an invalid slug "${b.slug}" (lowercase letters, numbers, hyphens only)`);
+    if (seen.has(b.slug)) throw new Error(`Duplicate blog slug detected: "${b.slug}" — slugs must be unique`);
+    seen.add(b.slug);
+    if (!BLOG_CATEGORIES.includes(b.category)) {
+      throw new Error(`Blog post "${b.title}" has an unrecognized category "${b.category}" — must be one of: ${BLOG_CATEGORIES.join(', ')}`);
+    }
+    (b.relatedProducts || []).forEach(slug => {
+      if (!productSlugSet.has(slug)) {
+        throw new Error(`Blog post "${b.title}" references unknown product slug "${slug}" in relatedProducts`);
+      }
+    });
+    (b.relatedRecipes || []).forEach(slug => {
+      if (!recipeSlugSet.has(slug)) {
+        throw new Error(`Blog post "${b.title}" references unknown recipe slug "${slug}" in relatedRecipes`);
+      }
+    });
+  });
+}
+
+// ── cross-reference logic (the actual interlinking) ──
 
 // For a given product slug, find every recipe that uses it — either
 // listed explicitly in relatedProducts or referenced by an ingredient.
@@ -189,6 +220,18 @@ function findRecipesForProduct(productSlug, recipes) {
       (r.relatedProducts || []).includes(productSlug) ||
       (r.ingredients || []).some(ing => ing.productSlug === productSlug)
     )
+    .sort((a, b) => a.slug.localeCompare(b.slug));
+}
+
+function findBlogForProduct(productSlug, blogPosts) {
+  return blogPosts
+    .filter(b => (b.relatedProducts || []).includes(productSlug))
+    .sort((a, b) => a.slug.localeCompare(b.slug));
+}
+
+function findBlogForRecipe(recipeSlug, blogPosts) {
+  return blogPosts
+    .filter(b => (b.relatedRecipes || []).includes(recipeSlug))
     .sort((a, b) => a.slug.localeCompare(b.slug));
 }
 
@@ -329,7 +372,24 @@ function buildRelatedRecipesForProductHtml(p, recipes) {
 </div>`;
 }
 
-function renderProduct(p, allProducts, recipes, template) {
+function buildRelatedBlogForProductHtml(p, blogPosts) {
+  const related = findBlogForProduct(p.slug, blogPosts);
+  if (!related.length) return '';
+  const cards = related.map(b => `
+            <a class="related-card recipe-related-card" href="../guide/${b.slug}.html">
+                <img src="../${b.image}" alt="${escapeHtml(b.imageAlt || b.title)}" loading="lazy" width="160" height="160"
+                    onerror="this.src='https://placehold.co/160x160/7b1120/fff?text=${encodeURIComponent(b.title)}'">
+                <span>${escapeHtml(b.title)}</span>
+            </a>`).join('');
+  return `
+<div class="container">
+    <h2 class="section-title">From the Spice Guide</h2>
+    <div class="related-grid">${cards}
+    </div>
+</div>`;
+}
+
+function renderProduct(p, allProducts, recipes, blogPosts, template) {
   const title = escapeHtml((p.seo && p.seo.title) || `Buy ${p.name} Online | Mom Masale`);
   const metaDesc = escapeHtml((p.seo && (p.seo.metaDescription || p.seo.shortDescription)) || '');
   const longDesc = escapeHtml((p.seo && p.seo.longDescription) || '');
@@ -356,6 +416,7 @@ function renderProduct(p, allProducts, recipes, template) {
     '{{PRODUCT_FAQ_BLOCK}}': buildFaqHtml(p),
     '{{PRODUCT_RELATED_BLOCK}}': buildRelatedProductsForProductHtml(p, allProducts),
     '{{PRODUCT_RELATED_RECIPES_BLOCK}}': buildRelatedRecipesForProductHtml(p, recipes),
+    '{{PRODUCT_RELATED_BLOG_BLOCK}}': buildRelatedBlogForProductHtml(p, blogPosts),
   };
 
   let html = template;
@@ -463,7 +524,24 @@ function buildRelatedRecipesForRecipeHtml(r, allRecipes) {
 </div>`;
 }
 
-function renderRecipe(r, allRecipes, productBySlug, template) {
+function buildRelatedBlogForRecipeHtml(r, blogPosts) {
+  const related = findBlogForRecipe(r.slug, blogPosts);
+  if (!related.length) return '';
+  const cards = related.map(b => `
+            <a class="related-card recipe-related-card" href="../guide/${b.slug}.html">
+                <img src="../${b.image}" alt="${escapeHtml(b.imageAlt || b.title)}" loading="lazy" width="160" height="160"
+                    onerror="this.src='https://placehold.co/160x160/7b1120/fff?text=${encodeURIComponent(b.title)}'">
+                <span>${escapeHtml(b.title)}</span>
+            </a>`).join('');
+  return `
+<div class="container">
+    <h2 class="section-title">From the Spice Guide</h2>
+    <div class="related-grid">${cards}
+    </div>
+</div>`;
+}
+
+function renderRecipe(r, allRecipes, productBySlug, blogPosts, template) {
   const title = escapeHtml((r.seo && r.seo.title) || `${r.title} Recipe | Mom Masale`);
   const metaDesc = escapeHtml((r.seo && r.seo.metaDescription) || r.description || '');
   const keywords = escapeHtml((r.seo && r.seo.keywords || []).join(', '));
@@ -491,6 +569,7 @@ function renderRecipe(r, allRecipes, productBySlug, template) {
     '{{RECIPE_INGREDIENTS_LIST}}': buildIngredientsHtml(r, productBySlug),
     '{{RECIPE_STEPS_LIST}}': buildStepsHtml(r),
     '{{RECIPE_SHOP_INGREDIENTS_BLOCK}}': buildShopIngredientsHtml(r, productBySlug),
+    '{{RECIPE_RELATED_BLOG_BLOCK}}': buildRelatedBlogForRecipeHtml(r, blogPosts),
     '{{RECIPE_RELATED_BLOCK}}': buildRelatedRecipesForRecipeHtml(r, allRecipes),
   };
 
@@ -501,9 +580,122 @@ function renderRecipe(r, allRecipes, productBySlug, template) {
   return html;
 }
 
-// ── sitemap ──────────────────────────────────────────────
+// ── BLOG rendering ────────────────────────────────────────
 
-function buildSitemap(products, recipes, lastmodMap) {
+function buildBlogSchema(b) {
+  if (b.category === 'FAQs') {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [{
+        '@type': 'Question',
+        name: b.title,
+        acceptedAnswer: { '@type': 'Answer', text: (b.body || []).join(' ') },
+      }],
+    };
+  }
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: b.title,
+    image: [`${SITE_URL}/${b.image}`],
+    description: b.description || b.title,
+    articleSection: b.category,
+    author: { '@type': 'Organization', name: 'Mom Masale' },
+    publisher: { '@type': 'Organization', name: 'Mom Masale' },
+  };
+}
+
+function buildBlogBreadcrumbSchema(b) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Spice Guide', item: `${SITE_URL}/spice-guide.html` },
+      { '@type': 'ListItem', position: 3, name: b.title, item: `${SITE_URL}/guide/${b.slug}.html` },
+    ],
+  };
+}
+
+function buildBlogBodyHtml(b) {
+  return (b.body || []).map(p => `<p>${escapeHtml(p)}</p>`).join('\n            ');
+}
+
+function buildRelatedProductsForBlogHtml(b, productBySlug) {
+  const slugs = [...new Set(b.relatedProducts || [])].sort();
+  if (!slugs.length) return '';
+  const cards = slugs.map(slug => {
+    const p = productBySlug.get(slug);
+    if (!p) return '';
+    return `
+            <a class="related-card" href="../products/${p.slug}.html">
+                <img src="../${p.image}" alt="${escapeHtml(p.imageAlt || p.name)}" loading="lazy" width="160" height="160">
+                <span>${escapeHtml(p.name)}</span>
+            </a>`;
+  }).join('');
+  return `
+<div class="container">
+    <h2 class="section-title">Shop the Ingredients</h2>
+    <div class="related-grid">${cards}
+    </div>
+</div>`;
+}
+
+function buildRelatedRecipesForBlogHtml(b, recipeBySlug) {
+  const slugs = [...new Set(b.relatedRecipes || [])].sort();
+  if (!slugs.length) return '';
+  const cards = slugs.map(slug => {
+    const r = recipeBySlug.get(slug);
+    if (!r) return '';
+    return `
+            <a class="related-card recipe-related-card" href="../recipes/${r.slug}.html">
+                <img src="../${r.image}" alt="${escapeHtml(r.imageAlt || r.title)}" loading="lazy" width="160" height="160"
+                    onerror="this.src='https://placehold.co/160x160/7b1120/fff?text=${encodeURIComponent(r.title)}'">
+                <span>${escapeHtml(r.title)}</span>
+            </a>`;
+  }).join('');
+  return `
+<div class="container">
+    <h2 class="section-title">Related Recipes</h2>
+    <div class="related-grid">${cards}
+    </div>
+</div>`;
+}
+
+function renderBlog(b, productBySlug, recipeBySlug, template) {
+  const title = escapeHtml((b.seo && b.seo.title) || `${b.title} | Mom Masale`);
+  const metaDesc = escapeHtml((b.seo && b.seo.metaDescription) || b.description || '');
+  const keywords = escapeHtml((b.seo && b.seo.keywords || []).join(', '));
+  const canonical = `${SITE_URL}/guide/${b.slug}.html`;
+  const schemaJson = JSON.stringify(buildBlogSchema(b), null, 2);
+
+  const replacements = {
+    '{{TITLE}}': title,
+    '{{META_DESCRIPTION}}': metaDesc,
+    '{{KEYWORDS}}': keywords,
+    '{{CANONICAL_URL}}': canonical,
+    '{{BLOG_SCHEMA_JSON}}': schemaJson,
+    '{{BLOG_BREADCRUMB_JSON}}': JSON.stringify(buildBlogBreadcrumbSchema(b), null, 2),
+    '{{BLOG_TITLE}}': escapeHtml(b.title),
+    '{{BLOG_CATEGORY}}': escapeHtml(b.category || ''),
+    '{{BLOG_DESCRIPTION}}': escapeHtml(b.description || ''),
+    '{{BLOG_IMAGE}}': escapeHtml(b.image),
+    '{{BLOG_IMAGE_ALT}}': escapeHtml(b.imageAlt || b.title),
+    '{{BLOG_BODY_HTML}}': buildBlogBodyHtml(b),
+    '{{BLOG_RELATED_PRODUCTS_BLOCK}}': buildRelatedProductsForBlogHtml(b, productBySlug),
+    '{{BLOG_RELATED_RECIPES_BLOCK}}': buildRelatedRecipesForBlogHtml(b, recipeBySlug),
+  };
+
+  let html = template;
+  for (const [token, value] of Object.entries(replacements)) {
+    html = html.split(token).join(value);
+  }
+  return html;
+}
+
+// ── sitemap ──────────────────────────────────────────────
+function buildSitemap(products, recipes, blogPosts, lastmodMap) {
   const urls = STATIC_PAGES.map(pg => {
     const lastmod = gitLastmod(pg.file);
     return `  <url><loc>${SITE_URL}${pg.loc}</loc><lastmod>${lastmod}</lastmod><priority>${pg.priority}</priority></url>`;
@@ -520,7 +712,14 @@ function buildSitemap(products, recipes, lastmodMap) {
     .sort((a, b) => a.slug.localeCompare(b.slug))
     .forEach(r => {
       const lastmod = lastmodMap[`recipe:${r.slug}`].lastmod;
-      urls.push(`  <url><loc>${SITE_URL}/recipes/${r.slug}</loc><lastmod>${lastmod}</lastmod><priority>0.7</priority></url>`);
+      urls.push(`  <url><loc>${SITE_URL}/recipes/${r.slug}.html</loc><lastmod>${lastmod}</lastmod><priority>0.7</priority></url>`);
+    });
+  blogPosts
+    .slice()
+    .sort((a, b) => a.slug.localeCompare(b.slug))
+    .forEach(b => {
+      const lastmod = lastmodMap[`blog:${b.slug}`].lastmod;
+      urls.push(`  <url><loc>${SITE_URL}/guide/${b.slug}.html</loc><lastmod>${lastmod}</lastmod><priority>0.65</priority></url>`);
     });
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`;
 }
@@ -551,20 +750,27 @@ function syncGeneratedFiles(outputDir, manifestPath, currentSlugs, label) {
 function main() {
   if (!fs.existsSync(PRODUCTS_DATA_PATH)) throw new Error(`Cannot find ${PRODUCTS_DATA_PATH}.`);
   if (!fs.existsSync(RECIPES_DATA_PATH)) throw new Error(`Cannot find ${RECIPES_DATA_PATH}.`);
+  if (!fs.existsSync(BLOG_DATA_PATH)) throw new Error(`Cannot find ${BLOG_DATA_PATH}.`);
   if (!fs.existsSync(PRODUCT_TEMPLATE_PATH)) throw new Error(`Cannot find ${PRODUCT_TEMPLATE_PATH}.`);
   if (!fs.existsSync(RECIPE_TEMPLATE_PATH)) throw new Error(`Cannot find ${RECIPE_TEMPLATE_PATH}.`);
+  if (!fs.existsSync(BLOG_TEMPLATE_PATH)) throw new Error(`Cannot find ${BLOG_TEMPLATE_PATH}.`);
 
   const products = readJSON(PRODUCTS_DATA_PATH);
   const recipes = readJSON(RECIPES_DATA_PATH);
+  const blogPosts = readJSON(BLOG_DATA_PATH);
 
   validateProducts(products);
   const productSlugSet = new Set(products.map(p => p.slug));
   validateRecipes(recipes, productSlugSet);
+  const recipeSlugSet = new Set(recipes.map(r => r.slug));
+  validateBlog(blogPosts, productSlugSet, recipeSlugSet);
 
   const productBySlug = new Map(products.map(p => [p.slug, p]));
+  const recipeBySlug = new Map(recipes.map(r => [r.slug, r]));
 
   const productTemplate = fs.readFileSync(PRODUCT_TEMPLATE_PATH, 'utf8');
   const recipeTemplate = fs.readFileSync(RECIPE_TEMPLATE_PATH, 'utf8');
+  const blogTemplate = fs.readFileSync(BLOG_TEMPLATE_PATH, 'utf8');
 
   // ── products ──
   const currentProductSlugs = new Set(products.map(p => p.slug));
@@ -572,7 +778,7 @@ function main() {
 
   const sortedProducts = products.slice().sort((a, b) => a.slug.localeCompare(b.slug));
   sortedProducts.forEach(p => {
-    const html = renderProduct(p, products, recipes, productTemplate);
+    const html = renderProduct(p, products, recipes, blogPosts, productTemplate);
     fs.writeFileSync(path.join(PRODUCTS_OUTPUT_DIR, `${p.slug}.html`), html, 'utf8');
   });
   fs.writeFileSync(PRODUCTS_MANIFEST_PATH, JSON.stringify({ files: sortedProducts.map(p => `${p.slug}.html`) }, null, 2) + '\n', 'utf8');
@@ -583,25 +789,38 @@ function main() {
 
   const sortedRecipes = recipes.slice().sort((a, b) => a.slug.localeCompare(b.slug));
   sortedRecipes.forEach(r => {
-    const html = renderRecipe(r, recipes, productBySlug, recipeTemplate);
+    const html = renderRecipe(r, recipes, productBySlug, blogPosts, recipeTemplate);
     fs.writeFileSync(path.join(RECIPES_OUTPUT_DIR, `${r.slug}.html`), html, 'utf8');
   });
   fs.writeFileSync(RECIPES_MANIFEST_PATH, JSON.stringify({ files: sortedRecipes.map(r => `${r.slug}.html`) }, null, 2) + '\n', 'utf8');
+
+  // ── blog / spice guide ──
+  const currentBlogSlugs = new Set(blogPosts.map(b => b.slug));
+  const removedBlog = syncGeneratedFiles(BLOG_OUTPUT_DIR, BLOG_MANIFEST_PATH, currentBlogSlugs, 'blog');
+
+  const sortedBlog = blogPosts.slice().sort((a, b) => a.slug.localeCompare(b.slug));
+  sortedBlog.forEach(b => {
+    const html = renderBlog(b, productBySlug, recipeBySlug, blogTemplate);
+    fs.writeFileSync(path.join(BLOG_OUTPUT_DIR, `${b.slug}.html`), html, 'utf8');
+  });
+  fs.writeFileSync(BLOG_MANIFEST_PATH, JSON.stringify({ files: sortedBlog.map(b => `${b.slug}.html`) }, null, 2) + '\n', 'utf8');
 
   // ── lastmod tracking ──
   const prevLastmodCache = loadLastmodCache();
   const productLastmods = computeLastmods(products, prevLastmodCache, 'product:');
   const recipeLastmods = computeLastmods(recipes, prevLastmodCache, 'recipe:');
-  const lastmodMap = { ...productLastmods, ...recipeLastmods };
+  const blogLastmods = computeLastmods(blogPosts, prevLastmodCache, 'blog:');
+  const lastmodMap = { ...productLastmods, ...recipeLastmods, ...blogLastmods };
   fs.writeFileSync(LASTMOD_CACHE_PATH, JSON.stringify(lastmodMap, null, 2) + '\n', 'utf8');
 
-  // ── sitemap (covers both collections + static pages) ──
-  fs.writeFileSync(SITEMAP_PATH, buildSitemap(products, recipes, lastmodMap), 'utf8');
+  // ── sitemap (covers all collections + static pages) ──
+  fs.writeFileSync(SITEMAP_PATH, buildSitemap(products, recipes, blogPosts, lastmodMap), 'utf8');
 
   console.log(`\nDone.`);
   console.log(`  products: generated ${sortedProducts.length}, removed ${removedProducts} stale`);
   console.log(`  recipes:  generated ${sortedRecipes.length}, removed ${removedRecipes} stale`);
-  console.log(`  sitemap.xml rebuilt (${STATIC_PAGES.length + products.length + recipes.length} URLs)`);
+  console.log(`  blog:     generated ${sortedBlog.length}, removed ${removedBlog} stale`);
+  console.log(`  sitemap.xml rebuilt (${STATIC_PAGES.length + products.length + recipes.length + blogPosts.length} URLs)`);
 }
 
 try {

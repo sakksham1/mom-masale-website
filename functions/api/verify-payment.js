@@ -8,6 +8,7 @@
 // browser tab right after paying, before this call ever fires.
 
 import { verifyPaymentSignature } from './_utils/razorpay.js';
+import { notifyPaymentConfirmed } from './_utils/notify.js';
 
 function jsonError(message, status = 400) {
   return new Response(JSON.stringify({ error: message }), {
@@ -33,7 +34,7 @@ export async function onRequestPost(context) {
   }
 
   const order = await env.DB.prepare(
-    'SELECT id, razorpay_order_id FROM orders WHERE id = ?'
+    'SELECT id, razorpay_order_id, customer_name, total, payment_status FROM orders WHERE id = ?'
   ).bind(orderId).first();
 
   if (!order) return jsonError('Order not found', 404);
@@ -42,9 +43,17 @@ export async function onRequestPost(context) {
   const valid = await verifyPaymentSignature(env, razorpay_order_id, razorpay_payment_id, razorpay_signature);
   if (!valid) return jsonError('Payment verification failed', 400);
 
+  const wasUnpaid = order.payment_status !== 'paid';
+
   await env.DB.prepare(
     `UPDATE orders SET payment_status = 'paid', razorpay_payment_id = ?, updated_at = datetime('now') WHERE id = ?`
   ).bind(razorpay_payment_id, orderId).run();
+
+  if (wasUnpaid) {
+    context.waitUntil(notifyPaymentConfirmed(env, {
+      orderId, customerName: order.customer_name, total: order.total,
+    }));
+  }
 
   return new Response(JSON.stringify({ success: true, orderId }), {
     status: 200,

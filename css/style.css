@@ -1134,6 +1134,7 @@ nav.active {
     nav a {
     width: 100%;
     text-align: center;
+    justify-content: center;
     border-radius: 14px;
     padding: 12px 14px;
     background: rgba(255,255,255,0.07);

@@ -318,5 +318,29 @@
   "recipe:haldi-doodh": {
     "hash": "ced894a40730fade79295ba1409d50eeafa82a02c7e117b4cd86aa4c0afc5cfa",
     "lastmod": "2026-07-10"
+  },
+  "blog:what-is-garam-masala": {
+    "hash": "939a628d980c5dd1dbda753fe265a56e0135a7091b4b8de71e224b1aeafef46c",
+    "lastmod": "2026-07-17"
+  },
+  "blog:how-to-store-turmeric": {
+    "hash": "c68ea6910895f8fcb9163a9abd9ec4241cb3ce4e782de1e99f534811591e9f5f",
+    "lastmod": "2026-07-17"
+  },
+  "blog:cumin-vs-caraway": {
+    "hash": "f6d9225677c885fc2dc3524b0b267a5aec66dafe68c9187502d50ede98286d32",
+    "lastmod": "2026-07-17"
+  },
+  "blog:can-turmeric-expire": {
+    "hash": "06057338b5029bb7189e94e50ac7560967a5f7d813e8b60de42989a4ed8e33e5",
+    "lastmod": "2026-07-17"
+  },
+  "blog:why-does-chilli-powder-lose-color": {
+    "hash": "7ebe9dff8f43a6c9d74078e5fb3d92a3e147b46c97a5a4fbdabe064c963c50ba",
+    "lastmod": "2026-07-17"
+  },
+  "blog:how-long-do-spices-last": {
+    "hash": "3847abb53b589607946a33512a35831afa33462f122a5645a5bd9c0ee8504650",
+    "lastmod": "2026-07-17"
   }
 }

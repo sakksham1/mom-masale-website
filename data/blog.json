@@ -1,0 +1,125 @@
+[
+  {
+    "slug": "what-is-garam-masala",
+    "title": "What is Garam Masala?",
+    "category": "Articles",
+    "image": "images/blog/what-is-garam-masala.webp",
+    "imageAlt": "Garam masala spice blend in a bowl",
+    "description": "A quick guide to what garam masala actually is, what typically goes into it, and when to add it for the best flavour.",
+    "body": [
+      "Garam masala is a blend of ground, warming spices used throughout North Indian cooking. \"Garam\" means warm or heating, referring to the effect these spices are traditionally believed to have on the body, not to any chilli heat — garam masala itself isn't spicy.",
+      "A typical blend includes spices like cinnamon, cloves, cardamom, cumin, coriander, black pepper, and bay leaf, dry-roasted and ground together. The exact mix varies by region and household, which is why two garam masalas can taste noticeably different from each other.",
+      "It's almost always added toward the end of cooking, or even off the heat, rather than at the start like turmeric or cumin. This preserves its aroma, which fades quickly with prolonged cooking.",
+      "You'll find it finishing curries, dals, and rice dishes — a small pinch stirred in during the last few minutes is usually enough to round out a dish's flavour."
+    ],
+    "relatedProducts": ["garam-masala"],
+    "relatedRecipes": ["masala-poori", "matar-paneer"],
+    "seo": {
+      "title": "What is Garam Masala? A Complete Guide | Mom Masale",
+      "metaDescription": "Learn what garam masala is, what spices go into it, and how to use it correctly — from the Mom Masale Spice Guide.",
+      "keywords": ["what is garam masala", "garam masala guide", "garam masala spices", "mom masale"]
+    }
+  },
+  {
+    "slug": "how-to-store-turmeric",
+    "title": "How to Store Turmeric (Properly)",
+    "category": "Articles",
+    "image": "images/blog/how-to-store-turmeric.webp",
+    "imageAlt": "Turmeric powder stored in an airtight jar",
+    "description": "The three things that actually degrade turmeric powder over time, and simple habits that keep it fresher for longer.",
+    "body": [
+      "Turmeric powder doesn't spoil in the way fresh food does, but it does lose potency — its colour dulls and its aroma fades — when exposed to light, heat, or moisture over time.",
+      "Store it in an airtight container, away from direct sunlight and away from the stovetop, where heat and steam shorten its shelf life. A cool, dark cupboard works better than a rack near the window or the hob.",
+      "Always use a completely dry spoon when scooping turmeric out. Moisture introduced this way is one of the most common reasons ground spices clump or develop mould.",
+      "Buying smaller pack sizes more frequently, rather than one large pack that sits half-used for months, is usually the simplest way to keep the turmeric in your kitchen tasting fresh."
+    ],
+    "relatedProducts": ["turmeric-powder"],
+    "relatedRecipes": ["haldi-doodh"],
+    "seo": {
+      "title": "How to Store Turmeric Powder Properly | Mom Masale",
+      "metaDescription": "Simple, practical tips to keep turmeric powder fresh for longer — how light, heat and moisture affect it, and how to store it right.",
+      "keywords": ["how to store turmeric", "turmeric storage tips", "turmeric powder shelf life", "mom masale"]
+    }
+  },
+  {
+    "slug": "cumin-vs-caraway",
+    "title": "Difference Between Cumin & Caraway",
+    "category": "Articles",
+    "image": "images/blog/cumin-vs-caraway.webp",
+    "imageAlt": "Cumin seeds next to caraway seeds for comparison",
+    "description": "Cumin and caraway seeds look similar and get mixed up often — here's how to tell them apart and when each one belongs in your cooking.",
+    "body": [
+      "Cumin and caraway are two different plants, but their seeds are similar enough in size and shape that they're commonly confused, especially when buying loose spices.",
+      "Cumin seeds are a light, sandy brown and have a warm, earthy, slightly peppery flavour. They're a staple in Indian cooking, used whole for tempering (tadka) or ground into masalas.",
+      "Caraway seeds are darker, more curved, and have a distinct anise-like, slightly sweet flavour — closer to fennel than to cumin. They're used far less in Indian cooking and more commonly in European breads and pickles.",
+      "If a recipe calls for jeera (cumin), reach for the lighter, straighter seed with the earthy smell — not the darker, curved one that smells faintly of liquorice."
+    ],
+    "relatedProducts": [],
+    "relatedRecipes": ["mixed-vegetable-stir-fry"],
+    "seo": {
+      "title": "Cumin vs Caraway: What's the Difference? | Mom Masale",
+      "metaDescription": "Cumin and caraway seeds are often confused. Learn how to tell them apart by look, smell and use in Indian cooking.",
+      "keywords": ["cumin vs caraway", "jeera vs caraway", "difference between cumin and caraway", "mom masale"]
+    }
+  },
+  {
+    "slug": "can-turmeric-expire",
+    "title": "Can Turmeric Expire?",
+    "category": "FAQs",
+    "image": "images/blog/can-turmeric-expire.webp",
+    "imageAlt": "A spoonful of turmeric powder",
+    "description": "Short answer: it doesn't spoil like fresh food, but it does lose potency. Here's what actually happens over time.",
+    "body": [
+      "Turmeric powder doesn't \"go off\" the way milk or bread does, and it's generally safe to use well past any printed best-before date, provided it's been stored properly and shows no signs of moisture or mould.",
+      "What actually happens is a slow loss of potency: the volatile oils responsible for turmeric's aroma and some of its colour intensity fade over months, so an old packet may taste flatter and colour a dish less vibrantly than a fresh one.",
+      "As a rough guide, ground turmeric stored airtight in a cool, dark place keeps good flavour for around 2-3 years. If it still smells earthy and looks vividly yellow-orange, it's fine to use — trust your nose more than the date on the pack."
+    ],
+    "relatedProducts": ["turmeric-powder"],
+    "relatedRecipes": ["haldi-doodh"],
+    "seo": {
+      "title": "Can Turmeric Expire? | Mom Masale",
+      "metaDescription": "Does turmeric powder go bad? Here's what actually happens to turmeric over time and how long it really lasts.",
+      "keywords": ["can turmeric expire", "does turmeric go bad", "turmeric shelf life", "mom masale"]
+    }
+  },
+  {
+    "slug": "why-does-chilli-powder-lose-color",
+    "title": "Why Does Chilli Powder Lose Color?",
+    "category": "FAQs",
+    "image": "images/blog/why-does-chilli-powder-lose-color.webp",
+    "imageAlt": "Red chilli powder in a bowl",
+    "description": "If your red chilli powder looks duller than when you bought it, here's what's actually going on.",
+    "body": [
+      "Red chilli powder gets its colour from carotenoid pigments, which are naturally sensitive to light, heat, and oxygen. Over time, exposure to any of these three breaks the pigments down, and the powder fades from a deep red toward a duller brick or brownish shade.",
+      "Sunlight is usually the biggest culprit — a jar kept on a windowsill or near a stove will fade noticeably faster than one kept in a closed cupboard.",
+      "Fading colour isn't the same as spoiling. A slightly paler chilli powder is still safe to cook with, though it may have lost some heat and aroma along with the colour. For the most vibrant results, store it airtight, away from light and heat, and use it within a reasonable time of opening."
+    ],
+    "relatedProducts": ["red-chilli-powder"],
+    "relatedRecipes": ["chole-masala"],
+    "seo": {
+      "title": "Why Does Chilli Powder Lose Its Colour? | Mom Masale",
+      "metaDescription": "Red chilli powder fading? Here's why it happens and how to store it to keep its colour and heat for longer.",
+      "keywords": ["chilli powder losing color", "why does red chilli powder fade", "mom masale"]
+    }
+  },
+  {
+    "slug": "how-long-do-spices-last",
+    "title": "How Long Do Spices Last?",
+    "category": "FAQs",
+    "image": "images/blog/how-long-do-spices-last.webp",
+    "imageAlt": "Assorted whole and ground spices",
+    "description": "Whole spices, ground spices, and blends all have different shelf lives — here's a practical breakdown.",
+    "body": [
+      "As a general rule, whole spices last the longest — around 3-4 years — because their essential oils are sealed inside the seed or pod until it's cracked or ground. Ground spices lose potency faster, typically staying at their best for about 2-3 years.",
+      "Blended masalas, like garam masala or chai masala, tend to have a slightly shorter window — around 1-2 years — since they combine multiple ground spices, each fading at its own rate.",
+      "None of these are hard safety limits; properly stored spices rarely become unsafe to eat, they just gradually lose aroma and flavour intensity. The real test is your nose: if a spice still smells strong and characteristic, it's still doing its job."
+    ],
+    "relatedProducts": ["turmeric-powder", "red-chilli-powder", "garam-masala"],
+    "relatedRecipes": [],
+    "seo": {
+      "title": "How Long Do Spices Last? | Mom Masale",
+      "metaDescription": "Whole spices, ground spices and masala blends all have different shelf lives. Here's a simple, practical breakdown.",
+      "keywords": ["how long do spices last", "spice shelf life", "how long does garam masala last", "mom masale"]
+    }
+  }
+]

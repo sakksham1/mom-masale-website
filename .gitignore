@@ -22,7 +22,7 @@ Thumbs.db
 .vscode/
 .idea/
 
-# ── Build/output (if you ever add a bundler step) ──
+# ── Build/output ──
 dist/
 build/
 

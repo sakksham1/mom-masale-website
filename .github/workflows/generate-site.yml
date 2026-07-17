@@ -9,6 +9,8 @@ on:
       - 'scripts/build-site.js'
       - 'scripts/product-template.html'
       - 'scripts/recipe-template.html'
+      - 'data/blog.json'
+      - 'scripts/blog-template.html'
       - 'css/style.css'
       - 'js/main.js'
   workflow_dispatch: {}
@@ -42,7 +44,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add products/ recipes/ sitemap.xml data/.lastmod-cache.json css/style.min.css js/main.min.js index.html products.html about.html contact.html recipes.html 404.html scripts/product-template.html scripts/recipe-template.html
+          git add products/ recipes/ guide/ sitemap.xml data/.lastmod-cache.json css/style.min.css js/main.min.js index.html products.html about.html contact.html recipes.html spice-guide.html 404.html scripts/product-template.html scripts/recipe-template.html scripts/blog-template.html
           if git diff --cached --quiet; then
             echo "No changes to commit — output already up to date."
           else

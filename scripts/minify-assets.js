@@ -42,9 +42,11 @@ const HTML_FILES = [
   'about.html',
   'contact.html',
   'recipes.html',
+  'spice-guide.html',
   '404.html',
   'scripts/product-template.html',
   'scripts/recipe-template.html',
+  'scripts/blog-template.html',
 ];
 
 async function buildCss() {
