@@ -38,7 +38,7 @@ const DRY_RUN = process.argv.includes('--dry-run');
 
 // ── every real top-level page on the site (filename without .html) ──
 const TOP_LEVEL_PAGES = [
-  'index', 'products', 'recipes', 'about', 'contact',
+  'index', 'products', 'recipes', 'guide', 'about', 'contact',
   'account', 'checkout', 'order-confirmation', '404', 'admin', 'bulk-orders',
 ];
 
@@ -47,7 +47,7 @@ const STATIC_HTML_FILES = [
   'index.html', 'products.html', 'recipes.html', 'about.html', 'contact.html',
   'account.html', 'checkout.html', 'order-confirmation.html', '404.html',
   'admin.html', 'bulk-orders.html',
-  'scripts/product-template.html', 'scripts/recipe-template.html',
+  'scripts/product-template.html', 'scripts/recipe-template.html', 'scripts/guide-template.html',
 ];
 
 const JS_FILES = ['js/main.js', 'js/account.js', 'js/checkout.js'];
@@ -94,6 +94,10 @@ function buildRules() {
     pattern: /([("'`])((?:\.\.\/)?recipes\/[\w-]+)\.html(#[\w-]*|\?[^"'`)\s]*)?([)"'`])/g,
     replace: (m, open, base, tail, close) => `${open}${base}${tail || ''}${close}`,
   });
+  rules.push({
+    pattern: /([("'`])((?:\.\.\/)?guide\/[\w-]+)\.html(#[\w-]*|\?[^"'`)\s]*)?([)"'`])/g,
+    replace: (m, open, base, tail, close) => `${open}${base}${tail || ''}${close}`,
+  });
 
   // 3. Template-literal dynamic links used in JS: `products/${p.slug}.html`
   rules.push({
@@ -105,11 +109,19 @@ function buildRules() {
     replace: (m, base) => base,
   });
   rules.push({
+    pattern: /(guide\/\$\{[^}]+\})\.html/g,
+    replace: (m, base) => base,
+  });
+  rules.push({
     pattern: /(\.\.\/products\/\$\{[^}]+\})\.html/g,
     replace: (m, base) => base,
   });
   rules.push({
     pattern: /(\.\.\/recipes\/\$\{[^}]+\})\.html/g,
+    replace: (m, base) => base,
+  });
+  rules.push({
+    pattern: /(\.\.\/guide\/\$\{[^}]+\})\.html/g,
     replace: (m, base) => base,
   });
 
@@ -127,6 +139,10 @@ function buildRules() {
   });
   rules.push({
     pattern: /(https:\/\/mommasale\.com\/recipes\/[\w-]+)\.html/g,
+    replace: (m, base) => base,
+  });
+  rules.push({
+    pattern: /(https:\/\/mommasale\.com\/guide\/[\w-]+)\.html/g,
     replace: (m, base) => base,
   });
 
@@ -191,6 +207,11 @@ function main() {
 
   console.log('\nGenerated recipe pages:');
   collectGeneratedPages('recipes').forEach(f => {
+    if (migrateFile(f, rulesWithSibling).changed) totalChanged++;
+  });
+
+  console.log('\nGenerated guide pages:');
+  collectGeneratedPages('guide').forEach(f => {
     if (migrateFile(f, rulesWithSibling).changed) totalChanged++;
   });
 

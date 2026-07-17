@@ -53,7 +53,7 @@ document.querySelectorAll('nav a').forEach(a => {
     const navMenu = document.getElementById('nav-menu');
     if (!navMenu) return;
 
-    const inSubdir = /\/(products|recipes)\//.test(location.pathname);
+    const inSubdir = /\/(products|recipes|guide)\//.test(location.pathname);
     const href = (inSubdir ? '../' : '') + 'account';
 
     const accountLink = document.createElement('a');
