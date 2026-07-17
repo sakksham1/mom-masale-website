@@ -5,6 +5,10 @@
 
 export async function sendEmail(env, { to, subject, html }) {
   if (!env.RESEND_API_KEY) throw new Error('RESEND_API_KEY is not configured');
+  // `to` can be a single address, a comma-separated string, or already an array.
+  const recipients = Array.isArray(to)
+    ? to
+    : String(to).split(',').map(s => s.trim()).filter(Boolean);
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -13,7 +17,7 @@ export async function sendEmail(env, { to, subject, html }) {
     },
     body: JSON.stringify({
       from: env.RESEND_FROM || 'Mom Masale <onboarding@resend.dev>',
-      to: [to],
+      to: recipients,
       subject,
       html,
     }),
