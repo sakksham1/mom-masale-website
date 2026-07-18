@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Studio – Mom Masale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+            try {
+            var saved = localStorage.getItem('theme');
+            var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="css/style.min.css">
+</head>
+<body>
+<header>
+    <div class="navbar">
+        <a class="logo" href="/">MOM <span>MASALE</span></a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </button>
+        <nav id="nav-menu">
+            <a href="/"><span>Home</span></a>
+            <a href="admin"><span>Operations</span></a>
+            <a href="account"><span>Account</span></a>
+        </nav>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"><span class="toggle-icon">☀️</span><span class="toggle-label">Light</span></button>
+</header>
+<div class="nav-overlay" id="nav-overlay"></div>
+<main>
+<div class="page-banner">
+    <h2>Studio</h2>
+    <p>Products, recipes, blog & site content — all in one place.</p>
+</div>
+
+<div class="container admin-page">
+    <div id="studio-loading" class="empty-state-msg">Checking access…</div>
+    <div id="studio-denied" class="form-card" hidden style="text-align:center">
+        <h2 class="section-title">Access Restricted</h2>
+        <p style="color:var(--text-light);margin-bottom:1.2rem">This page is only available to Mom Masale content editors.</p>
+        <a href="account" class="btn">Go to Login</a>
+    </div>
+
+    <div id="studio-app" hidden>
+        <div class="admin-tabs" id="studio-tabs"></div>
+        <section class="admin-panel" id="studio-panel"></section>
+    </div>
+</div>
+</main>
+<footer>
+    <div class="footer-bottom">© A brand of Sakksham Enterprises, Shuklaganj, Unnao</div>
+</footer>
+<script src="js/main.min.js" defer></script>
+<script src="js/admin-shared.js" defer></script>
+<script src="js/studio.js" defer></script>
+</body>
+</html>

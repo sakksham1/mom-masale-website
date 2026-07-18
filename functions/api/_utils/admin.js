@@ -16,6 +16,24 @@ export async function requireAdmin(request, env) {
   return { user, isAdmin };
 }
 
+export async function requireRole(request, env, allowedRoles) {
+  const user = await getUserFromSession(request, env);
+  if (!user) return { user: null, ok: false };
+  const row = await env.DB.prepare('SELECT role FROM users WHERE id = ?').bind(user.id).first();
+  const ok = !!(row && allowedRoles.includes(row.role));
+  return { user, ok, role: row?.role };
+}
+
+export async function logAudit(env, { userId, action, resource, resourceId, diff }) {
+  try {
+    await env.DB.prepare(
+      `INSERT INTO audit_log (user_id, action, resource, resource_id, diff) VALUES (?, ?, ?, ?, ?)`
+    ).bind(userId, action, resource, resourceId ?? null, diff ? JSON.stringify(diff) : null).run();
+  } catch (err) {
+    console.error('audit log write failed:', err.message);
+  }
+}
+
 export function forbidden(message) {
   return new Response(
     JSON.stringify({ error: message || 'Admin access required' }),
