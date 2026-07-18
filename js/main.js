@@ -216,8 +216,6 @@ document.addEventListener('click', e => {
 });
 
 // ── CART DRAWER ──
-const FREE_SHIPPING_THRESHOLD = 499; // change this if the real number is different
-
 function buildCartDrawer() {
     if (document.getElementById('cart-drawer')) return;
 
@@ -408,8 +406,8 @@ function updateShippingProgress(total) {
     const text = document.getElementById('shipping-progress-text');
     const fill = document.getElementById('shipping-progress-fill');
     if (!wrap || !text || !fill) return;
-    const remaining = FREE_SHIPPING_THRESHOLD - total;
-    const pct = Math.min((total / FREE_SHIPPING_THRESHOLD) * 100, 100);
+    const remaining = FREE_SHIPPING_THRESHOLD_CFG - total;
+    const pct = Math.min((total / FREE_SHIPPING_THRESHOLD_CFG) * 100, 100);
     fill.style.width = `${pct}%`;
     if (remaining <= 0) {
         text.textContent = "✅ You've unlocked free shipping!";
@@ -526,7 +524,12 @@ document.addEventListener('click', e => {
 });
 
 // ── DISCOUNT ──
-const DISCOUNT_PERCENT = 25;
+let DISCOUNT_PERCENT = 25; // fallback until settings load
+let FREE_SHIPPING_THRESHOLD_CFG = 499;
+window.settingsReady = fetch('data/settings.json').then(r => r.json()).then(s => {
+    DISCOUNT_PERCENT = s.commerce.discountPercent;
+    FREE_SHIPPING_THRESHOLD_CFG = s.commerce.freeShippingThreshold;
+}).catch(() => {});
 function discountedPrice(original) {
     return Math.round(original * (1 - DISCOUNT_PERCENT / 100));
 }
@@ -542,6 +545,7 @@ function escapeHtml(str) {
 
 // ── LOAD PRODUCTS ──
 async function loadProducts() {
+    await window.settingsReady;
     const containers = document.querySelectorAll('#products-container');
     const homeSections = {
         featured: { el: document.getElementById('featured-container'), wrap: document.getElementById('featured-section'), filter: p => p.featured && !p.comingSoon },

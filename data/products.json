@@ -1594,7 +1594,7 @@
 {
   "name": "Moringa Sattu",
   "category": "Special Mix",
-  "sizes": ["250g", "500g", "1kg"],
+  "sizes": ["250g", "500g"],
   "prices": {
     "250g": 150,
     "500g": 250
@@ -1672,7 +1672,7 @@
 {
   "name": "Sattu (Jow & Chana) with Masala",
   "category": "Special Mix",
-  "sizes": ["500g", "1kg"],
+  "sizes": ["500g"],
   "prices": {
     "500g": 200
   },

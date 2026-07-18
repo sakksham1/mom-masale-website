@@ -26,7 +26,7 @@ export async function onRequestPost(context) {
 
   const row = await env.DB.prepare(
     `SELECT id, otp_hash, attempts, expires_at FROM password_resets
-     WHERE user_id = ? AND used = 0 ORDER BY created_at DESC LIMIT 1`
+     WHERE user_id = ? AND used = 0 AND purpose = 'login' ORDER BY created_at DESC LIMIT 1`
   ).bind(user.id).first();
 
   if (!row) return jsonError('Invalid or expired code', 400);

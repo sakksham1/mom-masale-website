@@ -5,6 +5,7 @@
 import { hashPassword, generateSessionToken } from '../_utils/crypto.js';
 import { validatePassword } from '../_utils/password.js';
 import { setSessionCookie, newExpiry } from '../_utils/session.js';
+import { sendEmail, otpEmailHtml } from '../_utils/email.js';
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -53,6 +54,20 @@ export async function onRequestPost(context) {
   await env.DB.prepare(
     `INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)`
   ).bind(token, userId, expiresAt).run();
+
+  // Fire-and-forget: verification is informational for now, doesn't block login.
+  try {
+    const n = crypto.getRandomValues(new Uint32Array(1))[0] % 1000000;
+    const otp = String(n).padStart(6, '0');
+    const otpBuf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(otp));
+    const otpHash = [...new Uint8Array(otpBuf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+    await env.DB.prepare('INSERT INTO password_resets (user_id, otp_hash, expires_at, purpose) VALUES (?, ?, ?, ?)')
+      .bind(userId, otpHash, expiresAt, 'verify').run();
+    await sendEmail(env, { to: email, subject: 'Verify your Mom Masale email', html: otpEmailHtml(otp) });
+  } catch (err) {
+    console.error('Verification email send failed:', err.message);
+  }
 
   return new Response(JSON.stringify({ id: userId, name, email, phone: phone || null }), {
     status: 201,

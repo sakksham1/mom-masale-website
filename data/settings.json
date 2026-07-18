@@ -1,0 +1,18 @@
+{
+  "business": {
+    "name": "Mom Masale",
+    "legalName": "Sakksham Enterprises",
+    "phone": "9984064777",
+    "email": "sakkshamenterprises@gmail.com",
+    "whatsappShareNumber": "919984064777",
+    "whatsappOrderNumber": "917905391434",
+    "address": "8/69, Sitaram Colony, Shuklaganj, Unnao – 209861, Uttar Pradesh",
+    "hours": "Monday – Saturday: 9:00 AM – 6:00 PM"
+  },
+  "commerce": {
+    "discountPercent": 25,
+    "freeShippingThreshold": 499,
+    "flatShippingFee": 40
+  },
+  "promoBannerText": "🚚 Free Shipping & Same-Day Delivery in Kanpur"
+}

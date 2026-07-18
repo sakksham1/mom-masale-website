@@ -48,6 +48,7 @@ const STATIC_HTML_FILES = [
   'account.html', 'checkout.html', 'order-confirmation.html', '404.html',
   'admin.html', 'bulk-orders.html',
   'scripts/product-template.html', 'scripts/recipe-template.html', 'scripts/guide-template.html',
+  'scripts/blog-template.html',
 ];
 
 const JS_FILES = ['js/main.js', 'js/account.js', 'js/checkout.js'];

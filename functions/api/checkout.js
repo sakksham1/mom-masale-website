@@ -9,11 +9,7 @@
 
 import { getUserFromSession } from './_utils/session.js';
 import { createRazorpayOrder } from './_utils/razorpay.js';
-import { notifyOrderPlaced } from './_utils/notify.js';
-
-const FREE_SHIPPING_THRESHOLD = 499;
-const FLAT_SHIPPING_FEE = 40;
-const DISCOUNT_PERCENT = 25; // must match the discount baked into products.html / build-site.js
+import { notifyOrderPlaced } from './_utils/notify.js'; 
 
 function jsonError(message, status = 400) {
   return new Response(JSON.stringify({ error: message }), {
@@ -63,6 +59,17 @@ export async function onRequestPost(context) {
     return jsonError('Could not verify product prices right now. Please try again.', 502);
   }
 
+  let settings;
+  try {
+    const settingsUrl = new URL('/data/settings.json', request.url);
+    const settingsRes = await fetch(settingsUrl.toString());
+    if (!settingsRes.ok) throw new Error('fetch failed');
+    settings = await settingsRes.json();
+  } catch {
+    return jsonError('Could not verify pricing settings right now. Please try again.', 502);
+  }
+  const { discountPercent, freeShippingThreshold, flatShippingFee } = settings.commerce;
+
   // Cart items are keyed by product NAME (matches how the existing cart in
   // main.js stores them — no slug in localStorage), so match on name here
   // and pull the slug from the matched product record for storage.
@@ -86,7 +93,7 @@ export async function onRequestPost(context) {
       return jsonError(`Invalid size "${item.size}" for ${product.name}`);
     }
 
-    const unitPrice = Math.round(originalPrice * (1 - DISCOUNT_PERCENT / 100));
+    const unitPrice = Math.round(originalPrice * (1 - discountPercent / 100));
     subtotal += unitPrice * qty;
 
     validatedItems.push({
@@ -98,7 +105,7 @@ export async function onRequestPost(context) {
     });
   }
 
-  const shippingFee = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING_FEE;
+  const shippingFee = subtotal >= freeShippingThreshold ? 0 : flatShippingFee;
   const total = subtotal + shippingFee;
 
    const user = await getUserFromSession(request, env);

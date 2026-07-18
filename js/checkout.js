@@ -9,8 +9,12 @@
 // only product name + size + qty.
 
 (function () {
-    const DISPLAY_FREE_SHIPPING_THRESHOLD = 499;
-    const DISPLAY_FLAT_SHIPPING_FEE = 40;
+let DISPLAY_FREE_SHIPPING_THRESHOLD = 499; // fallback until settings load
+let DISPLAY_FLAT_SHIPPING_FEE = 40;
+fetch('data/settings.json').then(r => r.json()).then(s => {
+    DISPLAY_FREE_SHIPPING_THRESHOLD = s.commerce.freeShippingThreshold;
+    DISPLAY_FLAT_SHIPPING_FEE = s.commerce.flatShippingFee;
+}).catch(() => {});
 
     const emptyEl = document.getElementById('checkout-empty');
     const loginRequiredEl = document.getElementById('checkout-login-required');

@@ -28,14 +28,14 @@ export async function onRequestPost(context) {
   const user = await env.DB.prepare('SELECT id, email FROM users WHERE email = ?').bind(email).first();
   if (!user) return generic;
 
-  await env.DB.prepare('UPDATE password_resets SET used = 1 WHERE user_id = ? AND used = 0').bind(user.id).run();
+  await env.DB.prepare('UPDATE password_resets SET used = 1 WHERE user_id = ? AND used = 0 AND purpose = ?').bind(user.id, 'reset').run();
 
   const otp = genOtp();
   const otpHash = await sha256Hex(otp);
   const expiresAt = new Date(Date.now() + OTP_TTL_MINUTES * 60 * 1000).toISOString();
 
-  await env.DB.prepare('INSERT INTO password_resets (user_id, otp_hash, expires_at) VALUES (?, ?, ?)')
-    .bind(user.id, otpHash, expiresAt).run();
+  await env.DB.prepare('INSERT INTO password_resets (user_id, otp_hash, expires_at, purpose) VALUES (?, ?, ?, ?)')
+    .bind(user.id, otpHash, expiresAt, 'reset').run();
 
   try {
     await sendEmail(env, { to: user.email, subject: 'Your Mom Masale password reset code', html: otpEmailHtml(otp) });

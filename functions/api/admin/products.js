@@ -15,6 +15,32 @@ import { readRepoFile, writeRepoFile } from '../_utils/github.js';
 
 const PRODUCTS_PATH = 'data/products.json';
 const EDITABLE_FIELDS = ['name', 'category', 'prices', 'sizes', 'image', 'imageAlt', 'comingSoon', 'featured', 'bestseller', 'newArrival', 'aliases'];
+const RECIPES_PATH = 'data/recipes.json';
+const BLOG_PATH = 'data/blog.json';
+
+// Returns a human-readable list of things that reference this product slug,
+// or [] if it's safe to delete. Checked against the same files build-site.js
+// validates — catches a delete that would break the next CI run instead of
+// letting it fail silently at build time.
+async function findProductReferences(env, slug) {
+  const refs = [];
+
+  const { content: recipesContent } = await readRepoFile(env, RECIPES_PATH);
+  const recipes = JSON.parse(recipesContent);
+  recipes.forEach(r => {
+    const inRelated = (r.relatedProducts || []).includes(slug);
+    const inIngredients = (r.ingredients || []).some(ing => ing.productSlug === slug);
+    if (inRelated || inIngredients) refs.push(`recipe "${r.title}"`);
+  });
+
+  const { content: blogContent } = await readRepoFile(env, BLOG_PATH);
+  const blogPosts = JSON.parse(blogContent);
+  blogPosts.forEach(b => {
+    if ((b.relatedProducts || []).includes(slug)) refs.push(`blog post "${b.title}"`);
+  });
+
+  return refs;
+}
 
 function slugify(name) {
   return String(name).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-+|-+$)/g, '');
@@ -170,9 +196,18 @@ export async function onRequestDelete(context) {
 
   const url = new URL(request.url);
   const slug = url.searchParams.get('slug');
+  const force = url.searchParams.get('force') === '1';
   if (!slug) return jsonError('slug query param is required');
 
   try {
+    const refs = await findProductReferences(env, slug);
+    if (refs.length > 0 && !force) {
+      return jsonError(
+        `Can't delete — referenced by ${refs.join(', ')}. Remove those references first, or resend with ?force=1 to delete anyway (will break the next site build until fixed).`,
+        409
+      );
+    }
+
     const { content, sha } = await readRepoFile(env, PRODUCTS_PATH);
     const products = JSON.parse(content);
     const filtered = products.filter(p => p.slug !== slug);

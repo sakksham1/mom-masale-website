@@ -63,8 +63,9 @@ const STATIC_PAGES = [
   { loc: '/contact', priority: '0.6', file: 'contact.html' },
 ];
 
-const DISCOUNT_PERCENT = 25;
-
+const SETTINGS_PATH = path.join(ROOT, 'data', 'settings.json');
+if (!fs.existsSync(SETTINGS_PATH)) throw new Error(`Cannot find ${SETTINGS_PATH}.`);
+const DISCOUNT_PERCENT = readJSON(SETTINGS_PATH).commerce.discountPercent;
 // ── shared helpers ──────────────────────────────────────
 
 function readJSON(p) {
@@ -159,6 +160,11 @@ function validateProducts(products) {
     if (!/^[a-z0-9-]+$/.test(p.slug)) throw new Error(`Product "${p.name}" has an invalid slug "${p.slug}" (lowercase letters, numbers, hyphens only)`);
     if (seen.has(p.slug)) throw new Error(`Duplicate product slug detected: "${p.slug}" — slugs must be unique`);
     seen.add(p.slug);
+    (p.sizes || []).forEach(size => {
+      if (!p.comingSoon && (!p.prices || !Number.isFinite(p.prices[size]) || p.prices[size] <= 0)) {
+        throw new Error(`Product "${p.name}" lists size "${size}" but has no valid price for it — add a price or mark the product comingSoon`);
+      }
+    });
   });
 }
 
@@ -376,7 +382,7 @@ function buildRelatedBlogForProductHtml(p, blogPosts) {
   const related = findBlogForProduct(p.slug, blogPosts);
   if (!related.length) return '';
   const cards = related.map(b => `
-            <a class="related-card recipe-related-card" href="../guide/${b.slug}.html">
+            <a class="related-card recipe-related-card" href="../guide/${b.slug}">
                 <img src="../${b.image}" alt="${escapeHtml(b.imageAlt || b.title)}" loading="lazy" width="160" height="160"
                     onerror="this.src='https://placehold.co/160x160/7b1120/fff?text=${encodeURIComponent(b.title)}'">
                 <span>${escapeHtml(b.title)}</span>
@@ -528,7 +534,7 @@ function buildRelatedBlogForRecipeHtml(r, blogPosts) {
   const related = findBlogForRecipe(r.slug, blogPosts);
   if (!related.length) return '';
   const cards = related.map(b => `
-            <a class="related-card recipe-related-card" href="../guide/${b.slug}.html">
+            <a class="related-card recipe-related-card" href="../guide/${b.slug}">
                 <img src="../${b.image}" alt="${escapeHtml(b.imageAlt || b.title)}" loading="lazy" width="160" height="160"
                     onerror="this.src='https://placehold.co/160x160/7b1120/fff?text=${encodeURIComponent(b.title)}'">
                 <span>${escapeHtml(b.title)}</span>
@@ -612,7 +618,7 @@ function buildBlogBreadcrumbSchema(b) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
-      { '@type': 'ListItem', position: 2, name: 'Spice Guide', item: `${SITE_URL}/spice-guide.html` },
+      { '@type': 'ListItem', position: 3, name: b.title, item: `${SITE_URL}/guide/${b.slug}` },
       { '@type': 'ListItem', position: 3, name: b.title, item: `${SITE_URL}/guide/${b.slug}.html` },
     ],
   };
@@ -629,7 +635,7 @@ function buildRelatedProductsForBlogHtml(b, productBySlug) {
     const p = productBySlug.get(slug);
     if (!p) return '';
     return `
-            <a class="related-card" href="../products/${p.slug}.html">
+            <a class="related-card" href="../products/${p.slug}">
                 <img src="../${p.image}" alt="${escapeHtml(p.imageAlt || p.name)}" loading="lazy" width="160" height="160">
                 <span>${escapeHtml(p.name)}</span>
             </a>`;
@@ -649,7 +655,7 @@ function buildRelatedRecipesForBlogHtml(b, recipeBySlug) {
     const r = recipeBySlug.get(slug);
     if (!r) return '';
     return `
-            <a class="related-card recipe-related-card" href="../recipes/${r.slug}.html">
+            <a class="related-card recipe-related-card" href="../recipes/${r.slug}">
                 <img src="../${r.image}" alt="${escapeHtml(r.imageAlt || r.title)}" loading="lazy" width="160" height="160"
                     onerror="this.src='https://placehold.co/160x160/7b1120/fff?text=${encodeURIComponent(r.title)}'">
                 <span>${escapeHtml(r.title)}</span>
@@ -667,7 +673,7 @@ function renderBlog(b, productBySlug, recipeBySlug, template) {
   const title = escapeHtml((b.seo && b.seo.title) || `${b.title} | Mom Masale`);
   const metaDesc = escapeHtml((b.seo && b.seo.metaDescription) || b.description || '');
   const keywords = escapeHtml((b.seo && b.seo.keywords || []).join(', '));
-  const canonical = `${SITE_URL}/guide/${b.slug}.html`;
+  const canonical = `${SITE_URL}/guide/${b.slug}`;
   const schemaJson = JSON.stringify(buildBlogSchema(b), null, 2);
 
   const replacements = {
@@ -712,14 +718,14 @@ function buildSitemap(products, recipes, blogPosts, lastmodMap) {
     .sort((a, b) => a.slug.localeCompare(b.slug))
     .forEach(r => {
       const lastmod = lastmodMap[`recipe:${r.slug}`].lastmod;
-      urls.push(`  <url><loc>${SITE_URL}/recipes/${r.slug}.html</loc><lastmod>${lastmod}</lastmod><priority>0.7</priority></url>`);
+      urls.push(`  <url><loc>${SITE_URL}/recipes/${r.slug}</loc><lastmod>${lastmod}</lastmod><priority>0.7</priority></url>`);
     });
   blogPosts
     .slice()
     .sort((a, b) => a.slug.localeCompare(b.slug))
     .forEach(b => {
       const lastmod = lastmodMap[`blog:${b.slug}`].lastmod;
-      urls.push(`  <url><loc>${SITE_URL}/guide/${b.slug}.html</loc><lastmod>${lastmod}</lastmod><priority>0.65</priority></url>`);
+      urls.push(`  <url><loc>${SITE_URL}/guide/${b.slug}</loc><lastmod>${lastmod}</lastmod><priority>0.65</priority></url>`);
     });
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`;
 }

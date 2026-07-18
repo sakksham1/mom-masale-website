@@ -28,14 +28,14 @@ export async function onRequestPost(context) {
   if (!user) return generic;
 
   // Reuse password_resets as a generic "OTP" table — invalidate any pending codes first.
-  await env.DB.prepare('UPDATE password_resets SET used = 1 WHERE user_id = ? AND used = 0').bind(user.id).run();
-
+  await env.DB.prepare('UPDATE password_resets SET used = 1 WHERE user_id = ? AND used = 0 AND purpose = ?').bind(user.id, 'login').run();
+  
   const otp = genOtp();
   const otpHash = await sha256Hex(otp);
   const expiresAt = new Date(Date.now() + OTP_TTL_MINUTES * 60 * 1000).toISOString();
 
-  await env.DB.prepare('INSERT INTO password_resets (user_id, otp_hash, expires_at) VALUES (?, ?, ?)')
-    .bind(user.id, otpHash, expiresAt).run();
+  await env.DB.prepare('INSERT INTO password_resets (user_id, otp_hash, expires_at, purpose) VALUES (?, ?, ?, ?)')
+    .bind(user.id, otpHash, expiresAt, 'login').run();
 
   try {
     await sendEmail(env, { to: user.email, subject: 'Your Mom Masale login code', html: otpEmailHtml(otp) });
