@@ -44,7 +44,7 @@ export async function onRequestPost(context) {
   ).bind(token, user.id, expiresAt).run();
 
   return new Response(
-    JSON.stringify({ id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role }),
+    SON.stringify({ user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role } }),
     {
       status: 200,
       headers: {

@@ -69,7 +69,7 @@ export async function onRequestPost(context) {
   const expiresAt = newExpiry();
   await env.DB.prepare('INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)').bind(token, user.id, expiresAt).run();
 
-  return new Response(JSON.stringify({ id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role }), {
+  return new Response(JSON.stringify({ user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role } }), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',

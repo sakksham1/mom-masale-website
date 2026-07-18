@@ -69,7 +69,7 @@ export async function onRequestPost(context) {
     console.error('Verification email send failed:', err.message);
   }
 
-  return new Response(JSON.stringify({ id: userId, name, email, phone: phone || null, role: 'customer' }), {
+  return new Response(JSON.stringify({ user: { id: userId, name, email, phone: phone || null, role: 'customer' } }), {
     status: 201,
     headers: {
       'Content-Type': 'application/json',

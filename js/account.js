@@ -31,7 +31,7 @@
             const data = await res.json();
             if (!res.ok) { alert(data.error || 'Google sign-in failed.'); return; }
             if (redirectAfterAuth()) return;
-            showProfile(data);
+            showProfile(data.user);
         } catch (err) {
             alert('Could not reach the server. Please try again.');
         }
@@ -155,7 +155,7 @@
             }
 
             if (redirectAfterAuth()) return;
-            showProfile(data);
+            showProfile(data.user);
         } catch (err) {
             errorEl.textContent = 'Could not reach the server. Please try again.';
             errorEl.classList.add('show');
@@ -195,7 +195,7 @@
             }
 
              if (redirectAfterAuth()) return;
-            showProfile(data);
+            showProfile(data.user);
         } catch (err) {
             errorEl.textContent = 'Could not reach the server. Please try again.';
             errorEl.classList.add('show');
@@ -454,7 +454,7 @@
                 return;
             }
             if (redirectAfterAuth()) return;
-            showProfile(data);
+            showProfile(data.user);
         } catch (err) {
             errorEl.textContent = 'Could not reach the server. Please try again.';
             errorEl.classList.add('show');
