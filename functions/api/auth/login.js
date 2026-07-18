@@ -28,7 +28,7 @@ export async function onRequestPost(context) {
   if (!email || !password) return jsonError('Email and password are required');
 
   const user = await env.DB.prepare(
-    'SELECT id, name, email, phone, password_hash, password_salt FROM users WHERE email = ?'
+    'SELECT id, name, email, phone, role, password_hash, password_salt FROM users WHERE email = ?'
   ).bind(email).first();
 
   // Deliberately generic — don't reveal whether the email exists.
@@ -44,7 +44,7 @@ export async function onRequestPost(context) {
   ).bind(token, user.id, expiresAt).run();
 
   return new Response(
-    JSON.stringify({ id: user.id, name: user.name, email: user.email, phone: user.phone }),
+    JSON.stringify({ id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role }),
     {
       status: 200,
       headers: {

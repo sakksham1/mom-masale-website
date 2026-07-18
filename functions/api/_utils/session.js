@@ -44,7 +44,7 @@ export async function getUserFromSession(request, env) {
 
   const row = await env.DB.prepare(
     `SELECT users.id as id, users.name as name, users.email as email, users.phone as phone,
-            sessions.expires_at as expires_at
+            users.role as role, sessions.expires_at as expires_at
      FROM sessions
      JOIN users ON users.id = sessions.user_id
      WHERE sessions.id = ?`
@@ -58,5 +58,5 @@ export async function getUserFromSession(request, env) {
     return null;
   }
 
-  return { id: row.id, name: row.name, email: row.email, phone: row.phone };
+  return { id: row.id, name: row.name, email: row.email, phone: row.phone, role: row.role };
 }

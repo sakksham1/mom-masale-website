@@ -21,7 +21,7 @@ export async function onRequestPost(context) {
   const otp = (body.otp || '').trim();
   if (!email || !otp) return jsonError('Email and code are required');
 
-  const user = await env.DB.prepare('SELECT id, name, email, phone FROM users WHERE email = ?').bind(email).first();
+  const user = await env.DB.prepare('SELECT id, name, email, phone, role FROM users WHERE email = ?').bind(email).first();
   if (!user) return jsonError('Invalid or expired code', 400);
 
   const row = await env.DB.prepare(
@@ -45,7 +45,7 @@ export async function onRequestPost(context) {
   const expiresAt = newExpiry();
   await env.DB.prepare('INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)').bind(token, user.id, expiresAt).run();
 
-  return new Response(JSON.stringify({ id: user.id, name: user.name, email: user.email, phone: user.phone }), {
+  return new Response(JSON.stringify({ id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role }), {
     status: 200,
     headers: { 'Content-Type': 'application/json', 'Set-Cookie': setSessionCookie(token, expiresAt) },
   });

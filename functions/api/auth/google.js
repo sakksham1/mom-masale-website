@@ -46,11 +46,11 @@ export async function onRequestPost(context) {
   const name = payload.name || email.split('@')[0];
 
   // 1) Already linked to a Google identity?
-  let user = await env.DB.prepare('SELECT id, name, email, phone FROM users WHERE google_id = ?').bind(googleId).first();
+  let user = await env.DB.prepare('SELECT id, name, email, phone, role FROM users WHERE google_id = ?').bind(googleId).first();
 
   // 2) Existing email/password account with the same email — link it.
   if (!user) {
-    const existing = await env.DB.prepare('SELECT id, name, email, phone FROM users WHERE email = ?').bind(email).first();
+    const existing = await env.DB.prepare('SELECT id, name, email, phone, role FROM users WHERE email = ?').bind(email).first();
     if (existing) {
       await env.DB.prepare('UPDATE users SET google_id = ? WHERE id = ?').bind(googleId, existing.id).run();
       user = existing;
@@ -62,14 +62,14 @@ export async function onRequestPost(context) {
     const result = await env.DB.prepare(
       `INSERT INTO users (name, email, password_hash, password_salt, google_id) VALUES (?, ?, '', '', ?)`
     ).bind(name, email, googleId).run();
-    user = { id: result.meta.last_row_id, name, email, phone: null };
+    user = { id: result.meta.last_row_id, name, email, phone: null, role: 'customer' };
   }
 
   const token = generateSessionToken();
   const expiresAt = newExpiry();
   await env.DB.prepare('INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)').bind(token, user.id, expiresAt).run();
 
-  return new Response(JSON.stringify({ id: user.id, name: user.name, email: user.email, phone: user.phone }), {
+  return new Response(JSON.stringify({ id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role }), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
