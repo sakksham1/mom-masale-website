@@ -6,3 +6,7 @@ pages_build_output_dir = "."
 binding = "DB"
 database_name = "mom-masale-db"
 database_id = "cb5dcc52-dc4c-4439-8107-d38078479a00"
+
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "mom-masale-images"
