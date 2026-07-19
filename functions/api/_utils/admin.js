@@ -1,11 +1,10 @@
 // functions/api/_utils/admin.js
 // Shared guard for every /api/admin/* endpoint.
 //
-// Admin-ness lives ONLY on users.role now ('admin' | 'staff' | 'packer' |
-// 'accountant' | 'customer'). The old is_admin column is retired — see
-// migrations/0002_fix_admin_role.sql. getUserFromSession() already does a
-// fresh JOIN against users on every request (see session.js), so role here
-// is never stale/cached — no second DB read needed.
+// Admin-ness lives ONLY on users.role ('admin' | 'staff' | 'packer' |
+// 'accountant' | 'customer'). getUserFromSession() already does a fresh
+// JOIN against users on every request (see session.js), so role here is
+// never stale/cached — no second DB read needed.
 
 import { getUserFromSession } from './session.js';
 

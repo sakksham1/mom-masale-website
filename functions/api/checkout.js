@@ -3,19 +3,40 @@
 // Body: { customer: {name, phone, email?, address, city, pincode},
 //         items: [{name, size, qty}], paymentMethod: 'razorpay' | 'cod' }
 //
-// CRITICAL: prices are never trusted from the client. This Function re-fetches
-// data/products.json and recomputes the subtotal from scratch — the client's
-// cart only tells us WHICH products and HOW MANY, never how much they cost.
+// CRITICAL: prices are never trusted from the client. This now reprices
+// against D1 directly (products/product_sizes — see migrations/0002) instead
+// of self-fetching the deployed data/products.json. Same trust model as
+// before (never trust the client), just a more direct source: D1 is
+// authoritative the instant an admin saves a change, with no dependency on
+// a GitHub commit + Pages rebuild finishing first.
+//
+// Stock is decremented here too. If any line item is out of stock, every
+// decrement already applied for this order is rolled back and the order
+// itself is deleted (order_items cascades) before returning the error —
+// D1 doesn't give Workers a multi-statement app-level transaction here, so
+// this is a compensating-action rollback rather than a real ROLLBACK.
 
 import { getUserFromSession } from './_utils/session.js';
 import { createRazorpayOrder } from './_utils/razorpay.js';
-import { notifyOrderPlaced } from './_utils/notify.js'; 
+import { notifyOrderPlaced } from './_utils/notify.js';
 
 function jsonError(message, status = 400) {
   return new Response(JSON.stringify({ error: message }), {
     status,
     headers: { 'Content-Type': 'application/json' },
   });
+}
+
+async function restoreStock(env, items, orderId, note) {
+  for (const item of items) {
+    await env.DB.prepare(
+      `UPDATE product_sizes SET stock_qty = stock_qty + ? WHERE product_id = ? AND size = ?`
+    ).bind(item.qty, item.productId, item.size).run();
+    await env.DB.prepare(
+      `INSERT INTO inventory_movements (product_id, size, change_qty, reason, reference_type, reference_id, note)
+       VALUES (?, ?, ?, 'sale_reversed', 'order', ?, ?)`
+    ).bind(item.productId, item.size, item.qty, orderId, note).run();
+  }
 }
 
 export async function onRequestPost(context) {
@@ -48,13 +69,14 @@ export async function onRequestPost(context) {
     return jsonError('Invalid payment method');
   }
 
-  // ── Re-price everything from the source of truth ──
-  let products;
+  // ── Re-price everything from D1 (source of truth) ──
+  let productRows;
   try {
-    const productsUrl = new URL('/data/products.json', request.url);
-    const productsRes = await fetch(productsUrl.toString());
-    if (!productsRes.ok) throw new Error('fetch failed');
-    products = await productsRes.json();
+    const result = await env.DB.prepare(
+      `SELECT p.id, p.slug, p.name, p.coming_soon, ps.size, ps.price
+       FROM products p JOIN product_sizes ps ON ps.product_id = p.id`
+    ).all();
+    productRows = result.results || [];
   } catch {
     return jsonError('Could not verify product prices right now. Please try again.', 502);
   }
@@ -70,10 +92,15 @@ export async function onRequestPost(context) {
   }
   const { discountPercent, freeShippingThreshold, flatShippingFee } = settings.commerce;
 
-  // Cart items are keyed by product NAME (matches how the existing cart in
-  // main.js stores them — no slug in localStorage), so match on name here
-  // and pull the slug from the matched product record for storage.
-  const productByName = new Map(products.map(p => [p.name, p]));
+  // Cart items are keyed by product NAME (matches how the cart has always
+  // stored them — no slug client-side), so group D1 rows by name here too.
+  const productByName = new Map();
+  for (const row of productRows) {
+    if (!productByName.has(row.name)) {
+      productByName.set(row.name, { id: row.id, slug: row.slug, name: row.name, comingSoon: !!row.coming_soon, prices: {} });
+    }
+    productByName.get(row.name).prices[row.size] = row.price;
+  }
 
   const validatedItems = [];
   let subtotal = 0;
@@ -88,7 +115,7 @@ export async function onRequestPost(context) {
       return jsonError(`Invalid quantity for ${product.name}`);
     }
 
-    const originalPrice = product.prices && product.prices[item.size];
+    const originalPrice = product.prices[item.size];
     if (!Number.isFinite(originalPrice) || originalPrice <= 0) {
       return jsonError(`Invalid size "${item.size}" for ${product.name}`);
     }
@@ -97,6 +124,7 @@ export async function onRequestPost(context) {
     subtotal += unitPrice * qty;
 
     validatedItems.push({
+      productId: product.id,
       product_slug: product.slug,
       product_name: product.name,
       size: item.size,
@@ -108,7 +136,7 @@ export async function onRequestPost(context) {
   const shippingFee = subtotal >= freeShippingThreshold ? 0 : flatShippingFee;
   const total = subtotal + shippingFee;
 
-   const user = await getUserFromSession(request, env);
+  const user = await getUserFromSession(request, env);
   if (!user) {
     return jsonError('Please log in to place an order.', 401);
   }
@@ -139,6 +167,29 @@ export async function onRequestPost(context) {
       `INSERT INTO order_items (order_id, product_slug, product_name, size, qty, unit_price)
        VALUES (?, ?, ?, ?, ?, ?)`
     ).bind(orderId, item.product_slug, item.product_name, item.size, item.qty, item.unit_price).run();
+  }
+
+  // ── Decrement stock. Guarded UPDATE (stock_qty >= qty in the WHERE)
+  // means no separate read-then-write race window. On the first item that's
+  // actually out of stock, roll back everything decremented so far plus the
+  // order itself, then tell the customer which item failed. ──
+  const decremented = [];
+  for (const item of validatedItems) {
+    const res = await env.DB.prepare(
+      `UPDATE product_sizes SET stock_qty = stock_qty - ? WHERE product_id = ? AND size = ? AND stock_qty >= ?`
+    ).bind(item.qty, item.productId, item.size, item.qty).run();
+
+    if (res.meta.changes === 0) {
+      await restoreStock(env, decremented, orderId, 'checkout rollback: another item in the same order was out of stock');
+      await env.DB.prepare('DELETE FROM orders WHERE id = ?').bind(orderId).run(); // cascades order_items
+      return jsonError(`${item.product_name} (${item.size}) is out of stock`, 409);
+    }
+
+    decremented.push(item);
+    await env.DB.prepare(
+      `INSERT INTO inventory_movements (product_id, size, change_qty, reason, reference_type, reference_id)
+       VALUES (?, ?, ?, 'sale', 'order', ?)`
+    ).bind(item.productId, item.size, -item.qty, orderId).run();
   }
 
   if (paymentMethod === 'cod') {
@@ -175,9 +226,11 @@ export async function onRequestPost(context) {
       currency: razorpayOrder.currency,
     }), { status: 201, headers: { 'Content-Type': 'application/json' } });
   } catch (err) {
-    // Order + items rows already exist — mark payment as failed rather than
-    // leaving it silently stuck on 'created' with no Razorpay order behind it.
+    // Order + items rows already exist and stock is already decremented —
+    // mark payment as failed AND give the stock back, rather than leaving it
+    // silently stuck on 'created' with no Razorpay order and no inventory.
     await env.DB.prepare(`UPDATE orders SET payment_status = 'failed' WHERE id = ?`).bind(orderId).run();
+    await restoreStock(env, decremented, orderId, 'checkout rollback: Razorpay order creation failed');
     return jsonError('Could not initiate payment. Please try again.', 502);
   }
 }

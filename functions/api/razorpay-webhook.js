@@ -67,11 +67,37 @@ export async function onRequestPost(context) {
     const razorpayOrderId = paymentEntity?.order_id;
 
     if (razorpayOrderId) {
-      await env.DB.prepare(
+      // Guarded the same way as the payment.captured branch above: the
+      // WHERE clause only matches (and RETURNING only yields a row) the
+      // first time this fires for a given order. Razorpay retries webhook
+      // deliveries on non-2xx responses, and without this guard a retry
+      // would restore stock a second time for the same failed order.
+      const result = await env.DB.prepare(
         `UPDATE orders
          SET payment_status = 'failed', updated_at = datetime('now')
-         WHERE razorpay_order_id = ? AND payment_status != 'paid'`
-      ).bind(razorpayOrderId).run();
+         WHERE razorpay_order_id = ? AND payment_status NOT IN ('paid', 'failed')
+         RETURNING id`
+      ).bind(razorpayOrderId).all();
+
+      const row = result.results && result.results[0];
+      if (row) {
+        const itemsResult = await env.DB.prepare(
+          `SELECT product_slug, size, qty FROM order_items WHERE order_id = ?`
+        ).bind(row.id).all();
+
+        for (const item of itemsResult.results || []) {
+          await env.DB.prepare(
+            `UPDATE product_sizes SET stock_qty = stock_qty + ?
+             WHERE product_id = (SELECT id FROM products WHERE slug = ?) AND size = ?`
+          ).bind(item.qty, item.product_slug, item.size).run();
+
+          await env.DB.prepare(
+            `INSERT INTO inventory_movements (product_id, size, change_qty, reason, reference_type, reference_id, note)
+             SELECT id, ?, ?, 'sale_reversed', 'order', ?, 'razorpay payment.failed webhook'
+             FROM products WHERE slug = ?`
+          ).bind(item.size, item.qty, row.id, item.product_slug).run();
+        }
+      }
     }
   }
 
