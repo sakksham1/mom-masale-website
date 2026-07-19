@@ -12,7 +12,7 @@ export async function onRequestGet(context) {
   if (!isAdmin) return forbidden();
 
   const result = await env.DB.prepare(
-    `SELECT u.id, u.name, u.email, u.phone, u.is_admin, u.created_at,
+    `SELECT u.id, u.name, u.email, u.phone, u.role, u.created_at,
             COUNT(o.id) as order_count,
             COALESCE(SUM(CASE WHEN o.payment_status = 'paid' THEN o.total ELSE 0 END), 0) as lifetime_spend
      FROM users u

@@ -57,10 +57,10 @@ export async function onRequestPost(context) {
     }
   }
 
-  // 3) Brand new account.
+  // 3) Brand new account. role is set explicitly — see signup.js for why.
   if (!user) {
     const result = await env.DB.prepare(
-      `INSERT INTO users (name, email, password_hash, password_salt, google_id) VALUES (?, ?, '', '', ?)`
+      `INSERT INTO users (name, email, password_hash, password_salt, google_id, role) VALUES (?, ?, '', '', ?, 'customer')`
     ).bind(name, email, googleId).run();
     user = { id: result.meta.last_row_id, name, email, phone: null, role: 'customer' };
   }

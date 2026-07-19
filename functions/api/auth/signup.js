@@ -43,8 +43,11 @@ export async function onRequestPost(context) {
 
   const { hash, salt } = await hashPassword(password);
 
+  // role is set explicitly here rather than relying on a schema default —
+  // this column gates admin access, so it should never depend on an implicit
+  // default silently doing the right thing. See migrations/0002_fix_admin_role.sql.
   const result = await env.DB.prepare(
-    `INSERT INTO users (name, email, password_hash, password_salt, phone) VALUES (?, ?, ?, ?, ?)`
+    `INSERT INTO users (name, email, password_hash, password_salt, phone, role) VALUES (?, ?, ?, ?, ?, 'customer')`
   ).bind(name, email, hash, salt, phone || null).run();
 
   const userId = result.meta.last_row_id;

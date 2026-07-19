@@ -1,27 +1,27 @@
 // functions/api/_utils/admin.js
-// Shared guard for every /api/admin/* endpoint. Two-step check:
-// 1) is there a valid session at all (getUserFromSession)?
-// 2) does that user's row have is_admin = 1 in D1?
-// Nothing about "admin-ness" is ever trusted from the client — it's a fresh
-// DB read on every request.
+// Shared guard for every /api/admin/* endpoint.
+//
+// Admin-ness lives ONLY on users.role now ('admin' | 'staff' | 'packer' |
+// 'accountant' | 'customer'). The old is_admin column is retired — see
+// migrations/0002_fix_admin_role.sql. getUserFromSession() already does a
+// fresh JOIN against users on every request (see session.js), so role here
+// is never stale/cached — no second DB read needed.
 
 import { getUserFromSession } from './session.js';
 
 export async function requireAdmin(request, env) {
   const user = await getUserFromSession(request, env);
   if (!user) return { user: null, isAdmin: false };
-
-  const row = await env.DB.prepare('SELECT is_admin FROM users WHERE id = ?').bind(user.id).first();
-  const isAdmin = !!(row && row.is_admin);
-  return { user, isAdmin };
+  return { user, isAdmin: user.role === 'admin' };
 }
 
+// Generic version for future roles (staff, packer, accountant, ...).
+// Example: const { user, ok } = await requireRole(request, env, ['admin', 'packer']);
 export async function requireRole(request, env, allowedRoles) {
   const user = await getUserFromSession(request, env);
-  if (!user) return { user: null, ok: false };
-  const row = await env.DB.prepare('SELECT role FROM users WHERE id = ?').bind(user.id).first();
-  const ok = !!(row && allowedRoles.includes(row.role));
-  return { user, ok, role: row?.role };
+  if (!user) return { user: null, ok: false, role: null };
+  const ok = allowedRoles.includes(user.role);
+  return { user, ok, role: user.role };
 }
 
 export async function logAudit(env, { userId, action, resource, resourceId, diff }) {
