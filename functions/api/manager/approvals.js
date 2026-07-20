@@ -18,15 +18,21 @@ export async function onRequestGet(context) {
        WHERE t.status = 'pending' ORDER BY t.created_at`
     ).all(),
     env.DB.prepare(
-      `SELECT p.id, p.product_slug, p.size, p.qty, p.report_date,
-              p.user_id, u.name as requested_by_name, p.created_at
-       FROM packaging_reports p JOIN users u ON u.id = p.user_id
-       WHERE p.status = 'pending' ORDER BY p.created_at`
+      `SELECT pr.id, pr.product_id, pd.slug as product_slug, pd.name as product_name,
+              pr.size, pr.qty, pr.report_date,
+              pr.user_id, u.name as requested_by_name, pr.created_at
+       FROM packaging_reports pr
+       JOIN products pd ON pd.id = pr.product_id
+       JOIN users u ON u.id = pr.user_id
+       WHERE pr.status = 'pending' ORDER BY pr.created_at`
     ).all(),
     env.DB.prepare(
-      `SELECT c.id, c.product_slug, c.field, c.payload,
+      `SELECT c.id, c.product_id, pd.slug as product_slug, pd.name as product_name,
+              c.field, c.payload,
               c.requested_by, u.name as requested_by_name, c.created_at
-       FROM product_core_change_requests c JOIN users u ON u.id = c.requested_by
+       FROM product_core_change_requests c
+       JOIN products pd ON pd.id = c.product_id
+       JOIN users u ON u.id = c.requested_by
        WHERE c.status = 'pending' ORDER BY c.created_at`
     ).all(),
   ]);
