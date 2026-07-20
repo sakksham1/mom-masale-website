@@ -1,4 +1,8 @@
+// POST /api/packaging/reports   { productId, size, qty, reportDate? }  — packaging only
+// GET  /api/packaging/reports?mine=1  — packaging's own history; manager/admin see all
+
 import { requireRole, forbidden, jsonError } from '../_utils/admin.js';
+import { createNotification } from '../_utils/notify.js';
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -20,7 +24,9 @@ export async function onRequestPost(context) {
   if (!Number.isInteger(qty) || qty <= 0) return jsonError('qty must be a positive integer');
 
   const sizeRow = await env.DB.prepare(
-    `SELECT id FROM product_sizes WHERE product_id = ? AND size = ?`
+    `SELECT ps.id, p.name as product_name
+     FROM product_sizes ps JOIN products p ON p.id = ps.product_id
+     WHERE ps.product_id = ? AND ps.size = ?`
   ).bind(productId, size).first();
   if (!sizeRow) return jsonError('Unknown product/size combination', 400);
 
@@ -28,6 +34,14 @@ export async function onRequestPost(context) {
     const result = await env.DB.prepare(
       `INSERT INTO packaging_reports (user_id, product_id, size, qty, report_date) VALUES (?, ?, ?, ?, ?)`
     ).bind(user.id, productId, size, qty, reportDate).run();
+
+    context.waitUntil(createNotification(env, {
+      type: 'approval_requested',
+      title: 'Packaging report pending',
+      body: `${sizeRow.product_name} (${size}) × ${qty} — reported by ${user.name}`,
+      referenceType: 'packaging',
+      referenceId: result.meta.last_row_id,
+    }));
 
     return new Response(JSON.stringify({ ok: true, reportId: result.meta.last_row_id, status: 'pending' }), {
       status: 201, headers: { 'Content-Type': 'application/json' },

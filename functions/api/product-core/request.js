@@ -1,9 +1,10 @@
 // POST /api/product-core/request   { productId, field: 'name'|'price', payload }
 // manager or admin only — this is the one D1 change that fans out to the
 // public website, so it's kept to the two roles closest to the catalog.
-// Decision + json sync lives in manager/approvals/decide.js (already built).
+// Decision + json sync lives in manager/approvals/decide.js.
 
 import { requireRole, forbidden, jsonError } from '../_utils/admin.js';
+import { createNotification } from '../_utils/notify.js';
 
 const FIELDS = ['name', 'price'];
 
@@ -26,7 +27,7 @@ export async function onRequestPost(context) {
     if (!Number.isFinite(payload.price) || payload.price <= 0) return jsonError('payload.price must be a positive number');
   }
 
-  const product = await env.DB.prepare('SELECT id FROM products WHERE id = ?').bind(productId).first();
+  const product = await env.DB.prepare('SELECT id, name FROM products WHERE id = ?').bind(productId).first();
   if (!product) return jsonError('Product not found', 404);
 
   if (field === 'price') {
@@ -39,6 +40,18 @@ export async function onRequestPost(context) {
   const result = await env.DB.prepare(
     `INSERT INTO product_core_change_requests (product_id, field, payload, requested_by) VALUES (?, ?, ?, ?)`
   ).bind(productId, field, JSON.stringify(payload), user.id).run();
+
+  const summary = field === 'name'
+    ? `Rename "${product.name}" → "${payload.name}"`
+    : `${product.name} price change — ${payload.size}: ₹${payload.price}`;
+
+  context.waitUntil(createNotification(env, {
+    type: 'approval_requested',
+    title: 'Product change pending',
+    body: `${summary} — requested by ${user.name}`,
+    referenceType: 'product_core',
+    referenceId: result.meta.last_row_id,
+  }));
 
   return new Response(JSON.stringify({ ok: true, requestId: result.meta.last_row_id, status: 'pending' }), {
     status: 201, headers: { 'Content-Type': 'application/json' },

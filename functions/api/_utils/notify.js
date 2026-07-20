@@ -1,14 +1,18 @@
 // functions/api/_utils/notify.js
 // Push-based admin notifications — fired from the exact moments an order is
-// created or paid (checkout.js, verify-payment.js, razorpay-webhook.js).
-// No polling, no cron: called inline and wrapped in context.waitUntil() by
-// the caller so it completes even after the HTTP response has been sent.
+// created/paid, or a staff request needs approval. No polling, no cron:
+// called inline and wrapped in context.waitUntil() by the caller so it
+// completes even after the HTTP response has been sent.
 //
 // Requires env vars (wrangler secret put):
 //   TELEGRAM_BOT_TOKEN   — from @BotFather
 //   TELEGRAM_CHAT_ID     — your personal or group chat id
 //   ADMIN_NOTIFY_EMAIL   — where order emails should land
 // Reuses RESEND_API_KEY / RESEND_FROM already configured for OTP emails.
+//
+// createNotification() additionally writes a row to the `notifications`
+// table (see migrations) — that's what powers the in-app bell/badge in
+// admin/notifications.js, independent of Telegram/email delivery.
 
 import { sendEmail } from './email.js';
 
@@ -56,6 +60,18 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+// ── In-app notification row. Independent of Telegram/email — this is what
+// the Flutter admin app polls to drive the bell icon and unread badge. ──
+export async function createNotification(env, { type, title, body, referenceType, referenceId }) {
+  try {
+    await env.DB.prepare(
+      `INSERT INTO notifications (type, title, body, reference_type, reference_id) VALUES (?, ?, ?, ?, ?)`
+    ).bind(type, title, body || null, referenceType || null, referenceId || null).run();
+  } catch (err) {
+    console.error('notification write failed:', err.message);
+  }
+}
+
 // ── ORDER PLACED — fires right after the D1 insert, whether or not payment
 // has been confirmed yet (COD is "placed" immediately; Razorpay orders are
 // "placed" but payment_status stays 'created' until verify-payment/webhook) ──
@@ -78,6 +94,14 @@ export async function notifyOrderPlaced(env, order) {
       <p><strong>Total: ${rupee(total)}</strong></p>
       <p>Payment: ${methodLabel}</p>
     </div>`;
+
+  await createNotification(env, {
+    type: 'order_placed',
+    title: `New order #${orderId}`,
+    body: `${customerName} · ${rupee(total)}`,
+    referenceType: 'order',
+    referenceId: orderId,
+  });
 
   await Promise.allSettled([
     sendTelegramMessage(env, telegramText),
@@ -102,6 +126,14 @@ export async function notifyPaymentConfirmed(env, order) {
       <p><strong>${escapeHtml(customerName)}</strong></p>
       <p><strong>Amount: ${rupee(total)}</strong></p>
     </div>`;
+
+  await createNotification(env, {
+    type: 'payment_confirmed',
+    title: `Payment confirmed — order #${orderId}`,
+    body: `${customerName} · ${rupee(total)}`,
+    referenceType: 'order',
+    referenceId: orderId,
+  });
 
   await Promise.allSettled([
     sendTelegramMessage(env, telegramText),
