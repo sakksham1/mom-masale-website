@@ -14,13 +14,19 @@ export async function requireAdmin(request, env) {
   return { user, isAdmin: user.role === 'admin' };
 }
 
-// Generic version for future roles (staff, packer, accountant, ...).
-// Example: const { user, ok } = await requireRole(request, env, ['admin', 'packer']);
+// Generic role guard, always a fresh DB read — never trust session/cookie
+// claims about role. A demote takes effect on the very next request.
 export async function requireRole(request, env, allowedRoles) {
   const user = await getUserFromSession(request, env);
   if (!user) return { user: null, ok: false, role: null };
-  const ok = allowedRoles.includes(user.role);
-  return { user, ok, role: user.role };
+  const row = await env.DB.prepare('SELECT role FROM users WHERE id = ?').bind(user.id).first();
+  const role = row?.role || null;
+  return { user, ok: !!(role && allowedRoles.includes(role)), role };
+}
+
+// Manager or admin — the two roles allowed to decide on pending approvals.
+export async function requireApprover(request, env) {
+  return requireRole(request, env, ['admin', 'manager']);
 }
 
 export async function logAudit(env, { userId, action, resource, resourceId, diff }) {
