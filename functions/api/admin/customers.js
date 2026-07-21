@@ -4,12 +4,12 @@
 // (user_id NULL on the order) are counted in stats.js revenue totals but won't
 // show up here as a "customer" since there's no account to list them under.
 
-import { requireAdmin, forbidden } from '../_utils/admin.js';
+import { requireRole, forbidden } from '../_utils/admin.js';
 
 export async function onRequestGet(context) {
   const { request, env } = context;
-  const { isAdmin } = await requireAdmin(request, env);
-  if (!isAdmin) return forbidden();
+  const { ok } = await requireRole(request, env, ['admin', 'manager']);
+  if (!ok) return forbidden();
 
   const result = await env.DB.prepare(
     `SELECT u.id, u.name, u.email, u.phone, u.role, u.created_at,

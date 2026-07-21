@@ -2,15 +2,16 @@
 // GET   /api/admin/orders?status=&payment_status=   — list orders (newest first), with items
 // PATCH /api/admin/orders  { orderId, status?, payment_status? }  — update one order
 
-import { requireAdmin, forbidden, jsonError } from '../_utils/admin.js';
+import { requireAdmin, requireRole, forbidden, jsonError } from '../_utils/admin.js';
 
 const VALID_STATUS = ['placed', 'packed', 'shipped', 'delivered', 'cancelled'];
 const VALID_PAYMENT_STATUS = ['created', 'paid', 'failed', 'cod'];
 
 export async function onRequestGet(context) {
   const { request, env } = context;
-  const { isAdmin } = await requireAdmin(request, env);
-  if (!isAdmin) return forbidden();
+  // View access now includes manager — PATCH below stays admin-only.
+  const { ok } = await requireRole(request, env, ['admin', 'manager']);
+  if (!ok) return forbidden();
 
   const url = new URL(request.url);
   const statusFilter = url.searchParams.get('status');
@@ -28,7 +29,6 @@ export async function onRequestGet(context) {
   const ordersResult = await env.DB.prepare(query).bind(...binds).all();
   const orders = ordersResult.results || [];
 
-  // Per-order item fetch — fine at this scale (see orders.js precedent for the customer-facing endpoint).
   for (const order of orders) {
     const itemsResult = await env.DB.prepare(
       `SELECT product_slug, product_name, size, qty, unit_price FROM order_items WHERE order_id = ?`
@@ -44,7 +44,7 @@ export async function onRequestGet(context) {
 
 export async function onRequestPatch(context) {
   const { request, env } = context;
-  const { isAdmin } = await requireAdmin(request, env);
+  const { isAdmin } = await requireAdmin(request, env); // unchanged — admin-only
   if (!isAdmin) return forbidden();
 
   let body;
