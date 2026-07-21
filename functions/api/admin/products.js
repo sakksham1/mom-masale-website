@@ -10,7 +10,7 @@
 // _utils/products-sync.js. Stock is NOT part of that sync; see
 // admin/inventory/adjust.js for stock changes.
 
-import { requireAdmin, forbidden, jsonError, logAudit } from '../_utils/admin.js';
+import { requireAdmin, requireRole, forbidden, jsonError, logAudit } from '../_utils/admin.js';
 import { readRepoFile } from '../_utils/github.js';
 import { syncProductsToGitHub } from '../_utils/products-sync.js';
 
@@ -75,10 +75,12 @@ async function loadFullProduct(env, id) {
   };
 }
 
+const VIEW_ROLES = ['admin', 'manager', 'warehouser', 'packaging'];
+
 export async function onRequestGet(context) {
   const { request, env } = context;
-  const { isAdmin } = await requireAdmin(request, env);
-  if (!isAdmin) return forbidden();
+  const { ok } = await requireRole(request, env, VIEW_ROLES);
+  if (!ok) return forbidden();
 
   const [products, sizes, aliases, faqs, related] = await Promise.all([
     env.DB.prepare('SELECT * FROM products ORDER BY name').all(),
