@@ -1,11 +1,11 @@
 // GET  /api/admin/notifications?limit=20&unreadOnly=1
 // POST /api/admin/notifications   { id? }   — mark one (or all, if omitted) as read
-import { requireAdmin, forbidden } from '../_utils/admin.js';
+import { requireRole, forbidden } from '../_utils/admin.js';
 
 export async function onRequestGet(context) {
   const { request, env } = context;
-  const { isAdmin } = await requireAdmin(request, env);
-  if (!isAdmin) return forbidden();
+  const { ok } = await requireRole(request, env, ['admin', 'manager']);
+  if (!ok) return forbidden();
 
   const url = new URL(request.url);
   const limit = Math.min(50, Math.max(1, Number(url.searchParams.get('limit')) || 20));
@@ -25,8 +25,8 @@ export async function onRequestGet(context) {
 
 export async function onRequestPost(context) {
   const { request, env } = context;
-  const { isAdmin } = await requireAdmin(request, env);
-  if (!isAdmin) return forbidden();
+  const { ok } = await requireRole(request, env, ['admin', 'manager']);
+  if (!ok) return forbidden();
 
   let body;
   try { body = await request.json(); } catch { body = {}; }

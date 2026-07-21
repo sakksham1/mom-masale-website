@@ -1,13 +1,13 @@
 // GET /api/admin/audit-log?limit=20&beforeId=123 — cursor-paginated, newest first
-import { requireAdmin, forbidden } from '../_utils/admin.js';
+import { requireRole, forbidden } from '../_utils/admin.js';
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
 
 export async function onRequestGet(context) {
   const { request, env } = context;
-  const { isAdmin } = await requireAdmin(request, env);
-  if (!isAdmin) return forbidden();
+  const { ok } = await requireRole(request, env, ['admin', 'manager']);
+  if (!ok) return forbidden();
 
   const url = new URL(request.url);
   const limit = Math.min(MAX_LIMIT, Math.max(1, Number(url.searchParams.get('limit')) || DEFAULT_LIMIT));

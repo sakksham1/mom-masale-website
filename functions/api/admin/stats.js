@@ -3,12 +3,12 @@
 // All revenue figures only count payment_status = 'paid' orders, so a pending
 // or failed Razorpay attempt never inflates the numbers.
 
-import { requireAdmin, forbidden } from '../_utils/admin.js';
+import { requireRole, forbidden } from '../_utils/admin.js';
 
 export async function onRequestGet(context) {
   const { request, env } = context;
-  const { isAdmin } = await requireAdmin(request, env);
-  if (!isAdmin) return forbidden();
+  const { ok } = await requireRole(request, env, ['admin', 'manager']);
+  if (!ok) return forbidden();
 
   const overall = await env.DB.prepare(
     `SELECT COALESCE(SUM(total), 0) as total_revenue, COUNT(*) as paid_orders
