@@ -5,6 +5,7 @@ const HANDLERS = {
   raw_material: applyRawMaterialDecision,   // unchanged from before
   packaging: applyPackagingDecision,
   product_core: applyProductCoreDecision,
+  product_stock: applyProductStockDecision,
 };
 
 export async function onRequestPost(context) {
@@ -142,4 +143,40 @@ async function applyProductCoreDecision(env, id, decision, reviewer) {
   await env.DB.prepare(
     `UPDATE product_core_change_requests SET status = 'approved', reviewed_by = ?, reviewed_at = datetime('now') WHERE id = ?`
   ).bind(reviewer.id, id).run();
+}
+
+// New function, same shape as applyRawMaterialDecision
+async function applyProductStockDecision(env, id, decision, reviewer) {
+  const tx = await env.DB.prepare(
+    `SELECT id, product_id, size, change_qty, reason, status FROM product_stock_transactions WHERE id = ?`
+  ).bind(id).first();
+  if (!tx) throw Object.assign(new Error('Transaction not found'), { status: 404 });
+  if (tx.status !== 'pending') throw new Error(`Already ${tx.status}`);
+
+  if (decision === 'approved') {
+    const sizeRow = await env.DB.prepare(
+      'SELECT id, stock_qty FROM product_sizes WHERE product_id = ? AND size = ?'
+    ).bind(tx.product_id, tx.size).first();
+    if (!sizeRow) throw new Error('Product size no longer exists');
+    if (sizeRow.stock_qty + tx.change_qty < 0) {
+      throw new Error('Approving this would take stock negative — reject or ask for a correction');
+    }
+
+    await env.DB.batch([
+      env.DB.prepare(`UPDATE product_sizes SET stock_qty = stock_qty + ? WHERE id = ?`)
+        .bind(tx.change_qty, sizeRow.id),
+      env.DB.prepare(
+        `INSERT INTO inventory_movements (product_id, size, change_qty, reason, reference_type, reference_id, user_id, note)
+         VALUES (?, ?, ?, ?, 'product_stock_transaction', ?, ?, ?)`
+      ).bind(tx.product_id, tx.size, tx.change_qty, tx.reason, tx.id, reviewer.id,
+             `Approved stock adjustment #${tx.id}`),
+      env.DB.prepare(
+        `UPDATE product_stock_transactions SET status = 'approved', reviewed_by = ?, reviewed_at = datetime('now') WHERE id = ?`
+      ).bind(reviewer.id, id),
+    ]);
+  } else {
+    await env.DB.prepare(
+      `UPDATE product_stock_transactions SET status = 'rejected', reviewed_by = ?, reviewed_at = datetime('now') WHERE id = ?`
+    ).bind(reviewer.id, id).run();
+  }
 }

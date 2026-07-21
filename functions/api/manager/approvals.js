@@ -8,7 +8,7 @@ export async function onRequestGet(context) {
   const { ok } = await requireApprover(request, env);
   if (!ok) return forbidden();
 
-  const [rawMaterial, packaging, productCore] = await Promise.all([
+  const [rawMaterial, packaging, productCore, productStock] = await Promise.all([
     env.DB.prepare(
       `SELECT t.id, t.raw_material_id, m.name as material_name, t.delta, t.reason, t.note,
               t.requested_by, u.name as requested_by_name, t.created_at
@@ -35,11 +35,21 @@ export async function onRequestGet(context) {
        JOIN users u ON u.id = c.requested_by
        WHERE c.status = 'pending' ORDER BY c.created_at`
     ).all(),
+    env.DB.prepare(
+    `SELECT t.id, t.product_id, p.slug as product_slug, p.name as product_name,
+            t.size, t.change_qty, t.reason, t.note,
+            t.requested_by, u.name as requested_by_name, t.created_at
+     FROM product_stock_transactions t
+     JOIN products p ON p.id = t.product_id
+     JOIN users u ON u.id = t.requested_by
+     WHERE t.status = 'pending' ORDER BY t.created_at`
+  ).all(),
   ]);
 
   return new Response(JSON.stringify({
     rawMaterial: rawMaterial.results || [],
     packaging: packaging.results || [],
     productCore: productCore.results || [],
+    productStock: productStock.results || [],
   }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 }
