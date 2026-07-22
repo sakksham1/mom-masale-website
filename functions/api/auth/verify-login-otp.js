@@ -1,7 +1,7 @@
 // functions/api/auth/verify-login-otp.js
-// POST /api/auth/verify-login-otp  { email, otp } — on success, logs the user in directly.
-import { generateSessionToken } from '../_utils/crypto.js';
-import { setSessionCookie, newExpiry } from '../_utils/session.js';
+// POST /api/auth/verify-login-otp  { email, otp, platform? } — on success, logs the user in directly.
+
+import { setSessionCookie, createSession } from '../_utils/session.js';
 
 const MAX_ATTEMPTS = 5;
 
@@ -19,6 +19,7 @@ export async function onRequestPost(context) {
 
   const email = (body.email || '').trim().toLowerCase();
   const otp = (body.otp || '').trim();
+  const platform = (body.platform || 'unknown').trim();
   if (!email || !otp) return jsonError('Email and code are required');
 
   const user = await env.DB.prepare('SELECT id, name, email, phone, role FROM users WHERE email = ?').bind(email).first();
@@ -41,9 +42,7 @@ export async function onRequestPost(context) {
 
   await env.DB.prepare('UPDATE password_resets SET used = 1 WHERE id = ?').bind(row.id).run();
 
-  const token = generateSessionToken();
-  const expiresAt = newExpiry();
-  await env.DB.prepare('INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)').bind(token, user.id, expiresAt).run();
+  const { token, expiresAt } = await createSession(request, env, user.id, platform);
 
   return new Response(JSON.stringify({ user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role } }), {
     status: 200,

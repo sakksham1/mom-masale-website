@@ -1,12 +1,11 @@
 // functions/api/auth/google.js
-// POST /api/auth/google   { credential }  — credential is the Google ID token JWT
+// POST /api/auth/google   { credential, platform? }  — credential is the Google ID token JWT
 // Verifies the token via Google's tokeninfo endpoint (no JWKS library needed in
 // the Workers runtime), then logs in an existing account (matched by google_id,
 // falling back to email — which links a Google identity onto an existing
 // password account) or creates a brand new user.
 
-import { generateSessionToken } from '../_utils/crypto.js';
-import { setSessionCookie, newExpiry } from '../_utils/session.js';
+import { setSessionCookie, createSession } from '../_utils/session.js';
 
 function jsonError(message, status = 400) {
   return new Response(JSON.stringify({ error: message }), {
@@ -26,6 +25,7 @@ export async function onRequestPost(context) {
   }
 
   const credential = body.credential;
+  const platform = (body.platform || 'unknown').trim();
   if (!credential) return jsonError('Missing credential');
 
   // Verify the token is genuine and meant for this app.
@@ -65,9 +65,7 @@ export async function onRequestPost(context) {
     user = { id: result.meta.last_row_id, name, email, phone: null, role: 'customer' };
   }
 
-  const token = generateSessionToken();
-  const expiresAt = newExpiry();
-  await env.DB.prepare('INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)').bind(token, user.id, expiresAt).run();
+  const { token, expiresAt } = await createSession(request, env, user.id, platform);
 
   return new Response(JSON.stringify({ user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role } }), {
     status: 200,

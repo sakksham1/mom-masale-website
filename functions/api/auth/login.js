@@ -1,9 +1,9 @@
 // functions/api/auth/login.js
 // POST /api/auth/login
-// Body: { email, password }
+// Body: { email, password, platform? }
 
-import { verifyPassword, generateSessionToken } from '../_utils/crypto.js';
-import { setSessionCookie, newExpiry } from '../_utils/session.js';
+import { verifyPassword } from '../_utils/crypto.js';
+import { setSessionCookie, createSession } from '../_utils/session.js';
 
 function jsonError(message, status = 400) {
   return new Response(JSON.stringify({ error: message }), {
@@ -24,6 +24,7 @@ export async function onRequestPost(context) {
 
   const email = (body.email || '').trim().toLowerCase();
   const password = body.password || '';
+  const platform = (body.platform || 'unknown').trim();
 
   if (!email || !password) return jsonError('Email and password are required');
 
@@ -37,11 +38,7 @@ export async function onRequestPost(context) {
   const valid = await verifyPassword(password, user.password_hash, user.password_salt);
   if (!valid) return jsonError('Incorrect email or password', 401);
 
-  const token = generateSessionToken();
-  const expiresAt = newExpiry();
-  await env.DB.prepare(
-    'INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)'
-  ).bind(token, user.id, expiresAt).run();
+  const { token, expiresAt } = await createSession(request, env, user.id, platform);
 
   return new Response(
     JSON.stringify({ user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role } }),
