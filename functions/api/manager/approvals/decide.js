@@ -1,16 +1,15 @@
 import { requireApprover, forbidden, jsonError, logAudit } from '../../_utils/admin.js';
-import { readRepoFile, writeRepoFile } from '../../_utils/github.js';
+import { syncProductsToGitHub } from '../../_utils/products-sync.js';
 
 const HANDLERS = {
   raw_material: applyRawMaterialDecision,   // unchanged from before
-  packaging: applyPackagingDecision,
+  packaging: applyPackagingDecision,        // unchanged from before
   product_core: applyProductCoreDecision,
-  product_stock: applyProductStockDecision,
 };
 
 export async function onRequestPost(context) {
   const { request, env } = context;
-  const { user, ok } = await requireApprover(request, env);
+  const { user, ok, role } = await requireApprover(request, env);
   if (!ok) return forbidden();
 
   let body;
@@ -20,6 +19,14 @@ export async function onRequestPost(context) {
   if (!HANDLERS[type]) return jsonError(`type must be one of: ${Object.keys(HANDLERS).join(', ')}`);
   if (!['approved', 'rejected'].includes(decision)) return jsonError('decision must be approved or rejected');
   if (!Number.isInteger(id)) return jsonError('id is required');
+
+  // Catalog changes go straight to the live website, so — unlike raw
+  // material / packaging approvals, which any manager or admin can decide —
+  // product_core requests are reserved for admins only. Managers can still
+  // see them in the queue, just not approve/reject them.
+  if (type === 'product_core' && role !== 'admin') {
+    return forbidden('Only an admin can approve product catalog changes');
+  }
 
   try {
     await HANDLERS[type](env, id, decision, user);
@@ -88,10 +95,11 @@ async function applyRawMaterialDecision(env, id, decision, reviewer) {
   }
 }
 
-// ── Product core (name/price) — the one table whose approval also fans
-// out to data/products.json via the existing GitHub commit machinery, so
-// the same push already triggers generate-site.yml. No separate rebuild
-// step needed. ──
+// ── Product core (catalog) — approval applies the same whitelist of fields
+// PATCH /api/admin/products accepts (name, category, image, flags, seo,
+// prices), then re-syncs data/products.json via the same helper the admin
+// PATCH endpoint uses. No inventory/stock fields here at all — stock stays
+// exclusively in warehouse/inventory adjust flows. ──
 async function applyProductCoreDecision(env, id, decision, reviewer) {
   const change = await env.DB.prepare(
     `SELECT id, product_id, field, payload, status FROM product_core_change_requests WHERE id = ?`
@@ -106,77 +114,65 @@ async function applyProductCoreDecision(env, id, decision, reviewer) {
     return;
   }
 
-  const payload = JSON.parse(change.payload);
-  const product = await env.DB.prepare('SELECT id, slug, name FROM products WHERE id = ?').bind(change.product_id).first();
+  const updates = JSON.parse(change.payload);
+  const product = await env.DB.prepare('SELECT id, slug FROM products WHERE id = ?').bind(change.product_id).first();
   if (!product) throw new Error('Product no longer exists');
 
-  // 1) Apply to D1
-  if (change.field === 'name') {
-    if (!payload.name) throw new Error('Missing name in payload');
-    await env.DB.prepare(`UPDATE products SET name = ? WHERE id = ?`).bind(payload.name, product.id).run();
-  } else if (change.field === 'price') {
-    if (!payload.size || !Number.isFinite(payload.price)) throw new Error('Missing size/price in payload');
-    await env.DB.prepare(
-      `UPDATE product_sizes SET price = ? WHERE product_id = ? AND size = ?`
-    ).bind(payload.price, product.id, payload.size).run();
-  } else {
-    throw new Error(`Unknown field "${change.field}"`);
+  const columnMap = {
+    name: 'name', category: 'category', image: 'image', imageAlt: 'image_alt',
+    amazonUrl: 'amazon_url', flipkartUrl: 'flipkart_url', meeshoUrl: 'meesho_url',
+    comingSoon: 'coming_soon', featured: 'featured', bestseller: 'bestseller', newArrival: 'new_arrival',
+  };
+  const sets = [];
+  const binds = [];
+  for (const [key, column] of Object.entries(columnMap)) {
+    if (key in updates) {
+      const val = updates[key];
+      sets.push(`${column} = ?`);
+      binds.push(typeof val === 'boolean' ? (val ? 1 : 0) : val);
+    }
+  }
+  if (updates.seo && typeof updates.seo === 'object') {
+    const s = updates.seo;
+    if ('title' in s) { sets.push('seo_title = ?'); binds.push(s.title); }
+    if ('metaDescription' in s) { sets.push('seo_meta_description = ?'); binds.push(s.metaDescription); }
+    if ('shortDescription' in s) { sets.push('seo_short_description = ?'); binds.push(s.shortDescription); }
+    if ('longDescription' in s) { sets.push('seo_long_description = ?'); binds.push(s.longDescription); }
+    if ('keywords' in s) { sets.push('seo_keywords = ?'); binds.push(JSON.stringify(s.keywords || [])); }
+  }
+  if (sets.length) {
+    sets.push(`updated_at = datetime('now')`);
+    binds.push(product.id);
+    await env.DB.prepare(`UPDATE products SET ${sets.join(', ')} WHERE id = ?`).bind(...binds).run();
   }
 
-  // 2) Mirror the same field onto data/products.json and commit — reuses
-  // the exact pattern products.js already uses for direct admin edits.
-  const { content, sha } = await readRepoFile(env, 'data/products.json');
-  const products = JSON.parse(content);
-  const idx = products.findIndex(p => p.slug === product.slug);
-  if (idx === -1) throw new Error(`Product "${product.slug}" not found in products.json — data may be out of sync`);
-
-  if (change.field === 'name') {
-    products[idx].name = payload.name;
-  } else {
-    products[idx].prices = { ...products[idx].prices, [payload.size]: payload.price };
+  if (updates.prices && typeof updates.prices === 'object') {
+    for (const [size, price] of Object.entries(updates.prices)) {
+      const existingSize = await env.DB.prepare(
+        'SELECT id FROM product_sizes WHERE product_id = ? AND size = ?'
+      ).bind(product.id, size).first();
+      if (existingSize) {
+        await env.DB.prepare('UPDATE product_sizes SET price = ? WHERE id = ?').bind(price, existingSize.id).run();
+      } else {
+        // New size introduced via a catalog edit — same DEFAULT_STOCK
+        // convention as admin/products.js, logged the same way.
+        const maxSort = await env.DB.prepare(
+          'SELECT COALESCE(MAX(sort_order), -1) as m FROM product_sizes WHERE product_id = ?'
+        ).bind(product.id).first();
+        await env.DB.prepare(
+          `INSERT INTO product_sizes (product_id, size, price, stock_qty, sort_order) VALUES (?, ?, ?, 100, ?)`
+        ).bind(product.id, size, price, (maxSort?.m ?? -1) + 1).run();
+        await env.DB.prepare(
+          `INSERT INTO inventory_movements (product_id, size, change_qty, reason, user_id, note)
+           VALUES (?, ?, 100, 'initial', ?, 'size added via approved catalog change')`
+        ).bind(product.id, size, reviewer.id).run();
+      }
+    }
   }
 
-  const newContent = JSON.stringify(products, null, 2) + '\n';
-  await writeRepoFile(env, 'data/products.json', newContent, sha, `chore(approval): update ${product.slug} ${change.field}`);
+  await syncProductsToGitHub(env, `chore(approval): update ${product.slug}`);
 
-  // 3) Mark decided last, only after both writes succeeded
   await env.DB.prepare(
     `UPDATE product_core_change_requests SET status = 'approved', reviewed_by = ?, reviewed_at = datetime('now') WHERE id = ?`
   ).bind(reviewer.id, id).run();
-}
-
-// New function, same shape as applyRawMaterialDecision
-async function applyProductStockDecision(env, id, decision, reviewer) {
-  const tx = await env.DB.prepare(
-    `SELECT id, product_id, size, change_qty, reason, status FROM product_stock_transactions WHERE id = ?`
-  ).bind(id).first();
-  if (!tx) throw Object.assign(new Error('Transaction not found'), { status: 404 });
-  if (tx.status !== 'pending') throw new Error(`Already ${tx.status}`);
-
-  if (decision === 'approved') {
-    const sizeRow = await env.DB.prepare(
-      'SELECT id, stock_qty FROM product_sizes WHERE product_id = ? AND size = ?'
-    ).bind(tx.product_id, tx.size).first();
-    if (!sizeRow) throw new Error('Product size no longer exists');
-    if (sizeRow.stock_qty + tx.change_qty < 0) {
-      throw new Error('Approving this would take stock negative — reject or ask for a correction');
-    }
-
-    await env.DB.batch([
-      env.DB.prepare(`UPDATE product_sizes SET stock_qty = stock_qty + ? WHERE id = ?`)
-        .bind(tx.change_qty, sizeRow.id),
-      env.DB.prepare(
-        `INSERT INTO inventory_movements (product_id, size, change_qty, reason, reference_type, reference_id, user_id, note)
-         VALUES (?, ?, ?, ?, 'product_stock_transaction', ?, ?, ?)`
-      ).bind(tx.product_id, tx.size, tx.change_qty, tx.reason, tx.id, reviewer.id,
-             `Approved stock adjustment #${tx.id}`),
-      env.DB.prepare(
-        `UPDATE product_stock_transactions SET status = 'approved', reviewed_by = ?, reviewed_at = datetime('now') WHERE id = ?`
-      ).bind(reviewer.id, id),
-    ]);
-  } else {
-    await env.DB.prepare(
-      `UPDATE product_stock_transactions SET status = 'rejected', reviewed_by = ?, reviewed_at = datetime('now') WHERE id = ?`
-    ).bind(reviewer.id, id).run();
-  }
 }

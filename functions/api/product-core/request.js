@@ -1,12 +1,42 @@
-// POST /api/product-core/request   { productId, field: 'name'|'price', payload }
+// POST /api/product-core/request   { productId, updates: { ...whitelisted fields } }
+//
 // manager or admin only — this is the one D1 change that fans out to the
 // public website, so it's kept to the two roles closest to the catalog.
-// Decision + json sync lives in manager/approvals/decide.js.
+//
+// `updates` mirrors the exact whitelist PATCH /api/admin/products accepts
+// (see admin/products.js onRequestPatch), so a manager's phone edit and an
+// admin's direct edit go through identical validation and land in D1 the
+// same way once approved. Admins should just call PATCH /api/admin/products
+// directly instead of this endpoint — there's no point filing an approval
+// request for a change they're already allowed to approve themselves.
+//
+// Decision + GitHub sync lives in manager/approvals/decide.js.
 
 import { requireRole, forbidden, jsonError } from '../_utils/admin.js';
 import { createNotification } from '../_utils/notify.js';
 
-const FIELDS = ['name', 'price'];
+const SCALAR_FIELDS = [
+  'name', 'category', 'image', 'imageAlt',
+  'amazonUrl', 'flipkartUrl', 'meeshoUrl',
+  'comingSoon', 'featured', 'bestseller', 'newArrival',
+];
+const SEO_FIELDS = ['title', 'metaDescription', 'shortDescription', 'longDescription', 'keywords'];
+
+function summarize(productName, updates) {
+  const parts = [];
+  if (updates.name) parts.push(`rename → "${updates.name}"`);
+  if (updates.category) parts.push(`category → ${updates.category}`);
+  if (updates.prices) {
+    parts.push(...Object.entries(updates.prices).map(([size, price]) => `${size}: ₹${price}`));
+  }
+  if (updates.image) parts.push('image updated');
+  if (updates.seo) parts.push('SEO/description updated');
+  if ('comingSoon' in updates) parts.push(updates.comingSoon ? 'marked coming soon' : 'unmarked coming soon');
+  if ('featured' in updates) parts.push(updates.featured ? 'marked featured' : 'unmarked featured');
+  if ('bestseller' in updates) parts.push(updates.bestseller ? 'marked bestseller' : 'unmarked bestseller');
+  if ('newArrival' in updates) parts.push(updates.newArrival ? 'marked new arrival' : 'unmarked new arrival');
+  return `${productName} — ${parts.length ? parts.join(', ') : 'catalog update'}`;
+}
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -16,39 +46,42 @@ export async function onRequestPost(context) {
   let body;
   try { body = await request.json(); } catch { return jsonError('Invalid request body'); }
 
-  const { productId, field, payload } = body;
+  const { productId, updates } = body;
   if (!Number.isInteger(productId)) return jsonError('productId is required');
-  if (!FIELDS.includes(field)) return jsonError(`field must be one of: ${FIELDS.join(', ')}`);
-  if (!payload || typeof payload !== 'object') return jsonError('payload object is required');
-
-  if (field === 'name' && !payload.name?.trim()) return jsonError('payload.name is required');
-  if (field === 'price') {
-    if (!payload.size) return jsonError('payload.size is required');
-    if (!Number.isFinite(payload.price) || payload.price <= 0) return jsonError('payload.price must be a positive number');
+  if (!updates || typeof updates !== 'object' || Array.isArray(updates)) {
+    return jsonError('updates object is required');
   }
 
-  const product = await env.DB.prepare('SELECT id, name FROM products WHERE id = ?').bind(productId).first();
+  const allowedKeys = new Set([...SCALAR_FIELDS, 'seo', 'prices']);
+  const unknownKeys = Object.keys(updates).filter(k => !allowedKeys.has(k));
+  if (unknownKeys.length) return jsonError(`Unsupported field(s): ${unknownKeys.join(', ')}`);
+  if (Object.keys(updates).length === 0) return jsonError('No changes provided');
+
+  if (updates.seo) {
+    if (typeof updates.seo !== 'object') return jsonError('seo must be an object');
+    const seoUnknown = Object.keys(updates.seo).filter(k => !SEO_FIELDS.includes(k));
+    if (seoUnknown.length) return jsonError(`Unsupported SEO field(s): ${seoUnknown.join(', ')}`);
+  }
+  if (updates.prices) {
+    if (typeof updates.prices !== 'object') return jsonError('prices must be an object');
+    for (const [size, price] of Object.entries(updates.prices)) {
+      if (!Number.isFinite(price) || price <= 0) return jsonError(`Invalid price for size "${size}"`);
+    }
+  }
+
+  const product = await env.DB.prepare('SELECT id, slug, name FROM products WHERE id = ?').bind(productId).first();
   if (!product) return jsonError('Product not found', 404);
 
-  if (field === 'price') {
-    const sizeRow = await env.DB.prepare(
-      `SELECT id FROM product_sizes WHERE product_id = ? AND size = ?`
-    ).bind(productId, payload.size).first();
-    if (!sizeRow) return jsonError(`Product has no size "${payload.size}" to price`, 400);
-  }
-
+  // field is a fixed constant now (schema kept as-is — no migration needed).
+  // payload carries the whole `updates` object as JSON.
   const result = await env.DB.prepare(
-    `INSERT INTO product_core_change_requests (product_id, field, payload, requested_by) VALUES (?, ?, ?, ?)`
-  ).bind(productId, field, JSON.stringify(payload), user.id).run();
-
-  const summary = field === 'name'
-    ? `Rename "${product.name}" → "${payload.name}"`
-    : `${product.name} price change — ${payload.size}: ₹${payload.price}`;
+    `INSERT INTO product_core_change_requests (product_id, field, payload, requested_by) VALUES (?, 'update', ?, ?)`
+  ).bind(productId, JSON.stringify(updates), user.id).run();
 
   context.waitUntil(createNotification(env, {
     type: 'approval_requested',
     title: 'Product change pending',
-    body: `${summary} — requested by ${user.name}`,
+    body: `${summarize(product.name, updates)} — requested by ${user.name}`,
     referenceType: 'product_core',
     referenceId: result.meta.last_row_id,
   }));

@@ -1,5 +1,7 @@
 // functions/api/admin/products.js
 // GET    /api/admin/products               — full catalog from D1, incl. per-size stock
+//                                             (admin + manager — read-only for manager,
+//                                             who edits through the approval flow instead)
 // POST   /api/admin/products                { name, category, prices:{size:price}, image?, comingSoon?, aliases?, defaultStock? }
 // PATCH  /api/admin/products                { slug, updates: { ...whitelisted fields } }
 // DELETE /api/admin/products?slug=...
@@ -9,6 +11,10 @@
 // generate-site.yml pipeline rebuilds the storefront pages unchanged — see
 // _utils/products-sync.js. Stock is NOT part of that sync; see
 // admin/inventory/adjust.js for stock changes.
+//
+// POST/PATCH/DELETE remain admin-only: managers propose catalog edits via
+// POST /api/product-core/request instead, which lands here only after an
+// admin approves it (see manager/approvals/decide.js).
 
 import { requireAdmin, requireRole, forbidden, jsonError, logAudit } from '../_utils/admin.js';
 import { readRepoFile } from '../_utils/github.js';
@@ -75,11 +81,11 @@ async function loadFullProduct(env, id) {
   };
 }
 
-const VIEW_ROLES = ['admin', 'manager', 'warehouser', 'packaging'];
-
 export async function onRequestGet(context) {
   const { request, env } = context;
-  const { ok } = await requireRole(request, env, VIEW_ROLES);
+  // Read-only for managers too — they need the full catalog to propose
+  // edits, even though only admins can write here directly.
+  const { ok } = await requireRole(request, env, ['admin', 'manager']);
   if (!ok) return forbidden();
 
   const [products, sizes, aliases, faqs, related] = await Promise.all([
@@ -331,9 +337,6 @@ export async function onRequestDelete(context) {
     );
   }
 
-  // product_sizes / product_aliases / product_faq / product_related-as-source
-  // all cascade via ON DELETE CASCADE. Rows where this product is the TARGET
-  // of a relation do not cascade (see migrations/0002 note) — clean those here.
   await env.DB.prepare('DELETE FROM product_related WHERE related_product_id = ?').bind(product.id).run();
   await env.DB.prepare('DELETE FROM products WHERE id = ?').bind(product.id).run();
 

@@ -1,9 +1,11 @@
 // functions/api/admin/upload.js
 // POST /api/admin/upload   multipart/form-data: { file, folder? }
-// Admin-only. Uploads to R2, returns a path servable via /api/images/*.
+// Admin or manager (managers need this to attach a phone photo to a catalog
+// edit request — the resulting D1/site write still only happens once an
+// admin approves it). Uploads to R2, returns a path servable via /api/images/*.
 // folder defaults to "uploads" — pass "products" | "recipes" | "blog" | "events" etc.
 
-import { requireAdmin, forbidden, jsonError } from '../_utils/admin.js';
+import { requireRole, forbidden, jsonError } from '../_utils/admin.js';
 
 const MAX_BYTES = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = new Set(['image/webp', 'image/jpeg', 'image/png']);
@@ -14,8 +16,8 @@ function sanitizeName(name) {
 
 export async function onRequestPost(context) {
   const { request, env } = context;
-  const { isAdmin } = await requireAdmin(request, env);
-  if (!isAdmin) return forbidden();
+  const { ok } = await requireRole(request, env, ['admin', 'manager']);
+  if (!ok) return forbidden();
   if (!env.IMAGES) return jsonError('R2 bucket not configured for this environment', 502);
 
   let form;
