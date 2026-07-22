@@ -1,175 +1,175 @@
 {
-  "product:turmeric-powder": {
-    "hash": "2fa63312666794742986e10afa039ae666174647098a86b5eef43ff94003b9fc",
-    "lastmod": "2026-07-10"
-  },
-  "product:red-chilli-powder": {
-    "hash": "ec15741490120b8f1e121e05a5899a0f0cab9f336a964cb88a540bfaaa446bdf",
-    "lastmod": "2026-07-10"
-  },
-  "product:coriander-powder": {
-    "hash": "dacf5a70a362181f473070cc230a793d767858ee0be28b6b569e5113442470ff",
-    "lastmod": "2026-07-10"
-  },
-  "product:kasuri-methi": {
-    "hash": "4c58fa0df997ad5a92175d8f3e600fc2f183086ac4a4c324fa2115cd7d53c31b",
-    "lastmod": "2026-07-10"
-  },
-  "product:sabzi-king-masala": {
-    "hash": "543e511d6ca163c88b1a3e19bf7ede289a28ad8f81828ac5bd1ae3848f4e7732",
-    "lastmod": "2026-07-10"
-  },
   "product:amchur-powder": {
-    "hash": "19f26ba19f4aaaf120051f6371aac4e319865f5ddf3e24f08dc9dc68bce58c34",
-    "lastmod": "2026-07-10"
+    "hash": "a754fa3d27842fa7ce5dbe5d93f754a1908f9cdb41eb7dd05734f07e3dc6817f",
+    "lastmod": "2026-07-22"
   },
   "product:biryani-masala": {
-    "hash": "00c65b35391168b16b63bee505d837bcd49748a1027f244801a622bd0e9b1ebc",
-    "lastmod": "2026-07-10"
-  },
-  "product:chai-masala": {
-    "hash": "6449dbf7a34935137e808a3c18567bbe5ef5bd657e45d883b86dee03654bd9bc",
-    "lastmod": "2026-07-10"
+    "hash": "0d94a11f28cf911a3991d26a138125556743e5ba71c7b5ed75e8a44b14db1c77",
+    "lastmod": "2026-07-22"
   },
   "product:chaat-masala": {
-    "hash": "4ca8abf5ae7121fc69e7ad29297d1eb621b7242aceb6a33847f4fae4b202a9f7",
-    "lastmod": "2026-07-10"
+    "hash": "09846a068e3b98d6d5348b56127b71b50272f12a9308ab2729d8816350ae82a5",
+    "lastmod": "2026-07-22"
   },
-  "product:chicken-masala": {
-    "hash": "a7c189257dd833033928d2386fef492b72329e9f255b460d71c68c701f7ebcea",
-    "lastmod": "2026-07-10"
-  },
-  "product:chhola-masala": {
-    "hash": "ec0e20e5de8537a3797db91bb70a77b5909156bbcdddf54ad997f02ca60a3291",
-    "lastmod": "2026-07-10"
-  },
-  "product:garam-masala": {
-    "hash": "19fd63d6b31da4ce46cbb97535fc5f7e0e28cc9ec097e837c4ad0bb9024b97c8",
-    "lastmod": "2026-07-10"
-  },
-  "product:jaljeera-masala": {
-    "hash": "d1679f9a04e181d3ceea610783f4e86b0b006824728c000005733c2e4db35a62",
-    "lastmod": "2026-07-10"
-  },
-  "product:kuch-bhi-masala": {
-    "hash": "d507e87a444d66f4e0a56a6ea3b084fe318e3ace8c9eb642fda4682c18654cbe",
-    "lastmod": "2026-07-10"
-  },
-  "product:matar-paneer-masala": {
-    "hash": "fccb75a67a66dd70c42e3774c5cba0c26bfdc77638915a4927a13deeb84fc3b2",
-    "lastmod": "2026-07-10"
-  },
-  "product:meat-masala": {
-    "hash": "af3c199b50f783e2ba80bafa506af1ba92cb350c18ee667009979aed47177dfd",
-    "lastmod": "2026-07-10"
-  },
-  "product:pav-bhaji-masala": {
-    "hash": "25994a7dd0e472b6cd6e13ac8fa29e1bc65f9d8ac6fca2ac06b4e60b4c65d65c",
-    "lastmod": "2026-07-10"
-  },
-  "product:raita-masala": {
-    "hash": "93e1c03a1fbacaeb6fed30e554207b19fd3957030630a3408b38fdd3d8b21a58",
-    "lastmod": "2026-07-10"
-  },
-  "product:sambhar-masala": {
-    "hash": "99154a7626e3a59b229af1c5739282a4264f6a679ed862042fdd6947aa1ffab7",
-    "lastmod": "2026-07-10"
-  },
-  "product:shahi-paneer-masala": {
-    "hash": "a87118ce19e88433bb28f7fbcd275ff22bb55c4330e9f10de922e86e1b969c2e",
-    "lastmod": "2026-07-10"
-  },
-  "product:fruit-and-salad-masala": {
-    "hash": "4055e7afe2daa0ab771f46eec8a8620600a26a49fcaddf3de14a45efcda6a1dd",
-    "lastmod": "2026-07-10"
-  },
-  "product:kachauri-masala": {
-    "hash": "f788d9deef066924fdc362ac5a007d19e6e97dbc62d426736fa73b58dd237306",
-    "lastmod": "2026-07-10"
-  },
-  "product:kalonji-bharwa-masala": {
-    "hash": "adc0b736b09cad11d16bda078c5a5dd1099955aac7456c29ef5170b1ebd86757",
-    "lastmod": "2026-07-10"
-  },
-  "product:shahi-thandai": {
-    "hash": "a608097cb9ce0c6fc524fe0935356320a3b65c6da46e70417fd24ff537d1e334",
-    "lastmod": "2026-07-10"
-  },
-  "product:gulab-jamun-mix": {
-    "hash": "7a92e0988b4414fc7b14062e0a89caf1646a94d7f672228ac035d1bfed09c017",
-    "lastmod": "2026-07-10"
-  },
-  "product:tawa-masala": {
-    "hash": "8a5d3dd32f9e2c287910b5ffca9f549f7e49ef0f3483b26bd5c04ccbb30199d1",
-    "lastmod": "2026-07-10"
-  },
-  "product:dam-aloo-masala": {
-    "hash": "cfdf00d39a8cd0bf4d928316f5e79359aa830c873557e2f6ae7d3428e3c9850f",
-    "lastmod": "2026-07-10"
-  },
-  "product:dahi-bada-masala": {
-    "hash": "c57e4da6fabdcc89d47c64096ba0a12ab1d4c6fa1ebc8f0b7f4f9d1777c22fd6",
-    "lastmod": "2026-07-10"
-  },
-  "product:instant-dahi-bada-mix": {
-    "hash": "8df0be5b514a765aa455561fde63c8779dc14ecde1205f03fb1a6a29f17ed435",
-    "lastmod": "2026-07-10"
-  },
-  "product:lemon-tea-masala": {
-    "hash": "358157d37586bf8d2037ea1ba05ad2e9738e6bcf174baf1633bdb1c0a79c90c3",
-    "lastmod": "2026-07-10"
-  },
-  "product:moringa-sattu": {
-    "hash": "35b674dfaf6b15c15c5a87097686065d2976b91284f142eb7c65010396049394",
-    "lastmod": "2026-07-18"
-  },
-  "product:kulfi-premix": {
-    "hash": "f9338d446a8a546cceff0aae2c5207107275da7e8d486f1115352d6defad9c4c",
-    "lastmod": "2026-07-10"
-  },
-  "product:sattu-powder": {
-    "hash": "fc0e793b6075d4ec32944d4942dbbc5b390a514bb92d430b65e2600d8c1f3d9d",
-    "lastmod": "2026-07-18"
+  "product:chai-masala": {
+    "hash": "2a3f233de36e292be9b44842df59082698a4080b2d1d89ae816d3c65dec4368d",
+    "lastmod": "2026-07-22"
   },
   "product:chatpata-sprinkle-masala": {
-    "hash": "3c4c3f7e76b8662afe3e225e09c7b103a5e224c111fa84b11344f32da2950348",
-    "lastmod": "2026-07-10"
+    "hash": "5f0cfd8c5a0c814dc138bd2c575dbff952f3a6936c8822f8bd71281f8e8cd9e6",
+    "lastmod": "2026-07-22"
   },
-  "product:poha-masala-jeerawan": {
-    "hash": "a5c391afe470d4991e9cd450860ca1b6b6c1ed33fbc1117954f89d73f03995c3",
-    "lastmod": "2026-07-10"
+  "product:chhola-masala": {
+    "hash": "36b4208e9bffb85fe0fb72e5d39cf33f6af05812c02b38fd34f70dab4e249afc",
+    "lastmod": "2026-07-22"
   },
-  "product:samosa-masala": {
-    "hash": "4815a6e344d6085516294227cc7e1fd6837b3fe1d720c324dc9404ae4ec6433d",
-    "lastmod": "2026-07-10"
+  "product:chicken-masala": {
+    "hash": "3a19c68bf43eafecd32b6eb20b05bb8ec37b66d257dc7cd75b8cf721077e1e19",
+    "lastmod": "2026-07-22"
   },
-  "product:samosa-sprinkle": {
-    "hash": "515ee4d02c77d203faa634d084a1990dce8d2d7f78079a4f5202b8ca667133db",
-    "lastmod": "2026-07-10"
+  "product:coriander-powder": {
+    "hash": "93100c583fee4776cdbb636ff6314f81f9a89fb35ca455353d2966f6d3ff693f",
+    "lastmod": "2026-07-22"
   },
-  "product:kitchen-king-masala": {
-    "hash": "e7f1ed69676aefd356201f54aadd3a18f1530ba3335f4122afe662e9c7790dbb",
-    "lastmod": "2026-07-10"
+  "product:dahi-bada-masala": {
+    "hash": "0315d2f51e871dc640cb3b32e9af110e11bbdbabefd4645a63669826058d49c6",
+    "lastmod": "2026-07-22"
   },
   "product:dal-makhani-masala": {
-    "hash": "fce9e59f8ced8508c3abefeaaafb0e31202553de7dd9aae617063d2182f95f31",
-    "lastmod": "2026-07-10"
+    "hash": "e281162f7c873e11e49fd4fb03ec822480b49e19e7e0570d5daaf59bec8d38c0",
+    "lastmod": "2026-07-22"
   },
-  "product:rajma-masala": {
-    "hash": "a5940309ab14b88acd8c845232d4897d4f91bd77078beeaebee89dcc283f4ed3",
-    "lastmod": "2026-07-10"
-  },
-  "product:shikanji-sharbat": {
-    "hash": "922460ef5748aef740d406f08d38851c0f30161a5172f8f2f46f08a1b21ac7d8",
-    "lastmod": "2026-07-10"
+  "product:dam-aloo-masala": {
+    "hash": "df88fda6aad9d167d60602e5bc40ba4b19150eb672b540e838681d6d3c507a4a",
+    "lastmod": "2026-07-22"
   },
   "product:dry-fruit-milk-shake": {
     "hash": "09bd0f765a8e21869255a078f96c8aba099b402ac32eba062ba86d0aaf7338ae",
     "lastmod": "2026-07-10"
   },
+  "product:fruit-and-salad-masala": {
+    "hash": "65d814fdd96410ae39bc735af7eabf0a3e180b51637ddd2270252f35c5c878bf",
+    "lastmod": "2026-07-22"
+  },
+  "product:garam-masala": {
+    "hash": "e4e9179e34da1bcda699e8b6273299d208adfc69bca3250c12fc5cbc52f30e29",
+    "lastmod": "2026-07-22"
+  },
+  "product:gulab-jamun-mix": {
+    "hash": "4cdf5a35097e2f4f5f1c87b94c51a68a3e4d3be0c291addce15aef4720f41e10",
+    "lastmod": "2026-07-22"
+  },
+  "product:instant-dahi-bada-mix": {
+    "hash": "28d221f8858dcf73bd6bb525fd3c55ea5db9feab45286c33640426f9f1aaca42",
+    "lastmod": "2026-07-22"
+  },
+  "product:jaljeera-masala": {
+    "hash": "fbb5d69c443b0cd15629afdb5c58209d8aade8a93fed6ae782e0254e526f5343",
+    "lastmod": "2026-07-22"
+  },
+  "product:kachauri-masala": {
+    "hash": "effa2cc933014bbaac970275342a19341b49fc372d800451239e5e3e28e87001",
+    "lastmod": "2026-07-22"
+  },
+  "product:kalonji-bharwa-masala": {
+    "hash": "4f2b27a200df7c766c403a6ae94e636347714ad45fe80d45858edda74ea902a7",
+    "lastmod": "2026-07-22"
+  },
+  "product:kasuri-methi": {
+    "hash": "fea0cecffb003c9ae2d5f12a92c4f7e4cde137bb843b54e20a24417f0c5c673b",
+    "lastmod": "2026-07-22"
+  },
+  "product:kitchen-king-masala": {
+    "hash": "e7f1ed69676aefd356201f54aadd3a18f1530ba3335f4122afe662e9c7790dbb",
+    "lastmod": "2026-07-10"
+  },
+  "product:kuch-bhi-masala": {
+    "hash": "bed179889141829757300c0265f350b26969b6e360670a89d7c9d322c2278ab2",
+    "lastmod": "2026-07-22"
+  },
+  "product:kulfi-premix": {
+    "hash": "696cf361fe46ac2e11025a5b8173502488ff395f0d8ec601b66aa1392d4849e6",
+    "lastmod": "2026-07-22"
+  },
+  "product:lemon-tea-masala": {
+    "hash": "5a8691dbfe0456194fa4378cb11cf3319d193ebea943cef6b25b4d497e4f9516",
+    "lastmod": "2026-07-22"
+  },
+  "product:matar-paneer-masala": {
+    "hash": "e41999a0f763a2d559bfba8d3806bd9e4aa05ffe7882fd2480ed90596540077f",
+    "lastmod": "2026-07-22"
+  },
+  "product:meat-masala": {
+    "hash": "874145c9c5c9afb493d937192ea61879acbdbcfa14ae41e3375d7d98d7aafd7a",
+    "lastmod": "2026-07-22"
+  },
+  "product:moringa-sattu": {
+    "hash": "1c09842094f9a64960faf303cb6dac7c4b71886eb75b844ca275376b4d6b46e7",
+    "lastmod": "2026-07-22"
+  },
+  "product:pav-bhaji-masala": {
+    "hash": "d68c4a0e4c19de7b0f63887fddb6f6e3f956a570176eca3d9e6d4120beb2bb4e",
+    "lastmod": "2026-07-22"
+  },
+  "product:poha-masala-jeerawan": {
+    "hash": "713aa8b6a45d943c8a08783cf9bf5757040995162becbbe858656b2ba936564b",
+    "lastmod": "2026-07-22"
+  },
+  "product:raita-masala": {
+    "hash": "28d1504903861f32419851a088abc85a6453049a672af0d766842e6710a98b1b",
+    "lastmod": "2026-07-22"
+  },
+  "product:rajma-masala": {
+    "hash": "6e695c0fa836bdd582bd5bcd7c9a64b0fbbcde20fde95849ea997b356f28759c",
+    "lastmod": "2026-07-22"
+  },
+  "product:red-chilli-powder": {
+    "hash": "6d7de583e9af3a544d2958043bebee181fd365f59ee6d5955c7baee89f8d0eb2",
+    "lastmod": "2026-07-22"
+  },
   "product:rose-sharbat": {
     "hash": "ed3ab9d32000e7fd2a61911d9f353003b46a937528ede371b6b98a5a41b5979c",
     "lastmod": "2026-07-10"
+  },
+  "product:sabzi-king-masala": {
+    "hash": "d82a557d408ec0e1ab7db284fcaea62830eb107716b631a52f8e2dcb320d7b7c",
+    "lastmod": "2026-07-22"
+  },
+  "product:sambhar-masala": {
+    "hash": "91e0cdaa794aa7c5b5352d9faef62d63e7c7d5e84f695aa729e1790c78e3bb87",
+    "lastmod": "2026-07-22"
+  },
+  "product:samosa-masala": {
+    "hash": "e54c0f7d2446c1b95a00b898a218684e4aa8a197a3f4af9b83e5695cb7dd51ff",
+    "lastmod": "2026-07-22"
+  },
+  "product:samosa-sprinkle": {
+    "hash": "f5840537633c5df14cbbe7b09a557ca75260328bc09d2231b9ca2293d4703f4b",
+    "lastmod": "2026-07-22"
+  },
+  "product:sattu-powder": {
+    "hash": "3e89d34674cddaa0731a886ae86472427032908b283b7176d2992cf4e32da319",
+    "lastmod": "2026-07-22"
+  },
+  "product:shahi-paneer-masala": {
+    "hash": "39e6e9c026e2a1b1ce95bc481d9339c1d7296abf03663d1524fdaaf450b11f51",
+    "lastmod": "2026-07-22"
+  },
+  "product:shahi-thandai": {
+    "hash": "94de887954dbc111cd0ec869cf510f8995aff84d772f8a533273c669a8d163ae",
+    "lastmod": "2026-07-22"
+  },
+  "product:shikanji-sharbat": {
+    "hash": "922460ef5748aef740d406f08d38851c0f30161a5172f8f2f46f08a1b21ac7d8",
+    "lastmod": "2026-07-10"
+  },
+  "product:tawa-masala": {
+    "hash": "0dc7f0552497e828382abfe842750672e69fb595ce76a5335350a56c0cd6be39",
+    "lastmod": "2026-07-22"
+  },
+  "product:turmeric-powder": {
+    "hash": "3c64e8b0827ed7ac459ebf7ad1db4c8d530ab0e7a9e1c855544c3a01b1b98319",
+    "lastmod": "2026-07-22"
   },
   "recipe:lemon-tea": {
     "hash": "24933cb4c8a39498742c379764ddda89f494ba9dbb5b492a6f46146d41274706",
