@@ -15,6 +15,8 @@
 // admin/notifications.js, independent of Telegram/email delivery.
 
 import { sendEmail } from './email.js';
+import { sendPushToRoles } from './fcm.js';
+
 
 export async function sendTelegramMessage(env, text) {
   if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) {
@@ -70,6 +72,14 @@ export async function createNotification(env, { type, title, body, referenceType
   } catch (err) {
     console.error('notification write failed:', err.message);
   }
+
+  // Push to every admin/manager device. Never throws — callers already wrap
+  // createNotification() in context.waitUntil(), so this doesn't block the response.
+  await sendPushToRoles(env, ['admin', 'manager'], {
+    title,
+    body: body || '',
+    data: { type, referenceType: referenceType || '', referenceId: String(referenceId ?? '') },
+  });
 }
 
 // ── ORDER PLACED — fires right after the D1 insert, whether or not payment
