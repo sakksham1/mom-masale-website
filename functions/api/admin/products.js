@@ -83,9 +83,9 @@ async function loadFullProduct(env, id) {
 
 export async function onRequestGet(context) {
   const { request, env } = context;
-  // Read-only for managers too — they need the full catalog to propose
-  // edits, even though only admins can write here directly.
-  const { ok } = await requireRole(request, env, ['admin', 'manager']);
+  // Read-only for packaging/warehouser too — they need the full catalog
+  // (with stock) to view/adjust inventory. Writes below stay admin-only.
+  const { ok } = await requireRole(request, env, ['admin', 'manager', 'warehouser', 'packaging']);
   if (!ok) return forbidden();
 
   const [products, sizes, aliases, faqs, related] = await Promise.all([
