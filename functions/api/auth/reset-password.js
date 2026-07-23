@@ -28,8 +28,8 @@ export async function onRequestPost(context) {
   if (!row) return jsonError('Invalid or expired reset link', 400);
   if (new Date(row.expires_at) < new Date()) return jsonError('This reset link has expired. Please start again.', 400);
 
-  const { hash, salt } = await hashPassword(newPassword);
-  await env.DB.prepare('UPDATE users SET password_hash = ?, password_salt = ? WHERE id = ?').bind(hash, salt, user.id).run();
+  const { hash, salt, iterations } = await hashPassword(newPassword);
+  await env.DB.prepare('UPDATE users SET password_hash = ?, password_salt = ?, password_iterations = ? WHERE id = ?').bind(hash, salt, iterations, user.id).run();
   await env.DB.prepare('UPDATE password_resets SET used = 1 WHERE id = ?').bind(row.id).run();
   await env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(user.id).run(); // log out everywhere
 

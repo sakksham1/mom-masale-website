@@ -28,6 +28,14 @@ export async function onRequestPost(context) {
   const user = await env.DB.prepare('SELECT id, email FROM users WHERE email = ?').bind(email).first();
   if (!user) return generic;
 
+  // Cooldown — silently no-op if a code was requested in the last 60s, so
+  // this can't be used to spam someone's inbox. Still returns the same
+  // generic response either way, so it doesn't leak anything either.
+  const recentReset = await env.DB.prepare(
+    `SELECT id FROM password_resets WHERE user_id = ? AND purpose = 'reset' AND created_at >= datetime('now', '-60 seconds')`
+  ).bind(user.id).first();
+  if (recentReset) return generic;
+
   await env.DB.prepare('UPDATE password_resets SET used = 1 WHERE user_id = ? AND used = 0 AND purpose = ?').bind(user.id, 'reset').run();
 
   const otp = genOtp();

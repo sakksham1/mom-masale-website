@@ -27,6 +27,11 @@ export async function onRequestPost(context) {
   const user = await env.DB.prepare('SELECT id, name, email FROM users WHERE email = ?').bind(email).first();
   if (!user) return generic;
 
+  const recentLogin = await env.DB.prepare(
+    `SELECT id FROM password_resets WHERE user_id = ? AND purpose = 'login' AND created_at >= datetime('now', '-60 seconds')`
+  ).bind(user.id).first();
+  if (recentLogin) return generic;
+
   // Reuse password_resets as a generic "OTP" table — invalidate any pending codes first.
   await env.DB.prepare('UPDATE password_resets SET used = 1 WHERE user_id = ? AND used = 0 AND purpose = ?').bind(user.id, 'login').run();
   

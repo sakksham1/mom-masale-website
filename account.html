@@ -79,6 +79,11 @@
             </div>
 
             <form id="login-form" class="auth-form" novalidate>
+                <div class="honeypot">
+                    <label> Leave this field empty
+                    <input type="text" id="login-website" name="website" tabindex="-1" autocomplete="off">
+                    </label>
+                </div>
                 <div class="form-group">
                     <label for="login-email">Email</label>
                     <input id="login-email" type="email" autocomplete="email" required>
@@ -159,6 +164,11 @@
             </div>
 
             <form id="signup-form" class="auth-form" hidden novalidate>
+                <div class="honeypot">
+                    <label> Leave this field empty
+                    <input type="text" id="signup-website" name="website" tabindex="-1" autocomplete="off">
+                    </label>
+                </div>
                 <div class="form-group">
                     <label for="signup-name">Full Name</label>
                     <input id="signup-name" type="text" autocomplete="name" required>

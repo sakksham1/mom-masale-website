@@ -28,6 +28,11 @@ export async function onRequestPost(context) {
     return jsonError('Invalid request body');
   }
 
+  // Honeypot — real users never fill this in.
+  if (body.website) {
+    return jsonError('Something went wrong. Please try again.', 400);
+  }
+
   const name = (body.name || '').trim();
   const email = (body.email || '').trim().toLowerCase();
   const password = body.password || '';
@@ -42,14 +47,14 @@ export async function onRequestPost(context) {
   const existing = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(email).first();
   if (existing) return jsonError('An account with this email already exists', 409);
 
-  const { hash, salt } = await hashPassword(password);
+  const { hash, salt, iterations } = await hashPassword(password);
 
   // role is set explicitly here rather than relying on a schema default —
   // this column gates admin access, so it should never depend on an implicit
   // default silently doing the right thing. See migrations/0002_fix_admin_role.sql.
   const result = await env.DB.prepare(
-    `INSERT INTO users (name, email, password_hash, password_salt, phone, role) VALUES (?, ?, ?, ?, ?, 'customer')`
-  ).bind(name, email, hash, salt, phone || null).run();
+    `INSERT INTO users (name, email, password_hash, password_salt, password_iterations, phone, role) VALUES (?, ?, ?, ?, ?, ?, 'customer')`
+  ).bind(name, email, hash, salt, iterations, phone || null).run();
 
   const userId = result.meta.last_row_id;
 
