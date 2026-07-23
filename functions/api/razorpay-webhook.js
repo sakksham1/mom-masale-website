@@ -9,6 +9,7 @@
 
 import { verifyWebhookSignature } from './_utils/razorpay.js';
 import { notifyPaymentConfirmed } from './_utils/notify.js';
+import { notifyCustomerPaymentConfirmed } from './_utils/customer-notify.js';
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -46,7 +47,7 @@ export async function onRequestPost(context) {
              razorpay_payment_id = COALESCE(razorpay_payment_id, ?),
              updated_at = datetime('now')
          WHERE razorpay_order_id = ? AND payment_status != 'paid'
-         RETURNING id, customer_name, total`
+         RETURNING id, customer_name, total, email, phone, created_at`
       ).bind(razorpayPaymentId || null, razorpayOrderId).all();
 
       // RETURNING only yields a row if this UPDATE was the one that actually
@@ -58,6 +59,7 @@ export async function onRequestPost(context) {
         context.waitUntil(notifyPaymentConfirmed(env, {
           orderId: row.id, customerName: row.customer_name, total: row.total,
         }));
+        context.waitUntil(notifyCustomerPaymentConfirmed(env, row));
       }
     }
   }

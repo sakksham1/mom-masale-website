@@ -48,7 +48,17 @@
 <div class="container" style="text-align:center;padding:5rem 1rem">
     <h1 style="font-size:2.6rem;color:var(--maroon)">✅</h1>
     <h2 style="margin-bottom:0.6rem">Thank you for your order!</h2>
-    <p style="color:var(--text-light);margin-bottom:0.4rem" id="order-number-line"></p>
+    <script>
+    (function() {
+        const params = new URLSearchParams(location.search);
+        const orderId = params.get('order');
+        const orderCode = params.get('code');
+        const el = document.getElementById('order-number-line');
+        if (el && (orderCode || orderId)) {
+            el.textContent = 'Order ' + (orderCode || ('#' + orderId));
+        }
+    })();
+</script>
     <p style="color:var(--text-light);margin-bottom:2rem">We'll reach out on WhatsApp or by phone to confirm delivery details.</p>
     <a href="account" class="btn">View Order in My Account</a>
     <a href="products" class="btn btn-outline" style="margin-left:10px">Continue Shopping</a>

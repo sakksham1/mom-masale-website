@@ -9,6 +9,7 @@
 
 import { verifyPaymentSignature } from './_utils/razorpay.js';
 import { notifyPaymentConfirmed } from './_utils/notify.js';
+import { notifyCustomerPaymentConfirmed } from './_utils/customer-notify.js';
 
 function jsonError(message, status = 400) {
   return new Response(JSON.stringify({ error: message }), {
@@ -34,7 +35,7 @@ export async function onRequestPost(context) {
   }
 
   const order = await env.DB.prepare(
-    'SELECT id, razorpay_order_id, customer_name, total, payment_status FROM orders WHERE id = ?'
+    'SELECT id, razorpay_order_id, customer_name, email, phone, total, payment_status, created_at FROM orders WHERE id = ?'
   ).bind(orderId).first();
 
   if (!order) return jsonError('Order not found', 404);
@@ -53,6 +54,7 @@ export async function onRequestPost(context) {
     context.waitUntil(notifyPaymentConfirmed(env, {
       orderId, customerName: order.customer_name, total: order.total,
     }));
+    context.waitUntil(notifyCustomerPaymentConfirmed(env, order));
   }
 
   return new Response(JSON.stringify({ success: true, orderId }), {

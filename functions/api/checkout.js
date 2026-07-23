@@ -19,6 +19,8 @@
 import { getUserFromSession } from './_utils/session.js';
 import { createRazorpayOrder } from './_utils/razorpay.js';
 import { notifyOrderPlaced } from './_utils/notify.js';
+import { formatOrderCode } from './_utils/order-code.js';
+import { sendCustomerOrderConfirmationEmail, sendCustomerOrderConfirmationWhatsApp } from './_utils/customer-notify.js';
 
 function jsonError(message, status = 400) {
   return new Response(JSON.stringify({ error: message }), {
@@ -161,6 +163,7 @@ export async function onRequestPost(context) {
   ).run();
 
   const orderId = insertResult.meta.last_row_id;
+  const orderCode = formatOrderCode(orderId, new Date().toISOString());
 
   for (const item of validatedItems) {
     await env.DB.prepare(
@@ -197,8 +200,13 @@ export async function onRequestPost(context) {
       orderId, customerName: String(customer.name).trim(), phone, total,
       paymentMethod: 'cod', items: validatedItems,
     }));
+    context.waitUntil(sendCustomerOrderConfirmationEmail(env, {
+      to: customer.email ? String(customer.email).trim() : user.email,
+      orderCode, items: validatedItems, total, paymentMethod: 'cod',
+    }));
+    context.waitUntil(sendCustomerOrderConfirmationWhatsApp(env, { phone, orderCode, total }));
     return new Response(JSON.stringify({
-      orderId, subtotal, shippingFee, total, paymentMethod: 'cod',
+      orderId, orderCode, subtotal, shippingFee, total, paymentMethod: 'cod',
     }), { status: 201, headers: { 'Content-Type': 'application/json' } });
   }
 
@@ -216,6 +224,7 @@ export async function onRequestPost(context) {
 
     return new Response(JSON.stringify({
       orderId,
+      orderCode,
       subtotal,
       shippingFee,
       total,

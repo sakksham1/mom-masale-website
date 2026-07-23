@@ -103,10 +103,11 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
         placeOrderBtn.textContent = 'Place Order';
     }
 
-    function completeOrder(orderId) {
+    function completeOrder(orderId, orderCode) {
         saveCart([]);
         updateCartBadge();
-        window.location.href = `order-confirmation?order=${encodeURIComponent(orderId)}`;
+        const codeParam = orderCode ? `&code=${encodeURIComponent(orderCode)}` : '';
+        window.location.href = `order-confirmation?order=${encodeURIComponent(orderId)}${codeParam}`;
     }
 
     formEl.addEventListener('submit', async e => {
@@ -169,7 +170,7 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
         }
 
         if (data.paymentMethod === 'cod') {
-            completeOrder(data.orderId);
+            completeOrder(data.orderId, data.orderCode);
             return;
         }
 
@@ -198,7 +199,7 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
                     const verifyData = await verifyRes.json();
 
                     if (verifyRes.ok && verifyData.success) {
-                        completeOrder(data.orderId);
+                        completeOrder(data.orderId, data.orderCode);
                     } else {
                         showError(
                             'Payment received but verification failed. Please contact us with your order number: ' + data.orderId

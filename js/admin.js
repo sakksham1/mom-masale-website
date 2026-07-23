@@ -143,10 +143,20 @@
         }
     }
 
+    function formatOrderCode(id, createdAt) {
+        const iso = String(createdAt).includes('T') ? createdAt : String(createdAt).replace(' ', 'T') + 'Z';
+        const d = new Date(iso);
+        const y = d.getUTCFullYear();
+        const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(d.getUTCDate()).padStart(2, '0');
+        return `MM-${y}${m}${day}-${String(id).padStart(4, '0')}`;
+    }
+
     function renderOrderCard(order) {
         const itemsHtml = (order.items || []).map(item => `
             <div class="order-item-row">
                 <span>${escapeHtml(item.product_name)} (${escapeHtml(item.size)}) × ${item.qty}</span>
+                <span class="order-id">Order ${formatOrderCode(order.id, order.created_at)} — ${escapeHtml(order.customer_name)}</span>
                 <span>${rupee(item.unit_price * item.qty)}</span>
             </div>
         `).join('');
