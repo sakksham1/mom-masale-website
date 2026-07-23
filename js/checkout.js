@@ -32,6 +32,7 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
             const res = await fetch('/api/auth/me');
             const data = await res.json();
             if (!data.user) { showLoginRequired(); return; }
+            if (!data.user.emailVerified) { showVerificationRequired(); return; }
         } catch (err) {
             showLoginRequired();
             return;
@@ -40,7 +41,20 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
     }
 
     function showLoginRequired() {
-        if (loginRequiredEl) loginRequiredEl.hidden = false;
+        if (loginRequiredEl) {
+            loginRequiredEl.hidden = false;
+            loginRequiredEl.innerHTML = 'Please <a href="account?redirect=checkout">log in or create an account</a> to complete checkout — this lets you track your order afterward.';
+        }
+        emptyEl.hidden = true;
+        formEl.hidden = true;
+        summaryEl.hidden = true;
+    }
+
+    function showVerificationRequired() {
+        if (loginRequiredEl) {
+            loginRequiredEl.hidden = false;
+            loginRequiredEl.innerHTML = 'Please <a href="account">verify your email</a> before checking out.';
+        }
         emptyEl.hidden = true;
         formEl.hidden = true;
         summaryEl.hidden = true;
@@ -159,7 +173,12 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
             data = await res.json();
 
             if (!res.ok) {
-                showError(data.error || 'Something went wrong. Please try again.');
+                if (data.code === 'email_not_verified') {
+                    errorEl.innerHTML = 'Please <a href="account" style="color:#c0392b;text-decoration:underline;font-weight:600">verify your email</a> before placing an order.';
+                    errorEl.classList.add('show');
+                } else {
+                    showError(data.error || 'Something went wrong. Please try again.');
+                }
                 resetButton();
                 return;
             }

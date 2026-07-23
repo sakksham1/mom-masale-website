@@ -63,9 +63,10 @@ export async function getUserFromSession(request, env) {
   const token = getSessionToken(request);
   if (!token) return null;
 
-  const row = await env.DB.prepare(
+   const row = await env.DB.prepare(
     `SELECT users.id as id, users.name as name, users.email as email, users.phone as phone,
-            users.role as role, sessions.expires_at as expires_at, sessions.last_seen_at as last_seen_at
+            users.role as role, users.email_verified as email_verified,
+            sessions.expires_at as expires_at, sessions.last_seen_at as last_seen_at
      FROM sessions
      JOIN users ON users.id = sessions.user_id
      WHERE sessions.id = ?`
@@ -85,5 +86,5 @@ export async function getUserFromSession(request, env) {
     await env.DB.prepare(`UPDATE sessions SET last_seen_at = datetime('now') WHERE id = ?`).bind(token).run();
   }
 
-  return { id: row.id, name: row.name, email: row.email, phone: row.phone, role: row.role };
+  return { id: row.id, name: row.name, email: row.email, phone: row.phone, role: row.role, emailVerified: !!row.email_verified }
 }

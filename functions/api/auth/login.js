@@ -52,7 +52,7 @@ export async function onRequestPost(context) {
   }
 
   const user = await env.DB.prepare(
-    'SELECT id, name, email, phone, role, password_hash, password_salt, password_iterations FROM users WHERE email = ?'
+    'SELECT id, name, email, phone, role, email_verified, password_hash, password_salt, password_iterations FROM users WHERE email = ?'
   ).bind(email).first();
 
   // Deliberately generic — don't reveal whether the email exists.
@@ -83,7 +83,7 @@ export async function onRequestPost(context) {
   const { token, expiresAt } = await createSession(request, env, user.id, platform);
 
   return new Response(
-    JSON.stringify({ user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role } }),
+    JSON.stringify({ user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role, emailVerified: !!user.email_verified } }),
     {
       status: 200,
       headers: {

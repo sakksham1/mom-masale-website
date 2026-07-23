@@ -226,6 +226,30 @@
 
     </div>
 
+    <!-- ── LOGGED IN, EMAIL NOT VERIFIED: blocks entry until confirmed ── -->
+    <div id="verify-email-section" hidden>
+        <div class="form-card">
+            <h2 class="section-title">Verify Your Email</h2>
+            <p style="color:var(--text-light);margin-bottom:1rem">
+                We've sent a 6-digit code to <strong id="verify-email-address"></strong>. Enter it below to activate your account.
+            </p>
+            <form id="verify-email-form" novalidate>
+                <div class="form-group">
+                    <label for="verify-email-otp">Verification Code</label>
+                    <input id="verify-email-otp" type="text" inputmode="numeric" maxlength="6" required>
+                </div>
+                <div class="field-error" id="verify-email-error"></div>
+                <button type="submit" class="btn auth-submit-btn">Verify Email</button>
+            </form>
+            <p style="text-align:center;margin-top:1rem">
+                <a href="#" id="resend-verify-link" style="color:var(--maroon);font-size:0.88rem;font-weight:600">Resend code</a>
+            </p>
+            <p style="text-align:center;margin-top:0.8rem">
+                <button type="button" class="btn btn-outline" id="verify-logout-btn" style="width:100%">Log Out</button>
+            </p>
+        </div>
+    </div>
+
 </div>
 </main>
 <footer>

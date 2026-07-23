@@ -45,29 +45,31 @@ export async function onRequestPost(context) {
   const email = (payload.email || '').trim().toLowerCase();
   const name = payload.name || email.split('@')[0];
 
-  // 1) Already linked to a Google identity?
-  let user = await env.DB.prepare('SELECT id, name, email, phone, role FROM users WHERE google_id = ?').bind(googleId).first();
+   // 1) Already linked to a Google identity?
+  let user = await env.DB.prepare('SELECT id, name, email, phone, role, email_verified FROM users WHERE google_id = ?').bind(googleId).first();
 
-  // 2) Existing email/password account with the same email — link it.
+  // 2) Existing email/password account with the same email — link it. Google
+  // has already confirmed ownership of this address, so mark it verified too.
   if (!user) {
-    const existing = await env.DB.prepare('SELECT id, name, email, phone, role FROM users WHERE email = ?').bind(email).first();
+    const existing = await env.DB.prepare('SELECT id, name, email, phone, role, email_verified FROM users WHERE email = ?').bind(email).first();
     if (existing) {
-      await env.DB.prepare('UPDATE users SET google_id = ? WHERE id = ?').bind(googleId, existing.id).run();
-      user = existing;
+      await env.DB.prepare('UPDATE users SET google_id = ?, email_verified = 1 WHERE id = ?').bind(googleId, existing.id).run();
+      user = { ...existing, email_verified: 1 };
     }
   }
 
   // 3) Brand new account. role is set explicitly — see signup.js for why.
+  // email_verified = 1 since Google already confirmed this address.
   if (!user) {
     const result = await env.DB.prepare(
-      `INSERT INTO users (name, email, password_hash, password_salt, google_id, role) VALUES (?, ?, '', '', ?, 'customer')`
+      `INSERT INTO users (name, email, password_hash, password_salt, google_id, role, email_verified) VALUES (?, ?, '', '', ?, 'customer', 1)`
     ).bind(name, email, googleId).run();
-    user = { id: result.meta.last_row_id, name, email, phone: null, role: 'customer' };
+    user = { id: result.meta.last_row_id, name, email, phone: null, role: 'customer', email_verified: 1 };
   }
 
   const { token, expiresAt } = await createSession(request, env, user.id, platform);
 
-  return new Response(JSON.stringify({ user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role } }), {
+  return new Response(JSON.stringify({ user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role, emailVerified: !!user.email_verified } }), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',

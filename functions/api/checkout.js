@@ -142,6 +142,12 @@ export async function onRequestPost(context) {
   if (!user) {
     return jsonError('Please log in to place an order.', 401);
   }
+  if (!user.emailVerified) {
+    return new Response(JSON.stringify({
+      error: 'Please verify your email before placing an order.',
+      code: 'email_not_verified',
+    }), { status: 403, headers: { 'Content-Type': 'application/json' } });
+  }
   const initialPaymentStatus = paymentMethod === 'cod' ? 'cod' : 'created';
 
   const insertResult = await env.DB.prepare(

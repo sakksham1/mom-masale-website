@@ -5,6 +5,7 @@
 (function () {
     const authSection = document.getElementById('auth-section');
     const profileSection = document.getElementById('profile-section');
+    const verifyEmailSection = document.getElementById('verify-email-section');
 
     // ── GOOGLE SIGN-IN ──
     const GOOGLE_CLIENT_ID = '1032815088680-e28jfn9hvjrfkm57js1vlul37tb0rf7k.apps.googleusercontent.com';
@@ -112,10 +113,30 @@
     function showAuth() {
         authSection.hidden = false;
         profileSection.hidden = true;
+        verifyEmailSection.hidden = true;
+    }
+
+    function showVerifyGate(user) {
+        authSection.hidden = true;
+        profileSection.hidden = true;
+        verifyEmailSection.hidden = false;
+        document.getElementById('verify-email-address').textContent = user.email;
+        // Send a code the first time this gate appears on a page load — the
+        // endpoint's own 60s cooldown means this is a no-op if signup (or a
+        // prior visit) already sent one recently.
+        if (!window._verifyOtpRequested) {
+            window._verifyOtpRequested = true;
+            fetch('/api/auth/send-verify-otp', { method: 'POST' }).catch(() => {});
+        }
     }
 
     function showProfile(user) {
+        if (!user.emailVerified) {
+            showVerifyGate(user);
+            return;
+        }
         authSection.hidden = true;
+        verifyEmailSection.hidden = true;
         profileSection.hidden = false;
 
         document.getElementById('profile-name').textContent = user.name;
@@ -215,6 +236,56 @@
         showAuth();
         loginForm.reset();
         signupForm.reset();
+    });
+
+    // ── EMAIL VERIFICATION GATE ──
+    document.getElementById('verify-logout-btn')?.addEventListener('click', async () => {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (err) {}
+        window._verifyOtpRequested = false;
+        showAuth();
+        loginForm.reset();
+        signupForm.reset();
+    });
+
+    document.getElementById('verify-email-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('verify-email-error');
+        errorEl.classList.remove('show');
+        const otp = document.getElementById('verify-email-otp').value.trim();
+
+        const btn = e.target.querySelector('.auth-submit-btn');
+        btn.disabled = true; btn.textContent = 'Verifying…';
+        try {
+            const res = await fetch('/api/auth/verify-email', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ otp }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                errorEl.textContent = data.error || 'Incorrect code.';
+                errorEl.classList.add('show');
+                return;
+            }
+            const meRes = await fetch('/api/auth/me');
+            const meData = await meRes.json();
+            if (meData.user) showProfile(meData.user);
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            btn.disabled = false; btn.textContent = 'Verify Email';
+        }
+    });
+
+    document.getElementById('resend-verify-link')?.addEventListener('click', async e => {
+        e.preventDefault();
+        try {
+            await fetch('/api/auth/send-verify-otp', { method: 'POST' });
+        } catch (err) {}
+        if (typeof showCartToast === 'function') showCartToast('Verification code sent.');
+        else alert('If your email needs a new code, one has just been sent.');
     });
 
     // ── ORDER HISTORY ──
