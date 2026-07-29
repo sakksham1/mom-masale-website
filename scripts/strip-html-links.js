@@ -38,7 +38,7 @@ const DRY_RUN = process.argv.includes('--dry-run');
 
 // ── every real top-level page on the site (filename without .html) ──
 const TOP_LEVEL_PAGES = [
-  'index', 'products', 'recipes', 'guide', 'about', 'contact',
+  'index', 'products', 'recipes', 'spice-guide', 'guide', 'about', 'contact',
   'account', 'checkout', 'order-confirmation', '404', 'admin', 'bulk-orders',
 ];
 

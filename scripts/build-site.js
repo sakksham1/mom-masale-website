@@ -58,7 +58,7 @@ const STATIC_PAGES = [
   { loc: '/', priority: '1.0', file: 'index.html' },
   { loc: '/products', priority: '0.9', file: 'products.html' },
   { loc: '/recipes', priority: '0.85', file: 'recipes.html' },
-  { loc: '/spice-guide.html', priority: '0.8', file: 'spice-guide.html' },
+  { loc: '/spice-guide', priority: '0.8', file: 'spice-guide.html' },
   { loc: '/about', priority: '0.7', file: 'about.html' },
   { loc: '/contact', priority: '0.6', file: 'contact.html' },
 ];
@@ -618,8 +618,8 @@ function buildBlogBreadcrumbSchema(b) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Spice Guide', item: `${SITE_URL}/spice-guide.html` },
       { '@type': 'ListItem', position: 3, name: b.title, item: `${SITE_URL}/guide/${b.slug}` },
-      { '@type': 'ListItem', position: 3, name: b.title, item: `${SITE_URL}/guide/${b.slug}.html` },
     ],
   };
 }

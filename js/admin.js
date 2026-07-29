@@ -225,7 +225,8 @@
         const listEl = document.getElementById('products-list');
         listEl.innerHTML = '<p class="empty-state-msg">Loading…</p>';
         try {
-            allProducts = await api('/api/admin/products');
+            const data = await api('/api/admin/products');
+            allProducts = data.products || [];
             renderProductsList();
         } catch (err) {
             listEl.innerHTML = `<p class="empty-state-msg">Could not load products: ${escapeHtml(err.message)}</p>`;
@@ -347,7 +348,7 @@
             listEl.innerHTML = data.customers.map(c => `
                 <div class="admin-row">
                     <span>
-                        <strong>${escapeHtml(c.name)}</strong>${c.is_admin ? ' <span class="essentials-chip">Admin</span>' : ''}<br>
+                        <strong>${escapeHtml(c.name)}</strong>${c.role === 'admin' ? ' <span class="essentials-chip">Admin</span>' : ''}<br>
                         <span style="font-size:0.82rem;color:var(--text-light)">${escapeHtml(c.email)}${c.phone ? ' · ' + escapeHtml(c.phone) : ''}</span>
                     </span>
                     <span>${c.order_count} order(s) · ${rupee(c.lifetime_spend)}</span>

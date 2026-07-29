@@ -11,6 +11,7 @@
         products: {
             label: 'Products',
             listPath: '/api/admin/products',
+            unwrap: (data) => data.products || [],
             createPath: '/api/admin/products',
             updatePath: '/api/admin/products',       // PATCH { slug, updates }
             deletePath: (slug) => `/api/admin/products?slug=${encodeURIComponent(slug)}`,
@@ -122,7 +123,8 @@
         panel.innerHTML = '<p class="empty-state-msg">Loading…</p>';
         const config = RESOURCES[resourceKey];
         try {
-            allData[resourceKey] = await api(config.listPath);
+            const data = await api(config.listPath);
+            allData[resourceKey] = config.unwrap ? config.unwrap(data) : data;
             renderCollection(resourceKey);
         } catch (err) {
             panel.innerHTML = `<p class="empty-state-msg">Could not load: ${escapeHtml(err.message)}</p>`;
