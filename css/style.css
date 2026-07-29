@@ -4295,3 +4295,38 @@ nav > .theme-toggle {
     .admin-product-row { flex-wrap: wrap; }
     .admin-order-controls { flex-direction: column; align-items: stretch; }
 }
+
+/* ── Custom scrollbar (webkit: Chrome/Edge/Safari) ── */
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--gold);
+    border-radius: 10px;
+    border: 2px solid var(--cream-dark);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--maroon);
+}
+[data-theme="dark"] ::-webkit-scrollbar-track {
+    background: #090e16;
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: var(--gold);
+    border-color: #090e16;
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-light);
+}
+
+/* ── Firefox ── */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) var(--cream-dark);
+}
+[data-theme="dark"] html {
+    scrollbar-color: var(--gold) #090e16;
+}
