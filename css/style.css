@@ -215,7 +215,10 @@ nav a.active:hover {
 }
 
 .hamburger .bar:nth-child(1) { top: 14px; }
-.hamburger .bar:nth-child(2) { top: 21px; }
+.hamburger .bar:nth-child(2) {
+    top: 21px;
+    transition: transform 0.32s cubic-bezier(0.55, 0, 0.85, 0.35), opacity 0.22s ease;
+}
 .hamburger .bar:nth-child(3) { top: 28px; }
 
 .hamburger.open .bar:nth-child(1) {
@@ -224,7 +227,7 @@ nav a.active:hover {
 }
 .hamburger.open .bar:nth-child(2) {
     opacity: 0;
-    transform: translateX(-60%);
+    transform: translateX(18px) rotate(180deg) scale(0.4);
 }
 .hamburger.open .bar:nth-child(3) {
     top: 21px;
@@ -4329,4 +4332,33 @@ html {
 }
 [data-theme="dark"] html {
     scrollbar-color: var(--gold) #090e16;
+}
+
+/* ── VIEW TRANSITIONS (cross-document nav — progressive enhancement,
+   browsers without support just navigate normally, no fallback needed) ── */
+@view-transition {
+    navigation: auto;
+}
+
+footer { view-transition-name: site-footer; }
+.logo { view-transition-name: site-logo; }
+
+/* Active nav pill morphs from its old position to its new one across pages */
+nav a.active { view-transition-name: nav-active-pill; }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.22s;
+}
+::view-transition-old(nav-active-pill),
+::view-transition-new(nav-active-pill) {
+    animation-duration: 0.28s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
 }
