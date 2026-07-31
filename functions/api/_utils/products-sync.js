@@ -18,13 +18,32 @@ function groupBy(rows, key) {
   return out;
 }
 
+// First-name + last-initial for public display — avoids exposing a
+// reviewer's full name in JSON-LD that ships to every visitor/crawler.
+function shortAuthorName(fullName) {
+  const parts = String(fullName || 'Customer').trim().split(/\s+/);
+  if (parts.length === 1) return parts[0];
+  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+}
+
 export async function buildProductsJsonArray(env) {
-  const [products, sizes, aliases, faqs, related] = await Promise.all([
+  const [products, sizes, aliases, faqs, related, reviewAgg, topReviews] = await Promise.all([
     env.DB.prepare('SELECT * FROM products ORDER BY slug').all(),
     env.DB.prepare('SELECT * FROM product_sizes ORDER BY product_id, sort_order, id').all(),
     env.DB.prepare('SELECT * FROM product_aliases ORDER BY product_id, id').all(),
     env.DB.prepare('SELECT * FROM product_faq ORDER BY product_id, sort_order, id').all(),
     env.DB.prepare('SELECT * FROM product_related').all(),
+    env.DB.prepare(
+      `SELECT product_id, COUNT(*) as cnt, AVG(rating) as avg_rating
+       FROM product_reviews WHERE status = 'approved' GROUP BY product_id`
+    ).all(),
+    // Capped per-product below (not in SQL) — this pulls all approved
+    // reviews once, cheaply, rather than N queries (one per product).
+    env.DB.prepare(
+      `SELECT pr.product_id, pr.rating, pr.body, pr.created_at, u.name as author_name
+       FROM product_reviews pr JOIN users u ON u.id = pr.user_id
+       WHERE pr.status = 'approved' ORDER BY pr.product_id, pr.created_at DESC`
+    ).all(),
   ]);
 
   const productRows = products.results || [];
@@ -33,6 +52,24 @@ export async function buildProductsJsonArray(env) {
   const aliasesByProduct = groupBy(aliases.results || [], 'product_id');
   const faqByProduct = groupBy(faqs.results || [], 'product_id');
   const relatedByProduct = groupBy(related.results || [], 'product_id');
+
+  const ratingByProduct = new Map(
+    (reviewAgg.results || []).map(r => [r.product_id, { reviewCount: r.cnt, ratingValue: Math.round(r.avg_rating * 10) / 10 }])
+  );
+  const MAX_REVIEWS_IN_SCHEMA = 5;
+  const reviewsByProduct = new Map();
+  for (const r of topReviews.results || []) {
+    const list = reviewsByProduct.get(r.product_id) || [];
+    if (list.length < MAX_REVIEWS_IN_SCHEMA) {
+      list.push({
+        rating: r.rating,
+        body: r.body,
+        authorName: shortAuthorName(r.author_name),
+        datePublished: String(r.created_at).slice(0, 10),
+      });
+    }
+    reviewsByProduct.set(r.product_id, list);
+  }
 
   return productRows.map(p => {
     const productSizes = sizesByProduct[p.id] || [];
@@ -66,6 +103,11 @@ export async function buildProductsJsonArray(env) {
       relatedProducts: (relatedByProduct[p.id] || [])
         .map(r => slugById.get(r.related_product_id))
         .filter(Boolean),
+      // Omitted entirely (not even a zeroed object) until the first review
+      // is approved — buildProductSchema() in build-site.js only emits
+      // aggregateRating/review when these are present.
+      ...(ratingByProduct.has(p.id) ? { aggregateRating: ratingByProduct.get(p.id) } : {}),
+      ...(reviewsByProduct.has(p.id) ? { reviews: reviewsByProduct.get(p.id) } : {}),
     };
   });
 }

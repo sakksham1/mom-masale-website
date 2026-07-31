@@ -4494,3 +4494,75 @@ nav a.active { view-transition-name: nav-active-pill; }
 [data-theme="dark"] .shipping-progress.warning .shipping-progress-text {
     color: #e67e6b;
 }
+
+/* ── PRODUCT REVIEWS ── */
+.reviews-section { max-width: 950px; margin: 0 auto; }
+.review-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+.review-summary-value { font-size: 2rem; font-weight: 700; color: var(--maroon); }
+[data-theme="dark"] .review-summary-value { color: var(--gold); }
+.review-summary-stars { color: var(--gold); font-size: 1.3rem; letter-spacing: 2px; }
+.review-summary-count { color: var(--text-light); font-size: 0.9rem; }
+
+.review-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+.review-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.3rem;
+}
+.review-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+.review-card-stars { color: var(--gold); font-size: 0.95rem; letter-spacing: 1px; }
+.review-card-author { font-weight: 700; color: var(--brown); font-size: 0.9rem; }
+[data-theme="dark"] .review-card-author { color: var(--gold-light); }
+.review-card-date { color: var(--text-light); font-size: 0.78rem; margin-left: auto; }
+.review-card-title { font-size: 0.98rem; color: var(--maroon); margin-bottom: 4px; }
+[data-theme="dark"] .review-card-title { color: var(--gold); }
+.review-card-body { color: var(--text); font-size: 0.93rem; line-height: 1.6; }
+.review-card-images { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.review-image-thumb {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+}
+.review-status-msg {
+    background: rgba(212,160,23,0.12);
+    border: 1px solid rgba(212,160,23,0.35);
+    border-radius: 8px;
+    padding: 0.8rem 1.1rem;
+    font-size: 0.9rem;
+    color: var(--maroon);
+}
+[data-theme="dark"] .review-status-msg { color: var(--gold); }
+
+.star-picker { display: flex; gap: 4px; }
+.star-picker-btn {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--cream-dark);
+    cursor: pointer;
+    padding: 2px;
+    transition: color 0.15s;
+}
+[data-theme="dark"] .star-picker-btn { color: rgba(255,255,255,0.15); }
+.star-picker-btn.active { color: var(--gold); }
+
+.review-image-preview { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.review-image-preview .review-image-thumb { width: 56px; height: 56px; }
+
+#review-form-mount .form-card { margin-top: 1rem; max-width: none; }

@@ -246,6 +246,7 @@ function findBlogForRecipe(recipeSlug, blogPosts) {
 function buildProductSchema(p) {
   const priceValues = Object.values(p.prices || {});
   const lowPrice = priceValues.length ? Math.min(...priceValues) : undefined;
+  const highPrice = priceValues.length ? Math.max(...priceValues) : undefined;
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -259,9 +260,33 @@ function buildProductSchema(p) {
       '@type': 'AggregateOffer',
       priceCurrency: 'INR',
       lowPrice: lowPrice,
+      highPrice: highPrice,
+      offerCount: priceValues.length,
       availability: 'https://schema.org/InStock',
       url: `${SITE_URL}/products/${p.slug}.html`,
     };
+  }
+  // Populated only once a product has approved reviews — see
+  // _utils/products-sync.js, which attaches these fields when it writes
+  // data/products.json. Absent entirely until the first review is approved,
+  // so no empty/fake aggregateRating ever gets emitted.
+  if (p.aggregateRating && p.aggregateRating.reviewCount > 0) {
+    schema.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: p.aggregateRating.ratingValue,
+      reviewCount: p.aggregateRating.reviewCount,
+      bestRating: 5,
+      worstRating: 1,
+    };
+  }
+  if (Array.isArray(p.reviews) && p.reviews.length) {
+    schema.review = p.reviews.map(r => ({
+      '@type': 'Review',
+      reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+      author: { '@type': 'Person', name: r.authorName },
+      reviewBody: r.body,
+      datePublished: r.datePublished,
+    }));
   }
   return schema;
 }
@@ -338,6 +363,47 @@ function buildFaqHtml(p) {
     <h2 class="section-title">Frequently Asked Questions</h2>
     <div class="faq-list">${items}
     </div>
+</div>`;
+}
+
+function starString(rating) {
+  const rounded = Math.max(0, Math.min(5, Math.round(rating)));
+  return '★'.repeat(rounded) + '☆'.repeat(5 - rounded);
+}
+
+// Static SSR: rating summary + up to 5 approved reviews (already capped and
+// attached to p.reviews by products-sync.js — no extra DB/API call at build
+// time). Deliberately excludes review images here to keep page weight down;
+// the live js/product-reviews.js fetch replaces this list with the full
+// version (images included) once the page loads.
+function buildReviewsHtml(p) {
+  const agg = p.aggregateRating;
+  const reviews = p.reviews || [];
+
+  const summaryHtml = (agg && agg.reviewCount)
+    ? `<div class="review-summary">
+                <span class="review-summary-value">${agg.ratingValue.toFixed(1)}</span>
+                <span class="review-summary-stars" aria-hidden="true">${starString(agg.ratingValue)}</span>
+                <span class="review-summary-count">Based on ${agg.reviewCount} review${agg.reviewCount === 1 ? '' : 's'}</span>
+            </div>`
+    : `<p class="empty-state-msg">No reviews yet — be the first to review this product.</p>`;
+
+  const listHtml = reviews.map(r => `
+            <div class="review-card">
+                <div class="review-card-header">
+                    <span class="review-card-stars" aria-hidden="true">${starString(r.rating)}</span>
+                    <span class="review-card-author">${escapeHtml(r.authorName)}</span>
+                    <span class="review-card-date">${escapeHtml(r.datePublished)}</span>
+                </div>
+                <p class="review-card-body">${escapeHtml(r.body)}</p>
+            </div>`).join('');
+
+  return `
+<div class="container reviews-section">
+    <h2 class="section-title">Customer Reviews</h2>
+    <div id="review-summary-mount">${summaryHtml}</div>
+    <div id="reviews-list-mount" class="review-list" data-product-slug="${p.slug}">${listHtml}</div>
+    <div id="review-form-mount" data-product-slug="${p.slug}"></div>
 </div>`;
 }
 
@@ -420,6 +486,7 @@ function renderProduct(p, allProducts, recipes, blogPosts, template) {
     '{{PRODUCT_COMING_SOON_RIBBON}}': p.comingSoon ? '<span class="launching-ribbon">Launching Soon</span>' : '',
     '{{PRODUCT_PURCHASE_BLOCK}}': buildPurchaseBlockHtml(p),
     '{{PRODUCT_FAQ_BLOCK}}': buildFaqHtml(p),
+    '{{PRODUCT_REVIEWS_BLOCK}}': buildReviewsHtml(p),
     '{{PRODUCT_RELATED_BLOCK}}': buildRelatedProductsForProductHtml(p, allProducts),
     '{{PRODUCT_RELATED_RECIPES_BLOCK}}': buildRelatedRecipesForProductHtml(p, recipes),
     '{{PRODUCT_RELATED_BLOG_BLOCK}}': buildRelatedBlogForProductHtml(p, blogPosts),
