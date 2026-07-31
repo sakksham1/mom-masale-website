@@ -9,11 +9,13 @@
 // only product name + size + qty.
 
 (function () {
-let DISPLAY_FREE_SHIPPING_THRESHOLD = 499; // fallback until settings load
-let DISPLAY_FLAT_SHIPPING_FEE = 40;
+let DISPLAY_FREE_SHIPPING_THRESHOLD = 299; // fallback until settings load
+let DISPLAY_SMALL_ORDER_THRESHOLD = 100;
+let DISPLAY_SMALL_ORDER_FEE = 50;
 fetch('data/settings.json').then(r => r.json()).then(s => {
     DISPLAY_FREE_SHIPPING_THRESHOLD = s.commerce.freeShippingThreshold;
-    DISPLAY_FLAT_SHIPPING_FEE = s.commerce.flatShippingFee;
+    DISPLAY_SMALL_ORDER_THRESHOLD = s.commerce.smallOrderThreshold;
+    DISPLAY_SMALL_ORDER_FEE = s.commerce.smallOrderFee;
 }).catch(() => {});
 
     const emptyEl = document.getElementById('checkout-empty');
@@ -95,13 +97,91 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
         `).join('');
 
         const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
-        const shippingFee = subtotal >= DISPLAY_FREE_SHIPPING_THRESHOLD ? 0 : DISPLAY_FLAT_SHIPPING_FEE;
-        const total = subtotal + shippingFee;
 
         document.getElementById('checkout-subtotal').textContent = `₹${subtotal}`;
-        document.getElementById('checkout-shipping').textContent = shippingFee === 0 ? 'Free' : `₹${shippingFee}`;
-        document.getElementById('checkout-total').textContent = `₹${total}`;
+
+        const shippingLabelEl = document.getElementById('checkout-shipping-label');
+        const shippingValueEl = document.getElementById('checkout-shipping');
+
+        if (subtotal < DISPLAY_SMALL_ORDER_THRESHOLD) {
+            // Flat fee, doesn't depend on pincode — known immediately.
+            if (shippingLabelEl) shippingLabelEl.textContent = `Small Order Fee (orders under ₹${DISPLAY_SMALL_ORDER_THRESHOLD})`;
+            shippingValueEl.textContent = `₹${DISPLAY_SMALL_ORDER_FEE}`;
+            document.getElementById('checkout-total').textContent = `₹${subtotal + DISPLAY_SMALL_ORDER_FEE}`;
+        } else {
+            if (shippingLabelEl) shippingLabelEl.textContent = 'Shipping';
+            const freeShipping = subtotal >= DISPLAY_FREE_SHIPPING_THRESHOLD;
+            shippingValueEl.textContent = freeShipping ? 'Free' : 'Check below ↓';
+            document.getElementById('checkout-total').textContent = freeShipping ? `₹${subtotal}` : `₹${subtotal} + shipping`;
+        }
     }
+
+    const checkShippingBtn = document.getElementById('check-shipping-btn');
+    const shippingResultEl = document.getElementById('pincode-shipping-result');
+    const infoBtn = document.getElementById('pincode-info-btn');
+    const infoOverlay = document.getElementById('pincode-info-overlay');
+    const infoPopover = document.getElementById('pincode-info-popover');
+    const infoClose = document.getElementById('pincode-info-close');
+
+    function openPincodeInfo() {
+        infoOverlay.classList.add('active');
+        infoPopover.hidden = false;
+        infoBtn.setAttribute('aria-expanded', 'true');
+    }
+    function closePincodeInfo() {
+        infoOverlay.classList.remove('active');
+        infoPopover.hidden = true;
+        infoBtn.setAttribute('aria-expanded', 'false');
+    }
+    infoBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+       openPincodeInfo();
+    });
+    infoOverlay?.addEventListener('click', closePincodeInfo);
+    infoClose?.addEventListener('click', closePincodeInfo);
+
+    checkShippingBtn?.addEventListener('click', async () => {
+        const pincode = document.getElementById('checkout-pincode').value.trim();
+        if (!/^\d{6}$/.test(pincode)) {
+            shippingResultEl.hidden = false;
+            shippingResultEl.classList.add('error');
+            shippingResultEl.textContent = 'Enter a valid 6-digit pincode first.';
+            return;
+        }
+
+        const cart = getCartItems();
+        const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
+
+        checkShippingBtn.disabled = true;
+        checkShippingBtn.textContent = 'Checking…';
+        try {
+            const res = await fetch('/api/shipping-estimate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pincode, subtotal }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Could not check shipping.');
+
+            shippingResultEl.hidden = false;
+            shippingResultEl.classList.remove('error');
+            shippingResultEl.textContent = data.feeType === 'small-order'
+                ? `${data.label} — ₹${data.fee}`
+                : data.fee === 0
+                    ? `${data.area} — Free shipping`
+                    : `${data.area} — ₹${data.fee} shipping`;
+
+            document.getElementById('checkout-shipping').textContent = data.fee === 0 ? 'Free' : `₹${data.fee}`;
+            document.getElementById('checkout-total').textContent = `₹${subtotal + data.fee}`;
+        } catch (err) {
+            shippingResultEl.hidden = false;
+            shippingResultEl.classList.add('error');
+            shippingResultEl.textContent = err.message || 'Could not reach the server.';
+        } finally {
+            checkShippingBtn.disabled = false;
+           checkShippingBtn.textContent = 'Check Shipping';
+        }
+    });
 
     function showError(msg) {
         errorEl.textContent = msg;
@@ -139,8 +219,12 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
         const pincode = document.getElementById('checkout-pincode').value.trim();
         const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value;
 
-        if (!name || !phone || !address || !city || !pincode) {
+        if (!name || !phone || !email || !address || !city || !pincode) {
             showError('Please fill in all required fields.');
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showError('Please enter a valid email address.');
             return;
         }
         if (!/^[6-9]\d{9}$/.test(phone)) {

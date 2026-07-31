@@ -11,8 +11,14 @@
   },
   "commerce": {
     "discountPercent": 25,
-    "freeShippingThreshold": 499,
-    "flatShippingFee": 40
-  },
+    "freeShippingThreshold": 299,
+    "smallOrderThreshold": 100,
+    "smallOrderFee": 50,
+    "shippingZones": {
+      "local": { "label": "Kanpur & Unnao", "prefixes": ["208", "209"], "fee": 0 },
+      "up": { "label": "Rest of Uttar Pradesh", "prefixRange": [20, 28], "fee": 30 },
+      "national": { "label": "Rest of India", "fee": 50 }
+    }
+   },
   "promoBannerText": "🚚 Free Shipping & Same-Day Delivery in Kanpur"
 }

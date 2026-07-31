@@ -406,6 +406,17 @@ function updateShippingProgress(total) {
     const text = document.getElementById('shipping-progress-text');
     const fill = document.getElementById('shipping-progress-fill');
     if (!wrap || !text || !fill) return;
+    wrap.classList.remove('unlocked', 'warning');
+
+    if (total < SMALL_ORDER_THRESHOLD_CFG) {
+        const remaining = SMALL_ORDER_THRESHOLD_CFG - total;
+        const pct = Math.min((total / SMALL_ORDER_THRESHOLD_CFG) * 100, 100);
+        fill.style.width = `${pct}%`;
+        text.textContent = `⚠️ Add ₹${remaining} more to avoid the ₹${SMALL_ORDER_FEE_CFG} Small Order Fee`;
+        wrap.classList.add('warning');
+        return;
+    }
+
     const remaining = FREE_SHIPPING_THRESHOLD_CFG - total;
     const pct = Math.min((total / FREE_SHIPPING_THRESHOLD_CFG) * 100, 100);
     fill.style.width = `${pct}%`;
@@ -414,7 +425,6 @@ function updateShippingProgress(total) {
         wrap.classList.add('unlocked');
     } else {
         text.textContent = `🚚 Add ₹${remaining} more for free shipping`;
-        wrap.classList.remove('unlocked');
     }
 }
 
@@ -526,9 +536,13 @@ document.addEventListener('click', e => {
 // ── DISCOUNT ──
 let DISCOUNT_PERCENT = 25; // fallback until settings load
 let FREE_SHIPPING_THRESHOLD_CFG = 499;
+let SMALL_ORDER_THRESHOLD_CFG = 100;
+let SMALL_ORDER_FEE_CFG = 50;
 window.settingsReady = fetch('data/settings.json').then(r => r.json()).then(s => {
     DISCOUNT_PERCENT = s.commerce.discountPercent;
     FREE_SHIPPING_THRESHOLD_CFG = s.commerce.freeShippingThreshold;
+    SMALL_ORDER_THRESHOLD_CFG = s.commerce.smallOrderThreshold;
+    SMALL_ORDER_FEE_CFG = s.commerce.smallOrderFee;
 }).catch(() => {});
 function discountedPrice(original) {
     return Math.round(original * (1 - DISCOUNT_PERCENT / 100));

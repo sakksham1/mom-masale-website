@@ -16,6 +16,7 @@
 // D1 doesn't give Workers a multi-statement app-level transaction here, so
 // this is a compensating-action rollback rather than a real ROLLBACK.
 
+import { resolveShipping } from './_utils/shipping.js';
 import { getUserFromSession } from './_utils/session.js';
 import { createRazorpayOrder } from './_utils/razorpay.js';
 import { notifyOrderPlaced } from './_utils/notify.js';
@@ -53,8 +54,12 @@ export async function onRequestPost(context) {
 
   const { customer, items, paymentMethod } = body || {};
 
-  if (!customer || !customer.name || !customer.phone || !customer.address || !customer.city || !customer.pincode) {
+  if (!customer || !customer.name || !customer.phone || !customer.email || !customer.address || !customer.city || !customer.pincode) {
     return jsonError('Missing required customer details');
+  }
+  const email = String(customer.email).trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return jsonError('Enter a valid email address');
   }
   const phone = String(customer.phone).trim();
   if (!/^[6-9]\d{9}$/.test(phone)) {
@@ -92,7 +97,7 @@ export async function onRequestPost(context) {
   } catch {
     return jsonError('Could not verify pricing settings right now. Please try again.', 502);
   }
-  const { discountPercent, freeShippingThreshold, flatShippingFee } = settings.commerce;
+  const { discountPercent } = settings.commerce;
 
   // Cart items are keyed by product NAME (matches how the cart has always
   // stored them — no slug client-side), so group D1 rows by name here too.
@@ -135,7 +140,7 @@ export async function onRequestPost(context) {
     });
   }
 
-  const shippingFee = subtotal >= freeShippingThreshold ? 0 : flatShippingFee;
+  const { fee: shippingFee } = resolveShipping(pincode, subtotal, settings);
   const total = subtotal + shippingFee;
 
   const user = await getUserFromSession(request, env);
@@ -158,7 +163,7 @@ export async function onRequestPost(context) {
     user ? user.id : null,
     String(customer.name).trim(),
     phone,
-    customer.email ? String(customer.email).trim() : null,
+    email,    
     String(customer.address).trim(),
     String(customer.city).trim(),
     pincode,

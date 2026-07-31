@@ -76,8 +76,8 @@
                 <input id="checkout-phone" type="tel" placeholder="10-digit mobile number" maxlength="10" required>
             </div>
             <div class="form-group">
-                <label for="checkout-email">Email (optional)</label>
-                <input id="checkout-email" type="email">
+                <label for="checkout-email">Email *</label>
+                <input id="checkout-email" type="email" required>
             </div>
             <div class="form-group">
                 <label for="checkout-address">Address *</label>
@@ -89,7 +89,12 @@
             </div>
             <div class="form-group">
                 <label for="checkout-pincode">Pincode *</label>
-                <input id="checkout-pincode" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit pincode" required>
+                <div class="pincode-check-row">
+                    <input id="checkout-pincode" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit pincode" required>
+                    <button type="button" class="btn btn-outline pincode-check-btn" id="check-shipping-btn">Check Shipping</button>
+                    <button type="button" class="pincode-info-btn" id="pincode-info-btn" aria-label="About shipping check" aria-expanded="false">?</button>
+                </div>
+                <div class="pincode-shipping-result" id="pincode-shipping-result" hidden></div>
             </div>
 
             <div class="form-group">
@@ -115,7 +120,7 @@
                 <span id="checkout-subtotal"></span>
             </div>
             <div class="checkout-summary-line">
-                <span>Shipping</span>
+                <span id="checkout-shipping-label">Shipping</span>
                 <span id="checkout-shipping"></span>
             </div>
             <div class="checkout-summary-line checkout-summary-total">
@@ -190,5 +195,11 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="js/main.min.js" defer></script>
 <script src="js/checkout.js" defer></script>
+
+<div class="pincode-info-overlay" id="pincode-info-overlay"></div>
+<div class="pincode-info-popover" id="pincode-info-popover" hidden>
+    <button type="button" class="pincode-info-close" id="pincode-info-close" aria-label="Close">✕</button>
+    <p>Sometimes we can't detect your exact area name due to third party dependency — if that happens, we'll just show "your area" instead of the locality. Either way, the shipping cost shown is always correct for your pincode.</p>
+</div>
 </body>
 </html>

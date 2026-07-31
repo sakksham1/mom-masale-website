@@ -4362,3 +4362,135 @@ nav a.active { view-transition-name: nav-active-pill; }
         animation: none !important;
     }
 }
+
+/* ── PINCODE SHIPPING CHECK (checkout.html) ── */
+.pincode-check-row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+.pincode-check-row input {
+    flex: 1;
+}
+.pincode-check-btn {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    padding: 0 1rem;
+    white-space: nowrap;
+}
+.pincode-shipping-result {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--maroon);
+    background: rgba(212,160,23,0.12);
+    border: 1px solid rgba(212,160,23,0.35);
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+[data-theme="dark"] .pincode-shipping-result {
+    color: var(--gold);
+    background: rgba(212,160,23,0.08);
+}
+.pincode-shipping-result.error {
+    color: #c0392b;
+    background: rgba(192,57,43,0.1);
+    border-color: rgba(192,57,43,0.35);
+}
+
+/* ── PINCODE INFO BUTTON + OVERLAY POPOVER (checkout.html) ── */
+.pincode-info-btn {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid var(--maroon);
+    background: transparent;
+    color: var(--maroon);
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    transition: background 0.18s, color 0.18s;
+}
+.pincode-info-btn:hover {
+    background: var(--maroon);
+    color: var(--white);
+}
+[data-theme="dark"] .pincode-info-btn {
+    color: var(--gold);
+    border-color: var(--gold);
+}
+[data-theme="dark"] .pincode-info-btn:hover {
+    background: var(--gold);
+    color: #000;
+}
+
+.pincode-info-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1998;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+.pincode-info-overlay.active { display: block; }
+
+.pincode-info-popover {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1999;
+    width: min(360px, 88vw);
+    background: var(--white);
+    color: var(--text);
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    padding: 1.4rem 1.3rem 1.2rem;
+}
+[data-theme="dark"] .pincode-info-popover {
+    background: #1a2540;
+}
+.pincode-info-popover p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-light);
+    padding-right: 1.2rem;
+}
+.pincode-info-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: var(--cream-dark);
+    color: var(--text);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+[data-theme="dark"] .pincode-info-close {
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+}
+
+/* ── SMALL ORDER FEE WARNING (cart drawer) ── */
+.shipping-progress.warning {
+    background: rgba(192,57,43,0.1);
+    border-color: rgba(192,57,43,0.35);
+}
+.shipping-progress.warning .shipping-progress-text {
+    color: #c0392b;
+}
+.shipping-progress.warning .shipping-progress-fill {
+    background: #c0392b;
+}
+[data-theme="dark"] .shipping-progress.warning .shipping-progress-text {
+    color: #e67e6b;
+}
