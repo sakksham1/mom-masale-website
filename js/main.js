@@ -5,6 +5,47 @@
 let cartCache = [];
 let cartIsLoggedIn = false;
 
+// ── ANALYTICS (first-party — separate from GA/Cloudflare) ──
+function getAnonId() {
+    let id = localStorage.getItem('mm_anon_id');
+    if (!id) {
+        id = (crypto.randomUUID ? crypto.randomUUID() : 'anon-' + Date.now() + '-' + Math.random().toString(16).slice(2));
+        localStorage.setItem('mm_anon_id', id);
+    }
+    return id;
+}
+
+function getCheckoutSessionId() {
+    let id = sessionStorage.getItem('mm_checkout_session_id');
+    if (!id) {
+        id = (crypto.randomUUID ? crypto.randomUUID() : 'sess-' + Date.now() + '-' + Math.random().toString(16).slice(2));
+        sessionStorage.setItem('mm_checkout_session_id', id);
+    }
+    return id;
+}
+
+// opts.session=true attaches the per-checkout-attempt sessionId (used only
+// by checkout_step events, so the funnel query can group one attempt together)
+function trackAnalyticsEvent(type, payload, opts) {
+    opts = opts || {};
+    const body = JSON.stringify({
+        type,
+        payload,
+        anonId: getAnonId(),
+        sessionId: opts.session ? getCheckoutSessionId() : undefined,
+    });
+    try {
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon('/api/analytics/event', new Blob([body], { type: 'application/json' }));
+        } else {
+            fetch('/api/analytics/event', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true }).catch(() => {});
+        }
+    } catch (err) {
+        // analytics must never break the page
+    }
+}
+window.trackAnalyticsEvent = trackAnalyticsEvent;
+
 // ── DARK MODE ──
 const themeToggle = document.getElementById('theme-toggle');
 const toggleIcon = themeToggle?.querySelector('.toggle-icon');
@@ -257,6 +298,10 @@ function buildCartDrawer() {
 function openCart() {
     buildCartDrawer();
     renderCartItems();
+    if (getCart().length > 0) {
+        sessionStorage.removeItem('mm_checkout_session_id'); // fresh funnel session per cart-open
+        trackAnalyticsEvent('checkout_step', { step: 'cart_opened' }, { session: true });
+    }
     document.getElementById('cart-drawer').classList.add('open');
     document.getElementById('cart-overlay').classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -726,6 +771,12 @@ async function loadProducts() {
                         c.innerHTML = '';
                         noResults.hidden = false;
                         noResultsTerm.textContent = searchTerm || [...selectedCategories, ...selectedSizes].join(', ');
+                        if (searchTerm) {
+                            clearTimeout(window._productsZeroResultTimer);
+                            window._productsZeroResultTimer = setTimeout(() => {
+                                trackAnalyticsEvent('search_zero_result', { scope: 'products', query: searchTerm });
+                            }, 700); // debounced — only fires after typing pauses
+                        }
                     } else {
                         noResults.hidden = true;
                         c.innerHTML = renderCards(filtered);
@@ -769,6 +820,13 @@ async function loadProducts() {
                         if (cb.checked) targetSet.add(cb.value);
                         else targetSet.delete(cb.value);
                         applyFilters();
+                        if (selectedCategories.size > 0 || selectedSizes.size > 0) {
+                            trackAnalyticsEvent('filter_applied', {
+                                scope: 'products',
+                                categories: [...selectedCategories],
+                                sizes: [...selectedSizes],
+                            });
+                        }
                     });
                     filterPanel.addEventListener('click', e => e.stopPropagation());
                 }
@@ -859,6 +917,37 @@ async function loadProducts() {
                 e.stopPropagation();
             }
         });
+
+// ── ANALYTICS: coming-soon interest + recipe→product clicks ──
+document.addEventListener('click', e => {
+    const comingSoonPanel = e.target.closest('.launching-soon-panel');
+    if (comingSoonPanel) {
+        const card = comingSoonPanel.closest('.card');
+        const nameEl = card?.querySelector('.card-body h3, .product-detail-title');
+        const link = card?.querySelector('.card-name-link, .product-detail-link');
+        let slug = '';
+        if (link) {
+            const href = link.getAttribute('href') || '';
+            slug = href.split('/').filter(Boolean).pop() || '';
+        }
+        if (slug) {
+            trackAnalyticsEvent('coming_soon_click', {
+                productSlug: slug,
+                productName: nameEl ? nameEl.textContent.trim() : undefined,
+            });
+        }
+    }
+
+    const shopLink = e.target.closest('.ingredient-shop-link');
+    if (shopLink) {
+        const recipeSlug = location.pathname.split('/').filter(Boolean).pop() || '';
+        const href = shopLink.getAttribute('href') || '';
+        const productSlug = href.split('/').filter(Boolean).pop() || '';
+        if (recipeSlug && productSlug) {
+            trackAnalyticsEvent('recipe_ingredient_click', { recipeSlug, productSlug });
+        }
+    }
+});
 
     } catch (e) {
         document.querySelectorAll('#products-container').forEach(c => {
@@ -1028,6 +1117,12 @@ async function loadRecipes() {
                     noResults.hidden = false;
                     noResultsTerm.textContent = searchTerm || [...selectedCategories].join(', ');
                 }
+                if (searchTerm) {
+                    clearTimeout(window._recipesZeroResultTimer);
+                    window._recipesZeroResultTimer = setTimeout(() => {
+                        trackAnalyticsEvent('search_zero_result', { scope: 'recipes', query: searchTerm });
+                    }, 700);
+                }
                 return;
             }
             if (noResults) noResults.hidden = true;
@@ -1064,6 +1159,9 @@ async function loadRecipes() {
                 if (cb.checked) selectedCategories.add(cb.value);
                 else selectedCategories.delete(cb.value);
                 applyFilters();
+                if (selectedCategories.size > 0) {
+                    trackAnalyticsEvent('filter_applied', { scope: 'recipes', categories: [...selectedCategories] });
+                }
             });
             filterPanel.addEventListener('click', e => e.stopPropagation());
         }

@@ -88,6 +88,7 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
         emptyEl.hidden = true;
         formEl.hidden = false;
         summaryEl.hidden = false;
+        trackAnalyticsEvent('checkout_step', { step: 'checkout_started' }, { session: true });
 
         itemsListEl.innerHTML = cart.map(item => `
             <div class="checkout-item-row">
@@ -163,6 +164,7 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Could not check shipping.');
 
+            trackAnalyticsEvent('checkout_step', { step: 'pincode_checked' }, { session: true });
             shippingResultEl.hidden = false;
             shippingResultEl.classList.remove('error');
             shippingResultEl.textContent = data.feeType === 'small-order'
@@ -240,6 +242,15 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
             return;
         }
 
+        // Fires once, for every payment method, right as the customer commits
+        // to placing the order — matches the backend's canonical funnel order
+        // (payment_opened is a pre-order step, logged before order_placed).
+        // Previously this only fired for the Razorpay path, right before the
+        // gateway modal opened — which is AFTER order_placed already fires
+        // below, and never fired at all for COD. That inverted the funnel and
+        // made the payment_opened → order_placed drop-off meaningless.
+        trackAnalyticsEvent('checkout_step', { step: 'payment_opened' }, { session: true });
+
         placeOrderBtn.disabled = true;
         placeOrderBtn.textContent = 'Placing order…';
 
@@ -272,7 +283,10 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
             return;
         }
 
+        trackAnalyticsEvent('checkout_step', { step: 'order_placed', orderId: data.orderId }, { session: true });
+
         if (data.paymentMethod === 'cod') {
+            trackAnalyticsEvent('checkout_step', { step: 'payment_completed', orderId: data.orderId }, { session: true });
             completeOrder(data.orderId, data.orderCode);
             return;
         }
@@ -302,6 +316,7 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
                     const verifyData = await verifyRes.json();
 
                     if (verifyRes.ok && verifyData.success) {
+                        trackAnalyticsEvent('checkout_step', { step: 'payment_completed', orderId: data.orderId }, { session: true });
                         completeOrder(data.orderId, data.orderCode);
                     } else {
                         showError(
