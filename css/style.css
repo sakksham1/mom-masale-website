@@ -96,6 +96,23 @@ header {
     gap: 12px;
 }
 
+/* ── DESKTOP HEADER: two-row layout ──
+   Same .navbar element, just stacked instead of side-by-side — the brand
+   name centers on its own row, and the nav links center on the row below.
+   Functionally two sections, but no visual divider is added, so it still
+   reads as one continuous maroon strip. Only applies above the site's
+   existing mobile/hamburger breakpoint (max-width: 1280px), so the mobile
+   nav drawer is completely unaffected. */
+@media (min-width: 1281px) {
+    .navbar {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 24px 14px;
+    }
+}
+
 .logo {
     color: var(--white);
     font-size: 1.7rem;
@@ -1099,7 +1116,9 @@ footer {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1280px) {
-    .hamburger { display: block; }
+    .hamburger { display: block; order: -1; }
+    .logo { order: 0; }
+    .search-toggle { order: 1; }
 
     nav {
     display: none;
@@ -2271,10 +2290,14 @@ nav a.active {
 /* Desktop: pinned to the far edge of the header, outside the centered navbar container */
 header > .theme-toggle {
     position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
+    top: 16px;
+    left: 20px;
     z-index: 1001;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
 }
 
 /* Mobile: reparented into the nav drawer by JS — sits top-right of the panel */
@@ -4589,9 +4612,8 @@ nav a.active { view-transition-name: nav-active-pill; }
 .search-toggle:hover { background: rgba(212,160,23,0.2); border-color: var(--gold); }
 header > .search-toggle {
     position: absolute;
-    top: 50%;
-    right: 68px;
-    transform: translateY(-50%);
+    top: 16px;
+    right: 20px;
     z-index: 1001;
 }
 
