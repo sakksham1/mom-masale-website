@@ -11,11 +11,12 @@ export async function onRequestGet(context) {
   const [rawMaterial, packaging, productCore, productStock] = await Promise.all([
     env.DB.prepare(
       `SELECT t.id, t.raw_material_id, m.name as material_name, t.delta, t.reason, t.note,
-              t.requested_by, u.name as requested_by_name, t.created_at
-       FROM raw_material_transactions t
-       JOIN raw_materials m ON m.id = t.raw_material_id
-       JOIN users u ON u.id = t.requested_by
-       WHERE t.status = 'pending' ORDER BY t.created_at`
+        t.input_amount, t.input_unit,
+        t.requested_by, u.name as requested_by_name, t.created_at
+ FROM raw_material_transactions t
+ JOIN raw_materials m ON m.id = t.raw_material_id
+ JOIN users u ON u.id = t.requested_by
+ WHERE t.status = 'pending' ORDER BY t.created_at`
     ).all(),
     env.DB.prepare(
       `SELECT pr.id, pr.product_id, pd.slug as product_slug, pd.name as product_name,
