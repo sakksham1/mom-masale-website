@@ -247,7 +247,19 @@
         "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
       }
     ],
-    "relatedProducts": []
+    "relatedProducts": [],
+    "aggregateRating": {
+      "reviewCount": 1,
+      "ratingValue": 5
+    },
+    "reviews": [
+      {
+        "rating": 5,
+        "body": "Mom Masale का चाय मसाला यानी कड़क स्वाद और लाजवाब सुगंध का परफेक्ट मेल! चुटकी भर मसाला डालते ही चाय का ज़ायका बदल जाता है। ठंड और बारिश के मौसम में तो यह और भी ज़बरदस्त लगता है। Highly recommended for tea lovers! ☕",
+        "authorName": "mayankguptaskg",
+        "datePublished": "2026-08-03"
+      }
+    ]
   },
   {
     "name": "Chatpata Sprinkle Masala",
