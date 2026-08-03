@@ -174,7 +174,19 @@
         "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
       }
     ],
-    "relatedProducts": []
+    "relatedProducts": [],
+    "aggregateRating": {
+      "reviewCount": 1,
+      "ratingValue": 5
+    },
+    "reviews": [
+      {
+        "rating": 5,
+        "body": "असली घर जैसा स्वाद और ज़बरदस्त चटकारा!\"मैंने हाल ही में Mom Masale का चाट मसाला ट्राई किया और यह वाकई बहुत ही बेहतरीन है! बाज़ार के आम मसालों की तुलना में इसका स्वाद एकदम ताज़ा और शुद्ध लगता है।  अमचूर की खटास और काले नमक का संतुलन एकदम सही है। इसे फ्रूट सलाद, दही भल्ला, आलू टिक्की  पर छिड़कते ही स्वाद दोगुना हो जाता है। सबसे अच्छी बात यह है कि इसमें कोई आर्टिफिशल फ्लेवर या केमिकल की खुशबू नहीं आती, बस शुद्ध भारतीय मसालों की सोंधी महक आती है। अगर आपको चटपटा खाना पसंद है, तो यह हर किचन में होना ही चाहिए!",
+        "authorName": "mayankguptaskg",
+        "datePublished": "2026-08-03"
+      }
+    ]
   },
   {
     "name": "Chai Masala",
