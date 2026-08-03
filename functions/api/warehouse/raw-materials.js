@@ -22,7 +22,7 @@ const UNITS = ['kg', 'l', 'units'];
 
 export async function onRequestPost(context) {
   const { request, env } = context;
-  const { ok } = await requireRole(request, env, ['warehouser', 'packaging']);
+  const { ok } = await requireRole(request, env, ['warehouser']);
   if (!ok) return forbidden();
 
   let body;

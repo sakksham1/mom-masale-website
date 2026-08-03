@@ -20,7 +20,7 @@ const REASONS = ['restock', 'consumption', 'correction'];
 
 export async function onRequestPost(context) {
   const { request, env } = context;
-  const { user, ok } = await requireRole(request, env, ['warehouser', 'packaging']);
+  const { user, ok } = await requireRole(request, env, ['warehouser']);
   if (!ok) return forbidden();
 
   let body;
