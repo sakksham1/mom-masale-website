@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Search – Mom Masale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+            try {
+            var saved = localStorage.getItem('theme');
+            var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="description" content="Search Mom Masale's products, recipes, and spice guide.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://mommasale.com/search">
+    <link rel="stylesheet" href="css/style.min.css">
+</head>
+
+
+
+<body>
+<header>
+    <div class="navbar">
+        <a class="logo" href="/">MOM <span>MASALE</span></a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        <nav id="nav-menu">
+            <a href="/"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9"/></svg><span>Home</span></a>
+            <a href="products"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l1 13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span>Products</span></a>
+            <a href="recipes"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h6v18H6a2 2 0 0 1-2-2V5Z"/><path d="M20 5a2 2 0 0 0-2-2h-6v18h6a2 2 0 0 0 2-2V5Z"/></svg><span>Recipes</span></a>
+            <a href="spice-guide"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg><span>Spice Guide</span></a>
+            <a href="about"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.5" r="0.6" fill="currentColor" stroke="none"/></svg><span>About</span></a>
+            <a href="contact"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Contact</span></a>
+        </nav>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"><span class="toggle-icon">☀️</span><span class="toggle-label">Light</span></button>
+</header>
+<div class="nav-overlay" id="nav-overlay"></div>
+<main>
+<div class="page-banner">
+    <h2>Search</h2>
+    <p>Find products, recipes, and spice guide articles.</p>
+</div>
+
+<div class="container">
+    <div class="search-wrap search-page-bar">
+        <span class="search-icon">🔍</span>
+        <input type="search" id="search-page-input" class="product-search" placeholder="Search products, recipes, spice guide…" autocomplete="off">
+    </div>
+    <h2 class="section-title" id="search-page-heading" style="display:block;margin-bottom:1rem">Search</h2>
+    <div id="search-page-results"></div>
+</div>
+</main>
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <a class="logo" href="/">MOM <span>MASALE</span></a>
+            <p>Authentic Indian spices brought to you by Sakksham Enterprises.</p>
+        </div>
+        <div class="footer-links">
+            <h3>Quick Links</h3>
+            <a href="products">Products</a>
+            <a href="recipes">Recipes</a>
+            <a href="spice-guide">Spice Guide</a>
+            <a href="about">About Us</a>
+            <a href="contact">Contact</a>
+        </div>
+        <div class="footer-links">
+            <h3>Contact</h3>
+            <a href="tel:9984064777">📞 9984064777</a>
+            <a href="mailto:sakkshamenterprises@gmail.com">✉ sakkshamenterprises@gmail.com</a>
+        </div>
+    </div>
+    <div class="footer-bottom">© A brand of Sakksham Enterprises, Shuklaganj, Unnao</div>
+</footer>
+<script src="js/main.min.js" defer></script>
+</body>
+</html>

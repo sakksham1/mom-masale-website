@@ -1826,3 +1826,304 @@ if (statNums.length) {
         }
     });
 })();
+
+// ── UNIVERSAL SEARCH ── //
+(function() {
+    const inSubdir = /\/(products|recipes|guide)\//.test(location.pathname);
+    const SITE_PREFIX = inSubdir ? '../' : '';
+
+    const STATIC_PAGES_INDEX = [
+        { type: 'page', title: 'Home', url: '', keywords: 'home mom masale spices sakksham enterprises' },
+        { type: 'page', title: 'All Products', url: 'products', keywords: 'products shop spices masala catalogue' },
+        { type: 'page', title: 'All Recipes', url: 'recipes', keywords: 'recipes cooking dishes' },
+        { type: 'page', title: 'Spice Guide', url: 'spice-guide', keywords: 'spice guide articles faq blog storage tips' },
+        { type: 'page', title: 'About Us', url: 'about', keywords: 'about us story sakksham enterprises shuklaganj unnao' },
+        { type: 'page', title: 'Contact', url: 'contact', keywords: 'contact phone email address bulk order enquiry' },
+    ];
+
+    function searchResultHref(item) {
+        if (item.url === '') return SITE_PREFIX || '/';
+        return SITE_PREFIX + item.url;
+    }
+
+    let searchIndexPromise = null;
+    function buildSearchIndex() {
+        if (searchIndexPromise) return searchIndexPromise;
+        searchIndexPromise = Promise.all([
+            fetch(SITE_PREFIX + 'data/products.json').then(r => r.json()).catch(() => []),
+            fetch(SITE_PREFIX + 'data/recipes.json').then(r => r.json()).catch(() => []),
+            fetch(SITE_PREFIX + 'data/blog.json').then(r => r.json()).catch(() => []),
+        ]).then(([products, recipes, blog]) => {
+            const productItems = products.map(p => ({
+                type: 'product', title: p.name, url: `products/${p.slug}`, image: p.image,
+                keywords: [p.name, p.category, ...(p.aliases || [])].join(' ').toLowerCase(),
+            }));
+            const recipeItems = recipes.map(r => ({
+                type: 'recipe', title: r.title, url: `recipes/${r.slug}`, image: r.image,
+                keywords: [r.title, r.category, r.cuisine, r.description, ...((r.ingredients || []).map(i => i.text))]
+                    .filter(Boolean).join(' ').toLowerCase(),
+            }));
+            const blogItems = blog.map(b => ({
+                type: 'guide', title: b.title, url: `guide/${b.slug}`, image: b.image,
+                keywords: [b.title, b.category, b.description].filter(Boolean).join(' ').toLowerCase(),
+            }));
+            const pageItems = STATIC_PAGES_INDEX.map(p => ({ ...p, keywords: p.keywords.toLowerCase() }));
+            return [...productItems, ...recipeItems, ...blogItems, ...pageItems];
+        });
+        return searchIndexPromise;
+    }
+
+    function scoreIndex(index, query) {
+        const q = query.toLowerCase();
+        return index
+            .map(item => {
+                const title = item.title.toLowerCase();
+                let score = 0;
+                if (title === q) score = 100;
+                else if (title.startsWith(q)) score = 80;
+                else if (title.includes(q)) score = 60;
+                else if (item.keywords.includes(q)) score = 30;
+                return { item, score };
+            })
+            .filter(r => r.score > 0)
+            .sort((a, b) => b.score - a.score);
+    }
+
+    const SEARCH_TYPE_ICON = { product: '🌶️', recipe: '🍲', guide: '📖', page: '📄' };
+    const SEARCH_SECTIONS = [
+        { key: 'product', label: 'Products' },
+        { key: 'recipe', label: 'Recipes' },
+        { key: 'guide', label: 'Spice Guide' },
+        { key: 'page', label: 'Pages' },
+    ];
+
+    function groupByType(scored) {
+        const groups = { product: [], recipe: [], guide: [], page: [] };
+        scored.forEach(({ item }) => { if (groups[item.type]) groups[item.type].push(item); });
+        return groups;
+    }
+
+    // ── Toggle button: injected into header (desktop) or navbar next to
+    // the hamburger (mobile) — mirrors placeThemeToggle()'s reparenting. ──
+    const searchToggle = document.createElement('button');
+    searchToggle.type = 'button';
+    searchToggle.className = 'search-toggle';
+    searchToggle.id = 'search-toggle';
+    searchToggle.setAttribute('aria-label', 'Search');
+    searchToggle.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+    document.body.appendChild(searchToggle);
+
+    function placeSearchToggle() {
+        const headerEl = document.querySelector('header');
+        const navbarEl = document.querySelector('.navbar');
+        const hamburgerEl = document.getElementById('hamburger');
+        if (!headerEl || !navbarEl) return;
+        const isMobile = window.matchMedia('(max-width: 1280px)').matches;
+        if (isMobile) {
+            if (hamburgerEl && searchToggle.nextElementSibling !== hamburgerEl) {
+                navbarEl.insertBefore(searchToggle, hamburgerEl);
+            }
+        } else if (searchToggle.parentElement !== headerEl) {
+            headerEl.appendChild(searchToggle);
+        }
+    }
+    placeSearchToggle();
+    window.addEventListener('resize', placeSearchToggle);
+
+    // ── Overlay ── //
+    function buildSearchOverlay() {
+        if (document.getElementById('search-overlay')) return;
+        const overlay = document.createElement('div');
+        overlay.className = 'search-overlay';
+        overlay.id = 'search-overlay';
+
+        const modal = document.createElement('div');
+        modal.className = 'search-modal';
+        modal.id = 'search-modal';
+        modal.innerHTML = `
+            <div class="search-modal-header">
+                <span class="search-modal-icon">🔍</span>
+                <input type="text" id="search-modal-input" class="search-modal-input" placeholder="Search products, recipes, spice guide…" autocomplete="off">
+                <button class="search-modal-close" id="search-modal-close" aria-label="Close search">✕</button>
+            </div>
+            <div class="search-modal-results" id="search-modal-results">
+                <p class="empty-state-msg">Start typing to search the whole site.</p>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        document.body.appendChild(modal);
+
+        overlay.addEventListener('click', closeSearchModal);
+        document.getElementById('search-modal-close').addEventListener('click', closeSearchModal);
+        document.getElementById('search-modal-input').addEventListener('input', onSearchModalInput);
+    }
+
+    function openSearchModal() {
+        buildSearchOverlay();
+        document.getElementById('search-overlay').classList.add('active');
+        document.getElementById('search-modal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => document.getElementById('search-modal-input')?.focus(), 50);
+    }
+
+    function closeSearchModal() {
+        const overlay = document.getElementById('search-overlay');
+        const modal = document.getElementById('search-modal');
+        if (overlay) overlay.classList.remove('active');
+        if (modal) modal.classList.remove('open');
+        document.body.style.overflow = '';
+        searchToggle.focus();
+    }
+
+    let searchDebounceTimer;
+    function onSearchModalInput(e) {
+        const query = e.target.value.trim();
+        clearTimeout(searchDebounceTimer);
+        if (!query) {
+            document.getElementById('search-modal-results').innerHTML = '<p class="empty-state-msg">Start typing to search the whole site.</p>';
+            return;
+        }
+        searchDebounceTimer = setTimeout(() => runModalSearch(query), 120);
+    }
+
+    async function runModalSearch(query) {
+        const resultsEl = document.getElementById('search-modal-results');
+        const index = await buildSearchIndex();
+        const scored = scoreIndex(index, query);
+
+        if (scored.length === 0) {
+            resultsEl.innerHTML = `<p class="empty-state-msg">No results for "${escapeHtml(query)}".</p>`;
+            clearTimeout(window._siteSearchZeroTimer);
+            window._siteSearchZeroTimer = setTimeout(() => {
+                trackAnalyticsEvent('search_zero_result', { scope: 'site', query });
+            }, 700);
+            return;
+        }
+
+        const groups = groupByType(scored);
+        resultsEl.innerHTML = SEARCH_SECTIONS
+            .filter(s => groups[s.key].length)
+            .map(s => `
+                <div class="search-result-section">
+                    <h4 class="search-result-heading">${s.label}</h4>
+                    ${groups[s.key].slice(0, 3).map(renderSearchResultRow).join('')}
+                </div>
+            `).join('') + `
+            <a class="search-view-all-link" href="${SITE_PREFIX}search?q=${encodeURIComponent(query)}">View all results for "${escapeHtml(query)}" →</a>
+        `;
+    }
+
+    function renderSearchResultRow(item) {
+        const img = item.image
+            ? `<img src="${SITE_PREFIX}${escapeHtml(item.image)}" alt="" loading="lazy" class="search-result-thumb" onerror="this.style.visibility='hidden'">`
+            : `<span class="search-result-thumb search-result-thumb-icon">${SEARCH_TYPE_ICON[item.type] || '•'}</span>`;
+        return `
+            <a class="search-result-row" href="${searchResultHref(item)}">
+                ${img}
+                <span class="search-result-title">${escapeHtml(item.title)}</span>
+            </a>
+        `;
+    }
+
+    document.addEventListener('click', e => {
+        if (e.target.closest('#search-toggle')) openSearchModal();
+    });
+
+    document.addEventListener('keydown', e => {
+        if (e.key === '/' && !e.metaKey && !e.ctrlKey) {
+            const tag = document.activeElement?.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
+            e.preventDefault();
+            openSearchModal();
+            return;
+        }
+        const modal = document.getElementById('search-modal');
+        if (!modal || !modal.classList.contains('open')) return;
+        if (e.key === 'Escape') {
+            closeSearchModal();
+            return;
+        }
+        if (e.key === 'Tab') {
+            const focusable = modal.querySelectorAll('button, a[href], input');
+            if (!focusable.length) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+    });
+
+    // ── /search page ── //
+    async function initSearchPage() {
+        const container = document.getElementById('search-page-results');
+        const input = document.getElementById('search-page-input');
+        const heading = document.getElementById('search-page-heading');
+        if (!container) return;
+
+        const params = new URLSearchParams(location.search);
+        const initialQuery = params.get('q') || '';
+        if (input) input.value = initialQuery;
+
+        async function render(query) {
+            if (!query) {
+                container.innerHTML = '<p class="empty-state-msg">Type something above to search products, recipes, the spice guide, and site pages.</p>';
+                if (heading) heading.textContent = 'Search';
+                return;
+            }
+            if (heading) heading.textContent = `Results for "${query}"`;
+            container.innerHTML = '<p class="empty-state-msg">Searching…</p>';
+
+            const index = await buildSearchIndex();
+            const scored = scoreIndex(index, query);
+
+            if (!scored.length) {
+                container.innerHTML = `<p class="empty-state-msg">No results for "${escapeHtml(query)}".</p>`;
+                trackAnalyticsEvent('search_zero_result', { scope: 'site', query });
+                return;
+            }
+
+            const groups = groupByType(scored);
+            container.innerHTML = SEARCH_SECTIONS
+                .filter(s => groups[s.key].length)
+                .map(s => `
+                    <div class="recipe-category-block">
+                        <h2 class="section-title recipe-category-heading">${s.label}</h2>
+                        <div class="recipes-list">${groups[s.key].map(renderSearchPageRow).join('')}</div>
+                    </div>
+                `).join('');
+        }
+
+        function renderSearchPageRow(item) {
+            const img = item.image
+                ? `<img src="${SITE_PREFIX}${escapeHtml(item.image)}" alt="" loading="lazy" width="96" height="96" onerror="this.style.visibility='hidden'">`
+                : '';
+            return `
+                <a class="card recipe-bar" href="${searchResultHref(item)}">
+                    <div class="recipe-bar-image">${img}</div>
+                    <div class="recipe-bar-body">
+                        <div class="recipe-bar-main">
+                            <h3 class="recipe-bar-title">${escapeHtml(item.title)}</h3>
+                        </div>
+                    </div>
+                </a>
+            `;
+        }
+
+        render(initialQuery);
+
+        if (input) {
+            input.addEventListener('input', () => {
+                clearTimeout(window._searchPageDebounce);
+                window._searchPageDebounce = setTimeout(() => {
+                    const q = input.value.trim();
+                    const url = new URL(location.href);
+                    if (q) url.searchParams.set('q', q); else url.searchParams.delete('q');
+                    history.replaceState(null, '', url);
+                    render(q);
+                }, 250);
+            });
+        }
+    }
+
+    initSearchPage();
+})();

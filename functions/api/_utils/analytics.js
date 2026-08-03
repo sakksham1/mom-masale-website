@@ -30,7 +30,7 @@ export const CHECKOUT_FUNNEL_STEPS = [
   'payment_completed',
 ];
 
-const SEARCH_SCOPES = ['products', 'recipes'];
+const SEARCH_SCOPES = ['products', 'recipes', 'site'];
 
 function isNonEmptyString(v, maxLen = 200) {
   return typeof v === 'string' && v.trim().length > 0 && v.length <= maxLen;
