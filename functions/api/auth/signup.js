@@ -1,14 +1,21 @@
 // functions/api/auth/signup.js
 // POST /api/auth/signup
-// Body: { name, email, password, phone?, platform? }
+// Body: { name, email, password, phone, platform? }
 
 import { hashPassword } from '../_utils/crypto.js';
 import { validatePassword } from '../_utils/password.js';
 import { setSessionCookie, createSession } from '../_utils/session.js';
 import { sendEmail, otpEmailHtml } from '../_utils/email.js';
+import { createNotification } from '../_utils/notify.js';
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// Same shape checkout.js already requires for customer phones — keeps the
+// two entry points consistent instead of inventing a second phone format.
+function isValidPhone(phone) {
+  return /^[6-9]\d{9}$/.test(phone);
 }
 
 function jsonError(message, status = 400) {
@@ -17,6 +24,8 @@ function jsonError(message, status = 400) {
     headers: { 'Content-Type': 'application/json' },
   });
 }
+
+const APP_PLATFORMS = ['android', 'ios', 'windows', 'macos', 'linux'];
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -41,6 +50,9 @@ export async function onRequestPost(context) {
 
   if (!name) return jsonError('Name is required');
   if (!isValidEmail(email)) return jsonError('A valid email is required');
+  if (!phone) return jsonError('Phone number is required');
+  if (!isValidPhone(phone)) return jsonError('Enter a valid 10-digit phone number');
+
   const passwordCheck = validatePassword(password);
   if (!passwordCheck.valid) return jsonError(`Password requirements not met: ${passwordCheck.errors.join(', ')}`);
 
@@ -49,18 +61,15 @@ export async function onRequestPost(context) {
 
   const { hash, salt, iterations } = await hashPassword(password);
 
-  // role is set explicitly here rather than relying on a schema default —
-  // this column gates admin access, so it should never depend on an implicit
-  // default silently doing the right thing. See migrations/0002_fix_admin_role.sql.
   const result = await env.DB.prepare(
-    `INSERT INTO users (name, email, password_hash, password_salt, password_iterations, phone, role) VALUES (?, ?, ?, ?, ?, ?, 'customer')`
-  ).bind(name, email, hash, salt, iterations, phone || null).run();
+    `INSERT INTO users (name, email, password_hash, password_salt, password_iterations, phone, role, signup_platform)
+     VALUES (?, ?, ?, ?, ?, ?, 'customer', ?)`
+  ).bind(name, email, hash, salt, iterations, phone, platform).run();
 
   const userId = result.meta.last_row_id;
 
   const { token, expiresAt } = await createSession(request, env, userId, platform);
 
-  // Fire-and-forget: verification is informational for now, doesn't block login.
   try {
     const n = crypto.getRandomValues(new Uint32Array(1))[0] % 1000000;
     const otp = String(n).padStart(6, '0');
@@ -74,7 +83,17 @@ export async function onRequestPost(context) {
     console.error('Verification email send failed:', err.message);
   }
 
-  return new Response(JSON.stringify({ user: { id: userId, name, email, phone: phone || null, role: 'customer', emailVerified: false } }), {
+  if (APP_PLATFORMS.includes(platform)) {
+    context.waitUntil(createNotification(env, {
+      type: 'app_signup',
+      title: 'New app signup awaiting a role',
+      body: `${name} (${email}) signed up from the ${platform} app — assign them a role to let them in.`,
+      referenceType: 'user',
+      referenceId: userId,
+    }));
+  }
+
+  return new Response(JSON.stringify({ user: { id: userId, name, email, phone, role: 'customer', emailVerified: false } }), {
     status: 201,
     headers: {
       'Content-Type': 'application/json',

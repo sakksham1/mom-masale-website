@@ -12,14 +12,14 @@ export async function onRequestGet(context) {
   if (!ok) return forbidden();
 
   const result = await env.DB.prepare(
-    `SELECT u.id, u.name, u.email, u.phone, u.role, u.created_at,
-            COUNT(o.id) as order_count,
-            COALESCE(SUM(CASE WHEN o.payment_status = 'paid' THEN o.total ELSE 0 END), 0) as lifetime_spend
-     FROM users u
-     LEFT JOIN orders o ON o.user_id = u.id
-     GROUP BY u.id
-     ORDER BY u.created_at DESC`
-  ).all();
+  `SELECT u.id, u.name, u.email, u.phone, u.role, u.created_at, u.signup_platform,
+          COUNT(o.id) as order_count,
+          COALESCE(SUM(CASE WHEN o.payment_status = 'paid' THEN o.total ELSE 0 END), 0) as lifetime_spend
+   FROM users u
+   LEFT JOIN orders o ON o.user_id = u.id
+   GROUP BY u.id
+   ORDER BY u.created_at DESC`
+).all();
 
   return new Response(JSON.stringify({ customers: result.results || [] }), {
     status: 200,
