@@ -18,7 +18,7 @@
 
 import { requireAdmin, requireRole, forbidden, jsonError, logAudit } from '../_utils/admin.js';
 import { readRepoFile } from '../_utils/github.js';
-import { syncProductsToGitHub } from '../_utils/products-sync.js';
+import { enqueueSync, describeCatalogUpdates } from '../_utils/sync-queue.js';
 
 const DEFAULT_STOCK = 100;
 
@@ -177,11 +177,13 @@ export async function onRequestPost(context) {
     await env.DB.prepare(`INSERT INTO product_aliases (product_id, alias) VALUES (?, ?)`).bind(productId, alias).run();
   }
 
-  try {
-    await syncProductsToGitHub(env, `chore(admin): add product "${name}"`);
-  } catch (err) {
-    return jsonError(`Product saved to database, but the site sync failed: ${err.message}`, 502);
-  }
+  await enqueueSync(env, {
+    sourceType: 'product_create',
+    sourceId: productId,
+    productSlug: slug,
+    summary: `${name} — new product added`,
+    createdBy: user.id,
+  });
 
   await logAudit(env, { userId: user.id, action: 'create', resource: 'product', resourceId: slug, diff: { name, category, prices, defaultStock: stock } });
 
@@ -301,11 +303,13 @@ export async function onRequestPatch(context) {
     }
   }
 
-  try {
-    await syncProductsToGitHub(env, `chore(admin): update product "${slug}"`);
-  } catch (err) {
-    return jsonError(`Product updated in database, but the site sync failed: ${err.message}`, 502);
-  }
+  await enqueueSync(env, {
+    sourceType: 'product_core',
+    sourceId: product.id,
+    productSlug: slug,
+    summary: describeCatalogUpdates(updates.name || product.name, updates),
+    createdBy: user.id,
+  });
 
   await logAudit(env, { userId: user.id, action: 'update', resource: 'product', resourceId: slug, diff: updates });
 
@@ -340,11 +344,13 @@ export async function onRequestDelete(context) {
   await env.DB.prepare('DELETE FROM product_related WHERE related_product_id = ?').bind(product.id).run();
   await env.DB.prepare('DELETE FROM products WHERE id = ?').bind(product.id).run();
 
-  try {
-    await syncProductsToGitHub(env, `chore(admin): delete product "${slug}"`);
-  } catch (err) {
-    return jsonError(`Product deleted from database, but the site sync failed: ${err.message}`, 502);
-  }
+  await enqueueSync(env, {
+    sourceType: 'product_delete',
+    sourceId: product.id,
+    productSlug: slug,
+    summary: `${slug} — product deleted`,
+    createdBy: user.id,
+  });
 
   await logAudit(env, { userId: user.id, action: 'delete', resource: 'product', resourceId: slug });
 

@@ -11,7 +11,7 @@
 //   constraint disappears with the row, so the customer can fix and resubmit.
 
 import { requireRole, forbidden, jsonError, logAudit } from '../_utils/admin.js';
-import { syncProductsToGitHub } from '../_utils/products-sync.js';
+import { enqueueSync } from '../_utils/sync-queue.js';
 
 export async function onRequestGet(context) {
   const { request, env } = context;
@@ -83,14 +83,13 @@ export async function onRequestPatch(context) {
     `UPDATE product_reviews SET status = 'approved', reviewed_by = ?, reviewed_at = datetime('now') WHERE id = ?`
   ).bind(user.id, reviewId).run();
 
-  try {
-    await syncProductsToGitHub(env, `chore(reviews): approve review #${reviewId} for ${review.product_slug}`);
-  } catch (err) {
-    // Review is approved in D1 either way — the site sync just didn't land
-    // yet. It'll self-correct next time syncProductsToGitHub runs for any
-    // other catalog change; surface the error so it isn't silently missed.
-    return jsonError(`Review approved, but the site sync failed: ${err.message}`, 502);
-  }
+  await enqueueSync(env, {
+    sourceType: 'review',
+    sourceId: reviewId,
+    productSlug: review.product_slug,
+    summary: `New approved review for ${review.product_slug}`,
+    createdBy: user.id,
+  });
 
   await logAudit(env, {
     userId: user.id, action: 'approve', resource: 'product_review', resourceId: reviewId,

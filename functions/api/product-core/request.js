@@ -14,7 +14,7 @@
 
 import { requireRole, forbidden, jsonError } from '../_utils/admin.js';
 import { createNotification } from '../_utils/notify.js';
-
+import { describeCatalogUpdates } from '../_utils/sync-queue.js';
 const SCALAR_FIELDS = [
   'name', 'category', 'image', 'imageAlt',
   'amazonUrl', 'flipkartUrl', 'meeshoUrl',
@@ -81,7 +81,7 @@ export async function onRequestPost(context) {
   context.waitUntil(createNotification(env, {
     type: 'approval_requested',
     title: 'Product change pending',
-    body: `${summarize(product.name, updates)} — requested by ${user.name}`,
+    body: `${describeCatalogUpdates(product.name, updates)} — requested by ${user.name}`,
     referenceType: 'product_core',
     referenceId: result.meta.last_row_id,
   }));
