@@ -2026,8 +2026,17 @@ if (statNums.length) {
     }
 
     document.addEventListener('click', e => {
-        if (e.target.closest('#search-toggle')) openSearchModal();
-    });
+    const toggleBtn = e.target.closest('#search-toggle');
+    if (!toggleBtn) return;
+    toggleBtn.classList.remove('pressed');
+    void toggleBtn.offsetWidth; // restart animation if clicked again quickly
+    toggleBtn.classList.add('pressed');
+    openSearchModal();
+});
+
+searchToggle.addEventListener('animationend', () => {
+    searchToggle.classList.remove('pressed');
+});
 
     document.addEventListener('keydown', e => {
         if (e.key === '/' && !e.metaKey && !e.ctrlKey) {
