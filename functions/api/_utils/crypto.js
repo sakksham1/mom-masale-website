@@ -3,14 +3,15 @@
 // generally don't run in the Cloudflare Workers runtime, so we use PBKDF2 which is
 // natively supported and secure enough at this scale.
 //
-// CURRENT_ITERATIONS follows current PBKDF2-SHA256 guidance. Accounts created
-// before this was raised from 100,000 keep working — verifyPassword() takes
-// the iteration count that account's hash was actually created with — and
-// get opportunistically re-hashed at the new standard the next time they log
-// in successfully (see functions/api/auth/login.js).
+// CURRENT_ITERATIONS is fixed at 100,000 — Cloudflare Workers' WebCrypto
+// implementation throws NotSupportedError for any single PBKDF2 deriveBits()
+// call above that, which is a hard runtime ceiling (not a config knob), so
+// this constant must never be raised past it. Since CURRENT_ITERATIONS and
+// LEGACY_ITERATIONS are now the same value, needsRehash() is effectively a
+// no-op — nothing to opportunistically upgrade to.
 
-const CURRENT_ITERATIONS = 210000;
-const LEGACY_ITERATIONS = 100000; // default for rows created before the bump
+const CURRENT_ITERATIONS = 100000;
+const LEGACY_ITERATIONS = 100000;
 
 function toHex(buffer) {
   return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
