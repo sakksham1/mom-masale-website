@@ -515,9 +515,38 @@ function renderProduct(p, allProducts, recipes, blogPosts, template) {
 
 // ── RECIPE rendering ─────────────────────────────────────
 
+function buildRecipeInstructions(r, canonical) {
+  return (r.steps || []).map((step, i) => {
+    const stepNum = i + 1;
+    const name = step.length > 60 ? step.slice(0, 57).trimEnd() + '…' : step;
+    return {
+      '@type': 'HowToStep',
+      name,
+      text: step,
+      url: `${canonical}#step-${stepNum}`,
+      image: `${SITE_URL}/${r.image}`,
+    };
+  });
+}
+
+function buildRecipeVideoSchema(r) {
+  if (!r.video || !r.video.youtubeId) return undefined;
+  const thumbnailUrl = r.video.thumbnailUrl || `https://img.youtube.com/vi/${r.video.youtubeId}/hqdefault.jpg`;
+  return {
+    '@type': 'VideoObject',
+    name: r.video.title || r.title,
+    description: r.video.description || r.description || r.title,
+    thumbnailUrl: [thumbnailUrl],
+    uploadDate: r.video.uploadDate || undefined,
+    contentUrl: `https://www.youtube.com/watch?v=${r.video.youtubeId}`,
+    embedUrl: `https://www.youtube.com/embed/${r.video.youtubeId}`,
+  };
+}
+
 function buildRecipeSchema(r) {
   const totalMinutes = isoDurationToMinutes(r.prepTime) + isoDurationToMinutes(r.cookTime);
-  return {
+  const canonical = `${SITE_URL}/recipes/${r.slug}`;
+  const schema = {
     '@context': 'https://schema.org',
     '@type': 'Recipe',
     name: r.title,
@@ -529,10 +558,14 @@ function buildRecipeSchema(r) {
     cookTime: r.cookTime || undefined,
     totalTime: minutesToIsoDuration(totalMinutes),
     recipeYield: r.servings ? `${r.servings} servings` : undefined,
+    keywords: (r.seo && r.seo.keywords && r.seo.keywords.length) ? r.seo.keywords.join(', ') : undefined,
     recipeIngredient: (r.ingredients || []).map(ing => ing.text),
-    recipeInstructions: (r.steps || []).map(step => ({ '@type': 'HowToStep', text: step })),
+    recipeInstructions: buildRecipeInstructions(r, canonical),
     author: { '@type': 'Organization', name: 'Mom Masale' },
   };
+  const video = buildRecipeVideoSchema(r);
+  if (video) schema.video = video;
+  return schema;
 }
 
 function buildRecipeBreadcrumbSchema(r) {
@@ -563,8 +596,8 @@ function buildIngredientsHtml(r, productBySlug) {
 }
 
 function buildStepsHtml(r) {
-  return (r.steps || []).map(step => `
-            <li class="recipe-step">${escapeHtml(step)}</li>`).join('');
+  return (r.steps || []).map((step, i) => `
+            <li class="recipe-step" id="step-${i + 1}">${escapeHtml(step)}</li>`).join('');
 }
 
 // "Shop the Ingredients" section on recipe pages
@@ -628,6 +661,17 @@ function buildRelatedBlogForRecipeHtml(r, blogPosts) {
 </div>`;
 }
 
+function buildRecipeVideoHtml(r) {
+  if (!r.video || !r.video.youtubeId) return '';
+  return `
+<div class="container">
+    <h2 class="section-title">Watch How It's Made</h2>
+    <div class="recipe-video-wrap">
+        <iframe src="https://www.youtube.com/embed/${escapeHtml(r.video.youtubeId)}" title="${escapeHtml(r.video.title || r.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+</div>`;
+}
+
 function renderRecipe(r, allRecipes, productBySlug, blogPosts, template) {
   const title = escapeHtml((r.seo && r.seo.title) || `${r.title} Recipe | Mom Masale`);
   const metaDesc = escapeHtml((r.seo && r.seo.metaDescription) || r.description || '');
@@ -655,6 +699,7 @@ function renderRecipe(r, allRecipes, productBySlug, blogPosts, template) {
     '{{RECIPE_SERVINGS}}': String(r.servings || ''),
     '{{RECIPE_INGREDIENTS_LIST}}': buildIngredientsHtml(r, productBySlug),
     '{{RECIPE_STEPS_LIST}}': buildStepsHtml(r),
+    '{{RECIPE_VIDEO_BLOCK}}': buildRecipeVideoHtml(r),
     '{{RECIPE_SHOP_INGREDIENTS_BLOCK}}': buildShopIngredientsHtml(r, productBySlug),
     '{{RECIPE_RELATED_BLOG_BLOCK}}': buildRelatedBlogForRecipeHtml(r, blogPosts),
     '{{RECIPE_RELATED_BLOCK}}': buildRelatedRecipesForRecipeHtml(r, allRecipes),

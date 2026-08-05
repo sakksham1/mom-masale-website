@@ -48,6 +48,7 @@
             titleField: 'title',
             subtitleField: (item) => `${item.category || ''}${item.trending ? ' · trending' : ''}${item.essentials ? ' · essential' : ''}`,
             imageField: 'image',
+            videoField: 'video',
             createFields: [
                 { key: 'title', label: 'Title', type: 'text', required: true },
                 { key: 'category', label: 'Category', type: 'text', required: true },
@@ -219,6 +220,13 @@
                     <input type="checkbox" class="studio-toggle" data-resource="${resourceKey}" data-id="${escapeHtml(id)}" data-field="${t.key}" ${item[t.key] ? 'checked' : ''}>
                     ${escapeHtml(t.label)}
                 </label>`).join('');
+            const videoId = config.videoField && item[config.videoField] ? item[config.videoField].youtubeId || '' : '';
+            const videoControl = config.videoField ? `
+                    <div class="studio-video-control">
+                        <label for="studio-video-${escapeHtml(id)}">YouTube video</label>
+                        <input id="studio-video-${escapeHtml(id)}" class="studio-video-input" data-resource="${resourceKey}" data-id="${escapeHtml(id)}" value="${escapeHtml(videoId)}" placeholder="YouTube URL or video ID">
+                        <button type="button" class="btn btn-outline studio-video-save-btn" data-resource="${resourceKey}" data-id="${escapeHtml(id)}">Save video</button>
+                    </div>` : '';
             return `
                 <div class="admin-product-row" data-id="${escapeHtml(id)}">
                     ${config.imageField ? `<img src="${escapeHtml(item[config.imageField] || '')}" alt="" width="44" height="44" onerror="this.style.visibility='hidden'">` : ''}
@@ -227,6 +235,7 @@
                         <span class="admin-product-meta">${escapeHtml(subtitle)}</span>
                     </div>
                     ${toggles}
+                    ${videoControl}
                     <button type="button" class="btn btn-outline studio-delete-btn" data-resource="${resourceKey}" data-id="${escapeHtml(id)}">Delete</button>
                 </div>`;
         }).join('');
@@ -250,6 +259,30 @@
     });
 
     document.addEventListener('click', async e => {
+        const videoBtn = e.target.closest('.studio-video-save-btn');
+        if (videoBtn) {
+            const { resource, id } = videoBtn.dataset;
+            const input = document.querySelector(`.studio-video-input[data-resource="${resource}"][data-id="${id}"]`);
+            const youtubeId = getYouTubeId(input.value);
+            if (input.value.trim() && !youtubeId) {
+                alert('Enter a valid YouTube URL or 11-character video ID.');
+                return;
+            }
+            const config = RESOURCES[resource];
+            videoBtn.disabled = true; videoBtn.textContent = 'Saving…';
+            try {
+                await api(config.updatePath, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ [config.idField]: id, updates: { video: youtubeId ? { youtubeId } : null } }),
+                });
+                showToast(youtubeId ? 'Video saved — the site will rebuild in a minute or two.' : 'Video removed — the site will rebuild in a minute or two.');
+            } catch (err) {
+                alert('Could not save video: ' + err.message);
+            } finally {
+                videoBtn.disabled = false; videoBtn.textContent = 'Save video';
+            }
+            return;
+        }
         const delBtn = e.target.closest('.studio-delete-btn');
         if (!delBtn) return;
         const { resource, id } = delBtn.dataset;
@@ -264,4 +297,20 @@
             delBtn.disabled = false; delBtn.textContent = 'Delete';
         }
     });
+
+    function getYouTubeId(value) {
+        const input = value.trim();
+        if (/^[A-Za-z0-9_-]{11}$/.test(input)) return input;
+        try {
+            const url = new URL(input);
+            let id = '';
+            if (url.hostname === 'youtu.be' || url.hostname.endsWith('.youtu.be')) id = url.pathname.slice(1).split('/')[0];
+            else if (url.hostname === 'youtube.com' || url.hostname.endsWith('.youtube.com')) {
+                id = url.searchParams.get('v') || (url.pathname.match(/^\/(?:embed|shorts|live)\/([^/?#]+)/) || [])[1] || '';
+            }
+            return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : '';
+        } catch {
+            return '';
+        }
+    }
 })();

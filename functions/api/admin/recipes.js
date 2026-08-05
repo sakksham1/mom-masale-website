@@ -6,7 +6,7 @@ import { logAudit } from '../_utils/admin.js';
 const RECIPES_PATH = 'data/recipes.json';
 const PRODUCTS_PATH = 'data/products.json';
 const EDITABLE_FIELDS = ['title', 'category', 'cuisine', 'description', 'image', 'imageAlt',
-  'servings', 'prepTime', 'cookTime', 'trending', 'essentials', 'ingredients', 'steps', 'relatedProducts'];
+  'servings', 'prepTime', 'cookTime', 'trending', 'essentials', 'ingredients', 'steps', 'relatedProducts', 'video'];
 
 function slugify(name) {
   return String(name).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-+|-+$)/g, '');
@@ -52,6 +52,7 @@ export async function onRequestPost(context) {
       trending: !!body.trending, essentials: !!body.essentials,
       ingredients: body.ingredients || [], steps: body.steps || [],
       relatedProducts: body.relatedProducts || [],
+      video: body.video || undefined,
       seo: {
         title: `${title} Recipe | Mom Masale`,
         metaDescription: `Learn how to make ${title} at home with this easy Mom Masale recipe.`,

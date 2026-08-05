@@ -4316,9 +4316,36 @@ nav > .theme-toggle {
     padding: 0.4rem 0.8rem;
     flex-shrink: 0;
 }
+.studio-video-control {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 4px;
+}
+.studio-video-control label {
+    font-size: 0.82rem;
+    white-space: nowrap;
+}
+.studio-video-control input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid var(--cream-dark);
+    border-radius: 6px;
+    background: var(--white);
+    color: var(--text);
+}
+.studio-video-save-btn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    white-space: nowrap;
+}
 
 @media (max-width: 640px) {
     .admin-product-row { flex-wrap: wrap; }
+    .studio-video-control { align-items: stretch; flex-wrap: wrap; }
+    .studio-video-control input { flex-basis: 100%; }
     .admin-order-controls { flex-direction: column; align-items: stretch; }
 }
 
@@ -4852,4 +4879,23 @@ a.rating-badge-overlay:hover .rating-badge-stars {
 .reviews-section,
 #review-summary-mount {
     scroll-margin-top: 100px;
+}
+
+/* ── RECIPE VIDEO EMBED ── */
+.recipe-video-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+.recipe-video-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
 }
