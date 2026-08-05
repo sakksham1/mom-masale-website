@@ -602,6 +602,14 @@ function escapeHtml(str) {
         .replace(/'/g, '&#39;');
 }
 
+// ── RATING BADGE (product cards + modal — overlaid on the card image) ──
+function ratingBadgeHtml(p) {
+    if (!p.aggregateRating || !p.aggregateRating.reviewCount) return '';
+    const rounded = Math.max(0, Math.min(5, Math.round(p.aggregateRating.ratingValue)));
+    const stars = '★'.repeat(rounded) + '☆'.repeat(5 - rounded);
+    return `<span class="rating-badge-overlay"><span class="rating-badge-stars" aria-hidden="true">${stars}</span><span class="rating-badge-value">${p.aggregateRating.ratingValue.toFixed(1)}</span></span>`;
+}
+
 // ── LOAD PRODUCTS ──
 async function loadProducts() {
     await window.settingsReady;
@@ -623,6 +631,7 @@ async function loadProducts() {
       <div class="card-flip-inner">
         <div class="card-face card-face-front">
         <div class="card-image">
+            ${ratingBadgeHtml(p)}
             <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" width="400" height="400"
                 onload="this.closest('.card-image').classList.add('img-loaded')"
                 onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=${encodeURIComponent(p.name)}'">

@@ -351,6 +351,19 @@ function buildInitialPriceDisplay(p) {
   return `<span class="price-original">₹${original}</span><span class="price-discounted">₹${discounted}</span><span class="discount-badge">25% OFF</span>`;
 }
 
+// Reuses the customer-facing "review-summary-mount" id already emitted by
+// buildReviewsHtml() further down the page as the scroll target — tapping
+// the badge jumps straight to the reviews section (scroll-behavior: smooth
+// is already global, see css/style.css).
+function buildRatingBadgeHtml(p) {
+  const agg = p.aggregateRating;
+  if (!agg || !agg.reviewCount) return '';
+  return `<a href="#review-summary-mount" class="rating-badge-overlay rating-badge-link" aria-label="${agg.reviewCount} review${agg.reviewCount === 1 ? '' : 's'} — jump to reviews">
+                <span class="rating-badge-stars" aria-hidden="true">${starString(agg.ratingValue)}</span>
+                <span class="rating-badge-value">${agg.ratingValue.toFixed(1)}</span>
+            </a>`;
+}
+
 function buildFaqHtml(p) {
   if (!p.faq || !p.faq.length) return '';
   const items = p.faq.map(f => `
@@ -485,6 +498,7 @@ function renderProduct(p, allProducts, recipes, blogPosts, template) {
     '{{PRODUCT_COMING_SOON_CLASS}}': p.comingSoon ? ' card--coming-soon' : '',
     '{{PRODUCT_COMING_SOON_RIBBON}}': p.comingSoon ? '<span class="launching-ribbon">Launching Soon</span>' : '',
     '{{PRODUCT_PURCHASE_BLOCK}}': buildPurchaseBlockHtml(p),
+    '{{PRODUCT_RATING_BADGE}}': buildRatingBadgeHtml(p),
     '{{PRODUCT_FAQ_BLOCK}}': buildFaqHtml(p),
     '{{PRODUCT_REVIEWS_BLOCK}}': buildReviewsHtml(p),
     '{{PRODUCT_RELATED_BLOCK}}': buildRelatedProductsForProductHtml(p, allProducts),

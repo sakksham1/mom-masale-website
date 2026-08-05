@@ -83,6 +83,7 @@
 <div class="container">
     <div class="card product-detail-card{{PRODUCT_COMING_SOON_CLASS}}" data-category="{{PRODUCT_CATEGORY}}">
         <div class="card-image">
+            {{PRODUCT_RATING_BADGE}}
             <img src="../{{PRODUCT_IMAGE}}" alt="{{PRODUCT_IMAGE_ALT}}" loading="lazy" width="400" height="400"
                 onload="this.closest('.card-image').classList.add('img-loaded')"
                 onerror="this.src='https://placehold.co/400x400/7b1120/fff?text={{PRODUCT_NAME}}'">

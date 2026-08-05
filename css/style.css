@@ -4783,3 +4783,73 @@ header > .search-toggle {
 [data-theme="dark"] .search-view-all-link { color: var(--gold); border-top-color: rgba(255,255,255,0.08); }
 
 .search-page-bar { max-width: 560px; margin-bottom: 1.5rem; }
+
+/* ── RATING BADGE (overlaid on the card image — cards, modal preview, detail page) ── */
+.rating-badge-overlay {
+    position: absolute;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.92);
+    color: var(--maroon);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    text-decoration: none;
+    line-height: 1;
+    pointer-events: none;
+}
+[data-theme="dark"] .rating-badge-overlay {
+    background: rgba(20,26,40,0.9);
+    color: var(--gold);
+}
+.rating-badge-overlay .rating-badge-stars {
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+.rating-badge-overlay .rating-badge-value {
+    font-weight: 700;
+}
+
+/* Grid / hscroll product cards: top-left of the image */
+.card--collapsed .card-image .rating-badge-overlay {
+    top: 8px;
+    left: 8px;
+}
+
+/* Modal preview + product detail page: extreme top-right of the image */
+.product-modal .card-image .rating-badge-overlay,
+.product-detail-card .card-image .rating-badge-overlay {
+    top: 8px;
+    right: 8px;
+}
+
+/* The detail-page badge is tappable — re-enable pointer events and hover state */
+a.rating-badge-overlay {
+    pointer-events: auto;
+    cursor: pointer;
+}
+a.rating-badge-overlay:hover {
+    background: var(--gold);
+    color: #000;
+}
+a.rating-badge-overlay:hover .rating-badge-stars {
+    color: #000;
+}
+
+/* Nudge the share button down so it doesn't collide with the badge in the same corner */
+.card-image:has(.rating-badge-overlay) .share-btn {
+    top: 44px;
+}
+
+/* Anchor-jump target: keeps the reviews section clear of the sticky header */
+.reviews-section,
+#review-summary-mount {
+    scroll-margin-top: 100px;
+}
