@@ -114,6 +114,70 @@ document.querySelectorAll('nav a').forEach(a => {
     }).catch(() => {});
 })();
 
+// ── NAVIGATION GROUPS ──
+// The underlying page markup still contains ordinary links, so the site remains
+// usable without JavaScript. On load we progressively group the secondary
+// destinations into compact, keyboard-accessible dropdowns everywhere.
+(function() {
+    const navMenu = document.getElementById('nav-menu');
+    if (!navMenu) return;
+
+    // Careers was intentionally introduced without touching every historical
+    // page header. Add its normal link before creating the "Us" group.
+    if (![...navMenu.querySelectorAll('a')].some(link => /\/careers(?:\.html)?$/.test(new URL(link.href, location.href).pathname))) {
+        const inSubdir = /\/(products|recipes|guide)\//.test(location.pathname);
+        const careersLink = document.createElement('a');
+        careersLink.href = (inSubdir ? '../' : '') + 'careers';
+        careersLink.innerHTML = `<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z"/><path d="M4 21c.8-4 3.4-6 8-6s7.2 2 8 6"/><path d="m17 5 1 1 2-2"/></svg><span>Careers</span>`;
+        if (location.pathname.endsWith('/careers') || location.pathname.endsWith('careers')) careersLink.classList.add('active');
+        navMenu.appendChild(careersLink);
+    }
+
+    function routeFor(link) {
+        try {
+            return new URL(link.getAttribute('href'), location.href).pathname
+                .replace(/\/index\.html$/, '/')
+                .replace(/\.html$/, '')
+                .replace(/\/$/, '') || '/';
+        } catch { return ''; }
+    }
+
+    function findRoute(route) {
+        return [...navMenu.querySelectorAll(':scope > a')]
+            .find(link => routeFor(link) === `/${route}`);
+    }
+
+    function makeDropdown(label, routes) {
+        const links = routes.map(findRoute).filter(Boolean);
+        if (!links.length) return;
+        const group = document.createElement('div');
+        group.className = 'nav-dropdown';
+        const menuId = `nav-dropdown-${label.toLowerCase().replace(/\s+/g, '-')}`;
+        const active = links.some(link => link.classList.contains('active'));
+        group.innerHTML = `<button class="nav-dropdown-toggle${active ? ' active' : ''}" type="button" aria-expanded="false" aria-controls="${menuId}"><span>${label}</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7 5 5 5-5"/></svg></button><div class="nav-dropdown-menu" id="${menuId}" role="group" aria-label="${label}"></div>`;
+        navMenu.insertBefore(group, links[0]);
+        const menu = group.querySelector('.nav-dropdown-menu');
+        links.forEach(link => menu.appendChild(link));
+        const toggle = group.querySelector('.nav-dropdown-toggle');
+        toggle.addEventListener('click', () => {
+            const willOpen = !group.classList.contains('open');
+            navMenu.querySelectorAll('.nav-dropdown.open').forEach(item => item.classList.remove('open'));
+            navMenu.querySelectorAll('.nav-dropdown-toggle').forEach(button => button.setAttribute('aria-expanded', 'false'));
+            group.classList.toggle('open', willOpen);
+            toggle.setAttribute('aria-expanded', String(willOpen));
+        });
+    }
+
+    makeDropdown('Spice Hub', ['recipes', 'spice-guide']);
+    makeDropdown('Us', ['about', 'contact', 'careers']);
+
+    document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        navMenu.querySelectorAll('.nav-dropdown.open').forEach(item => item.classList.remove('open'));
+        navMenu.querySelectorAll('.nav-dropdown-toggle').forEach(button => button.setAttribute('aria-expanded', 'false'));
+    });
+})();
+
 // ── HAMBURGER MENU ──
 const hamburger = document.getElementById('hamburger');
 const nav = document.getElementById('nav-menu');
@@ -129,6 +193,8 @@ function closeNav() {
     }, 400);
     overlay.classList.remove('active');
     hamburger.classList.remove('open');
+    nav.querySelectorAll('.nav-dropdown.open').forEach(item => item.classList.remove('open'));
+    nav.querySelectorAll('.nav-dropdown-toggle').forEach(button => button.setAttribute('aria-expanded', 'false'));
 }
 
 if (hamburger && nav) {

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>(function(){try{var s=localStorage.getItem('theme'),d=s?s==='dark':matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.setAttribute('data-theme','dark')}catch(e){}})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore current opportunities at Mom Masale and apply to join our growing team.">
+    <meta name="robots" content="noindex, follow">
+    <title>Careers | Mom Masale</title>
+    <link rel="stylesheet" href="css/style.min.css">
+</head>
+<body>
+<header>
+    <div class="navbar">
+        <a class="logo" href="/">MOM <span>MASALE</span></a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
+        <nav id="nav-menu">
+            <a href="/"><span>Home</span></a><a href="products"><span>Products</span></a><a href="recipes"><span>Recipes</span></a><a href="spice-guide"><span>Spice Guide</span></a><a href="about"><span>About</span></a><a href="contact"><span>Contact</span></a>
+        </nav>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"><span class="toggle-icon">☀️</span><span class="toggle-label">Light</span></button>
+</header>
+<div class="nav-overlay" id="nav-overlay"></div>
+
+<main>
+    <section class="careers-hero">
+        <div class="careers-hero__content">
+            <p class="careers-eyebrow">CAREERS AT MOM MASALE</p>
+            <h1>Help bring authentic flavour to more homes.</h1>
+            <p>We are building a thoughtful, ambitious team around quality food and the people who make it possible.</p>
+            <a class="btn careers-hero__cta" href="#open-roles">View open roles</a>
+        </div>
+        <div class="careers-hero__ornament" aria-hidden="true"><span>✦</span><span>✦</span><span>✦</span></div>
+    </section>
+
+    <section class="container careers-intro" aria-labelledby="why-work-here">
+        <div>
+            <p class="careers-eyebrow">OUR KITCHEN, YOUR IMPACT</p>
+            <h2 id="why-work-here">A growing Indian food company with room to make a difference.</h2>
+        </div>
+        <p>At Mom Masale, every role contributes to products people trust in their everyday kitchens. We value ownership, care for detail, and a willingness to learn as we grow together.</p>
+    </section>
+
+    <section class="container careers-openings" id="open-roles" aria-labelledby="open-roles-title">
+        <div class="careers-section-heading">
+            <div><p class="careers-eyebrow">CURRENT OPPORTUNITIES</p><h2 id="open-roles-title">Open roles</h2></div>
+            <p id="jobs-count" aria-live="polite"></p>
+        </div>
+        <div id="jobs-loading" class="careers-state">Loading opportunities…</div>
+        <div id="jobs-list" class="careers-jobs" hidden></div>
+        <div id="jobs-empty" class="careers-state" hidden>There are no open roles right now. Please check back soon.</div>
+        <div id="jobs-error" class="careers-state careers-state--error" hidden>We could not load open roles. Please refresh and try again.</div>
+    </section>
+
+    <section class="careers-talent container">
+        <div><p class="careers-eyebrow">DON'T SEE A MATCH?</p><h2>Keep in touch.</h2></div>
+        <p>If there isn't a suitable opening today, follow our social channels for future opportunities.</p>
+    </section>
+</main>
+
+<dialog class="career-dialog" id="career-dialog" aria-labelledby="career-dialog-title">
+    <button class="career-dialog__close" id="career-dialog-close" type="button" aria-label="Close application">×</button>
+    <div id="career-job-detail"></div>
+    <div class="career-apply" id="career-apply-section">
+        <h2 id="career-dialog-title">Apply for this role</h2>
+        <p class="career-apply__lead">Share your details and CV. No account is needed.</p>
+        <form id="career-application-form" novalidate>
+            <input type="hidden" name="jobSlug" id="career-job-slug">
+            <div class="honeypot" aria-hidden="true"><label>Leave this empty<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+            <div class="career-form-grid">
+                <div class="form-group"><label for="career-name">Name *</label><input id="career-name" name="name" autocomplete="name" maxlength="140" required></div>
+                <div class="form-group"><label for="career-email">Email *</label><input id="career-email" name="email" type="email" autocomplete="email" maxlength="254" required></div>
+                <div class="form-group"><label for="career-phone">Phone *</label><input id="career-phone" name="phone" type="tel" autocomplete="tel" maxlength="30" required></div>
+                <div class="form-group"><label for="career-location">Current location *</label><input id="career-location" name="location" autocomplete="address-level2" maxlength="180" placeholder="City, State" required></div>
+                <div class="form-group"><label for="career-education">Education <span>(optional)</span></label><textarea id="career-education" name="education" rows="3" maxlength="1000"></textarea></div>
+                <div class="form-group"><label for="career-experience">Experience <span>(optional)</span></label><textarea id="career-experience" name="experience" rows="3" maxlength="3000" placeholder="Briefly describe relevant experience"></textarea></div>
+                <div class="form-group"><label for="career-portfolio">Portfolio / LinkedIn <span>(optional)</span></label><input id="career-portfolio" name="portfolioUrl" type="url" maxlength="500" placeholder="https://"></div>
+                <div class="form-group"><label for="career-salary">Expected salary <span>(optional)</span></label><input id="career-salary" name="expectedSalary" maxlength="100" placeholder="e.g. ₹5,00,000 per year"></div>
+            </div>
+            <div class="form-group"><label for="career-cover-letter">Anything else you'd like us to know? <span>(optional)</span></label><textarea id="career-cover-letter" name="coverLetter" rows="4" maxlength="4000"></textarea></div>
+            <div class="form-group"><label for="career-resume">CV / Resume *</label><input id="career-resume" name="resume" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required><small>PDF, DOC, or DOCX · maximum 5 MB</small></div>
+            <label class="career-consent"><input id="career-consent" type="checkbox" required> I consent to Mom Masale processing my application and CV for recruitment.</label>
+            <p class="career-form-message" id="career-form-message" role="alert"></p>
+            <button class="btn" type="submit" id="career-submit">Submit application</button>
+        </form>
+        <div class="career-success" id="career-success" hidden><h2>Application received</h2><p>Thank you for applying. We have sent a confirmation to your email and will be in touch if your profile is a fit.</p></div>
+    </div>
+</dialog>
+
+<footer><div class="footer-inner"><div class="footer-brand"><a class="logo" href="/">MOM <span>MASALE</span></a><p>Authentic Indian spices brought to you by Sakksham Enterprises.</p></div><div class="footer-links"><h3>Quick Links</h3><a href="products">Products</a><a href="recipes">Recipes</a><a href="spice-guide">Spice Guide</a><a href="about">About Us</a><a href="contact">Contact</a></div><div class="footer-links"><h3>Contact</h3><a href="tel:9984064777">📞 9984064777</a><a href="mailto:sakkshamenterprises@gmail.com">✉ sakkshamenterprises@gmail.com</a></div></div><div class="footer-bottom">© A brand of Sakksham Enterprises, Shuklaganj, Unnao</div></footer>
+<script src="js/main.min.js" defer></script>
+<script src="js/careers.js" defer></script>
+</body>
+</html>

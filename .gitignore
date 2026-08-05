@@ -31,3 +31,6 @@ build/
 
 cookies.txt
 *.cookies
+
+# Local-only working files (never publish)
+somethings/

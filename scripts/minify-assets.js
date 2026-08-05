@@ -41,6 +41,7 @@ const HTML_FILES = [
   'products.html',
   'about.html',
   'contact.html',
+  'careers.html',
   'recipes.html',
   'spice-guide.html',
   '404.html',
