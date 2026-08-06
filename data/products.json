@@ -60,7 +60,19 @@
         "answer": "Prepared with a focus on quality and authentic flavour. Refer to the product packaging for complete ingredient information."
       }
     ],
-    "relatedProducts": []
+    "relatedProducts": [],
+    "aggregateRating": {
+      "reviewCount": 1,
+      "ratingValue": 5
+    },
+    "reviews": [
+      {
+        "rating": 5,
+        "body": "MOM Masale Amchur Powder की क्वालिटी बहुत बढ़िया है। इसका खट्टापन बिल्कुल नेचुरल है और स्वाद में किसी भी तरह की कड़वाहट नहीं है। पाउडर बारीक, ताज़ा और अच्छी तरह पैक किया गया है। चाट, सब्जी, दाल और स्नैक्स में डालने से स्वाद तुरंत बढ़ जाता है। 1kg पैक किफायती है और लंबे समय तक चल जाता है। अगर आप शुद्ध, फ्रेश और स्वादिष्ट अमचूर पाउडर चाहते हैं, तो यह एक बेहतरीन विकल्प है। ज़रूर खरीदें!",
+        "authorName": "ROBIN S.",
+        "datePublished": "2026-08-05"
+      }
+    ]
   },
   {
     "name": "Biryani Masala",
@@ -281,7 +293,7 @@
     "imageAlt": "Mom Masale Chatpata Sprinkle Masala retail pack",
     "featured": false,
     "bestseller": false,
-    "newArrival": false,
+    "newArrival": true,
     "comingSoon": false,
     "seo": {
       "title": "Buy Chatpata Sprinkle Masala Online | Mom Masale",
