@@ -32,19 +32,24 @@
     }
 
     async function openJob(slug, updateUrl = true) {
-        try {
-            const response = await fetch(`/api/careers/jobs?slug=${encodeURIComponent(slug)}`);
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Job not found');
-            const job = data.job;
-            detail.innerHTML = `<div class="career-detail"><p class="careers-eyebrow">${escapeHtml(job.department || 'MOM MASALE')}</p><h1>${escapeHtml(job.title)}</h1><div class="career-detail__facts"><span>${escapeHtml(job.location)}</span><span>${escapeHtml(label(job.workplaceType))}</span><span>${escapeHtml(label(job.employmentType))}</span>${job.experienceLevel ? `<span>${escapeHtml(job.experienceLevel)}</span>` : ''}${salary(job.salary) ? `<span>${salary(job.salary)}</span>` : ''}</div><p class="career-detail__summary">${escapeHtml(job.summary)}</p><div class="career-detail__description">${escapeHtml(job.description).replace(/\n/g, '<br>')}</div>${job.responsibilities?.length ? `<section><h2>What you'll do</h2>${list(job.responsibilities)}</section>` : ''}${job.qualifications?.length ? `<section><h2>What we're looking for</h2>${list(job.qualifications)}</section>` : ''}${job.skills?.length ? `<section><h2>Skills that help</h2>${list(job.skills)}</section>` : ''}</div>`;
-            slugInput.value = job.slug;
-            form.reset(); slugInput.value = job.slug; formMessage.textContent = '';
-            success.hidden = true; applySection.hidden = false;
-            dialog.showModal();
-            if (updateUrl) history.replaceState(null, '', `${location.pathname}?job=${encodeURIComponent(job.slug)}`);
-        } catch (err) { alert(err.message || 'Unable to open this role.'); }
-    }
+    try {
+        const response = await fetch(`/api/careers/jobs?slug=${encodeURIComponent(slug)}`);
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Job not found');
+        const job = data.job;
+        const jobUrl = `${location.origin}${location.pathname}?job=${encodeURIComponent(job.slug)}`;
+        detail.innerHTML = `<div class="career-detail">
+            <button type="button" class="share-btn" data-share-title="${escapeHtml(job.title)} — Careers at Mom Masale" data-share-url="${escapeHtml(jobUrl)}" aria-label="Share this role">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
+            </button>
+            <p class="careers-eyebrow">${escapeHtml(job.department || 'MOM MASALE')}</p><h1>${escapeHtml(job.title)}</h1><div class="career-detail__facts"><span>${escapeHtml(job.location)}</span><span>${escapeHtml(label(job.workplaceType))}</span><span>${escapeHtml(label(job.employmentType))}</span>${job.experienceLevel ? `<span>${escapeHtml(job.experienceLevel)}</span>` : ''}${salary(job.salary) ? `<span>${salary(job.salary)}</span>` : ''}</div><p class="career-detail__summary">${escapeHtml(job.summary)}</p><div class="career-detail__description">${escapeHtml(job.description).replace(/\n/g, '<br>')}</div>${job.responsibilities?.length ? `<section><h2>What you'll do</h2>${list(job.responsibilities)}</section>` : ''}${job.qualifications?.length ? `<section><h2>What we're looking for</h2>${list(job.qualifications)}</section>` : ''}${job.skills?.length ? `<section><h2>Skills that help</h2>${list(job.skills)}</section>` : ''}</div>`;
+        slugInput.value = job.slug;
+        form.reset(); slugInput.value = job.slug; formMessage.textContent = '';
+        success.hidden = true; applySection.hidden = false;
+        dialog.showModal();
+        if (updateUrl) history.replaceState(null, '', `${location.pathname}?job=${encodeURIComponent(job.slug)}`);
+    } catch (err) { alert(err.message || 'Unable to open this role.'); }
+}
 
     function clearJobUrl() { history.replaceState(null, '', location.pathname); }
     function closeJob() { if (dialog.open) dialog.close(); else clearJobUrl(); }

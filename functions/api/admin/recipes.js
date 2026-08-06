@@ -12,6 +12,25 @@ function slugify(name) {
   return String(name).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-+|-+$)/g, '');
 }
 
+// Recipes reference product slugs two ways: ingredients[].productSlug (shop
+// links) and relatedProducts. build-site.js's validateRecipes() throws a
+// HARD build error on any unknown slug — that failure only surfaces on the
+// next site build, long after this API call succeeded, so it's much better
+// to catch a typo/renamed-product here and reject the request immediately.
+// Mirrors the same check blog.js already does for its own relatedProducts.
+async function validateProductReferences(env, { ingredients, relatedProducts }) {
+  const slugsToCheck = new Set();
+  (ingredients || []).forEach(ing => { if (ing && ing.productSlug) slugsToCheck.add(ing.productSlug); });
+  (relatedProducts || []).forEach(slug => { if (slug) slugsToCheck.add(slug); });
+  if (slugsToCheck.size === 0) return null;
+
+  const { content } = await readRepoFile(env, PRODUCTS_PATH);
+  const productSlugs = new Set(JSON.parse(content).map(p => p.slug));
+  const bad = [...slugsToCheck].filter(s => !productSlugs.has(s));
+  if (bad.length) return `Unknown product slug(s) referenced: ${bad.join(', ')} — check for typos or a renamed/deleted product`;
+  return null;
+}
+
 export async function onRequestGet(context) {
   const { request, env } = context;
   const { isAdmin } = await requireAdmin(request, env);
@@ -34,6 +53,12 @@ export async function onRequestPost(context) {
 
   const { title, category, description } = body;
   if (!title || !category || !description) return jsonError('title, category, and description are required');
+
+  const refError = await validateProductReferences(env, {
+    ingredients: body.ingredients,
+    relatedProducts: body.relatedProducts,
+  });
+  if (refError) return jsonError(refError);
 
   try {
     const { content, sha } = await readRepoFile(env, RECIPES_PATH);
@@ -82,6 +107,12 @@ export async function onRequestPatch(context) {
   try { body = await request.json(); } catch { return jsonError('Invalid request body'); }
   const { slug, updates } = body;
   if (!slug || !updates) return jsonError('slug and an updates object are required');
+
+  const refError = await validateProductReferences(env, {
+    ingredients: updates.ingredients,
+    relatedProducts: updates.relatedProducts,
+  });
+  if (refError) return jsonError(refError);
 
   try {
     const { content, sha } = await readRepoFile(env, RECIPES_PATH);

@@ -802,7 +802,7 @@ nav a.active:hover {
 .career-dialog::backdrop { background: rgba(15,8,10,.68); backdrop-filter: blur(3px); }
 .career-dialog__close { position: sticky; float: right; top: .75rem; right: .75rem; z-index: 2; width: 2.3rem; height: 2.3rem; border: 0; border-radius: 50%; background: var(--maroon); color: white; font-size: 1.65rem; cursor: pointer; line-height: 1; }
 .career-detail, .career-apply { padding: clamp(1.4rem, 4vw, 3rem); }
-.career-detail { background: var(--cream-dark); border-bottom: 1px solid rgba(212,160,23,.35); }
+.career-detail { background: var(--cream-dark); border-bottom: 1px solid rgba(212,160,23,.35); position: relative; }
 [data-theme="dark"] .career-detail { background: #111a2b; }
 .career-detail h1 { color: var(--maroon); font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.15; padding-right: 2.2rem; }
 [data-theme="dark"] .career-detail h1 { color: var(--gold); }
