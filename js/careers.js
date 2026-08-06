@@ -4,6 +4,12 @@
     const empty = document.getElementById('jobs-empty');
     const error = document.getElementById('jobs-error');
     const count = document.getElementById('jobs-count');
+    const searchInput = document.getElementById('careers-search');
+    const searchClear = document.getElementById('careers-search-clear');
+    const noMatch = document.getElementById('jobs-no-match');
+    const noMatchTerm = document.getElementById('jobs-no-match-term');
+    const searchResetBtn = document.getElementById('careers-search-reset-btn');
+    let allJobs = [];
     const dialog = document.getElementById('career-dialog');
     const detail = document.getElementById('career-job-detail');
     const form = document.getElementById('career-application-form');
@@ -63,12 +69,51 @@
         finally { submit.disabled = false; submit.textContent = 'Submit application'; }
     });
 
+    function renderJobs(jobs) {
+        noMatch.hidden = true;
+        empty.hidden = true;
+        if (!jobs.length) {
+            jobsList.hidden = true;
+            if (searchInput && searchInput.value.trim()) {
+                noMatch.hidden = false;
+                noMatchTerm.textContent = searchInput.value.trim();
+            } else {
+                empty.hidden = false;
+            }
+            return;
+        }
+        jobsList.innerHTML = jobs.map(card).join('');
+        jobsList.hidden = false;
+    }
+
+    function applySearch() {
+        const term = (searchInput?.value || '').trim().toLowerCase();
+        if (searchClear) searchClear.hidden = !term;
+        if (!term) { renderJobs(allJobs); return; }
+        renderJobs(allJobs.filter(job =>
+            (job.title || '').toLowerCase().includes(term) ||
+            (job.location || '').toLowerCase().includes(term)
+        ));
+    }
+
+    searchInput?.addEventListener('input', applySearch);
+    searchClear?.addEventListener('click', () => {
+        if (searchInput) searchInput.value = '';
+        searchClear.hidden = true;
+        applySearch();
+        searchInput?.focus();
+    });
+    searchResetBtn?.addEventListener('click', () => {
+        if (searchInput) searchInput.value = '';
+        if (searchClear) searchClear.hidden = true;
+        applySearch();
+    });
+
     fetch('/api/careers/jobs').then(async response => {
         const data = await response.json(); if (!response.ok) throw new Error();
-        const jobs = data.jobs || []; loading.hidden = true;
-        count.textContent = jobs.length ? `${jobs.length} opening${jobs.length === 1 ? '' : 's'}` : '';
-        if (!jobs.length) { empty.hidden = false; return; }
-        jobsList.innerHTML = jobs.map(card).join(''); jobsList.hidden = false;
+        allJobs = data.jobs || []; loading.hidden = true;
+        count.textContent = allJobs.length ? `${allJobs.length} opening${allJobs.length === 1 ? '' : 's'}` : '';
+        applySearch();
         const job = new URLSearchParams(location.search).get('job'); if (job) openJob(job, false);
     }).catch(() => { loading.hidden = true; error.hidden = false; });
 })();

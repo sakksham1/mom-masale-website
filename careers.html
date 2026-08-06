@@ -46,9 +46,15 @@
             <div><p class="careers-eyebrow">CURRENT OPPORTUNITIES</p><h2 id="open-roles-title">Open roles</h2></div>
             <p id="jobs-count" aria-live="polite"></p>
         </div>
+        <div class="search-wrap careers-search-wrap" style="margin:1rem 0 1.4rem">
+            <span class="search-icon">🔍</span>
+            <input type="search" id="careers-search" class="product-search" placeholder="Search by title or location…" autocomplete="off">
+            <button class="search-clear" id="careers-search-clear" aria-label="Clear search" hidden>✕</button>
+        </div>
         <div id="jobs-loading" class="careers-state">Loading opportunities…</div>
         <div id="jobs-list" class="careers-jobs" hidden></div>
         <div id="jobs-empty" class="careers-state" hidden>There are no open roles right now. Please check back soon.</div>
+        <div id="jobs-no-match" class="careers-state" hidden>No roles match "<span id="jobs-no-match-term"></span>". <button type="button" class="btn btn-outline" id="careers-search-reset-btn">Clear search</button></div>
         <div id="jobs-error" class="careers-state careers-state--error" hidden>We could not load open roles. Please refresh and try again.</div>
     </section>
 

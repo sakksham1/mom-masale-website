@@ -148,28 +148,54 @@ document.querySelectorAll('nav a').forEach(a => {
     }
 
     function makeDropdown(label, routes) {
-        const links = routes.map(findRoute).filter(Boolean);
-        if (!links.length) return;
-        const group = document.createElement('div');
-        group.className = 'nav-dropdown';
-        const menuId = `nav-dropdown-${label.toLowerCase().replace(/\s+/g, '-')}`;
-        const active = links.some(link => link.classList.contains('active'));
-        group.innerHTML = `<button class="nav-dropdown-toggle${active ? ' active' : ''}" type="button" aria-expanded="false" aria-controls="${menuId}"><span>${label}</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7 5 5 5-5"/></svg></button><div class="nav-dropdown-menu" id="${menuId}" role="group" aria-label="${label}"></div>`;
-        navMenu.insertBefore(group, links[0]);
-        const menu = group.querySelector('.nav-dropdown-menu');
-        links.forEach(link => menu.appendChild(link));
-        const toggle = group.querySelector('.nav-dropdown-toggle');
-        toggle.addEventListener('click', () => {
-            const willOpen = !group.classList.contains('open');
-            navMenu.querySelectorAll('.nav-dropdown.open').forEach(item => item.classList.remove('open'));
-            navMenu.querySelectorAll('.nav-dropdown-toggle').forEach(button => button.setAttribute('aria-expanded', 'false'));
-            group.classList.toggle('open', willOpen);
-            toggle.setAttribute('aria-expanded', String(willOpen));
+    const links = routes.map(findRoute).filter(Boolean);
+    if (!links.length) return;
+    const group = document.createElement('div');
+    group.className = 'nav-dropdown';
+    const menuId = `nav-dropdown-${label.toLowerCase().replace(/\s+/g, '-')}`;
+    const active = links.some(link => link.classList.contains('active'));
+    group.innerHTML = `<button class="nav-dropdown-toggle${active ? ' active' : ''}" type="button" aria-expanded="false" aria-controls="${menuId}"><span>${label}</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7 5 5 5-5"/></svg></button><div class="nav-dropdown-menu" id="${menuId}" role="group" aria-label="${label}"></div>`;
+    navMenu.insertBefore(group, links[0]);
+    const menu = group.querySelector('.nav-dropdown-menu');
+    links.forEach(link => menu.appendChild(link));
+    const toggle = group.querySelector('.nav-dropdown-toggle');
+
+    function setOpen(willOpen) {
+        navMenu.querySelectorAll('.nav-dropdown.open').forEach(item => {
+            if (item !== group) item.classList.remove('open');
+        });
+        navMenu.querySelectorAll('.nav-dropdown-toggle').forEach(btn => {
+            if (btn !== toggle) btn.setAttribute('aria-expanded', 'false');
+        });
+        group.classList.toggle('open', willOpen);
+        toggle.setAttribute('aria-expanded', String(willOpen));
+    }
+
+    toggle.addEventListener('click', e => {
+        e.stopPropagation();
+        setOpen(!group.classList.contains('open'));
+    });
+
+    if (window.matchMedia('(hover: hover)').matches) {
+        let closeTimer;
+        group.addEventListener('mouseenter', () => {
+            clearTimeout(closeTimer);
+            setOpen(true);
+        });
+        group.addEventListener('mouseleave', () => {
+            closeTimer = setTimeout(() => setOpen(false), 250);
         });
     }
+}
 
     makeDropdown('Spice Hub', ['recipes', 'spice-guide']);
     makeDropdown('Us', ['about', 'contact', 'careers']);
+
+    document.addEventListener('click', event => {
+    if (event.target.closest('.nav-dropdown')) return;
+    navMenu.querySelectorAll('.nav-dropdown.open').forEach(item => item.classList.remove('open'));
+    navMenu.querySelectorAll('.nav-dropdown-toggle').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+});
 
     document.addEventListener('keydown', event => {
         if (event.key !== 'Escape') return;

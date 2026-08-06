@@ -2,6 +2,7 @@
 // /api/careers/manage/resume?applicationId=... after authorisation instead.
 import { requireCareerManager, jsonError, APPLICATION_STATUSES } from '../../_utils/careers.js';
 import { logAudit } from '../../_utils/admin.js';
+import { notifyApplicantStatusChange } from '../../_utils/career-notify.js';
 
 function view(row) {
   return { id: row.id, jobId: row.job_id, jobSlug: row.job_slug, jobTitle: row.job_title, name: row.applicant_name, email: row.email, phone: row.phone, location: row.location, education: row.education, experience: row.experience, portfolioUrl: row.portfolio_url, expectedSalary: row.expected_salary, coverLetter: row.cover_letter, resume: { filename: row.resume_filename, mime: row.resume_mime, bytes: row.resume_bytes }, status: row.status, source: row.source, createdAt: row.created_at, updatedAt: row.updated_at };
@@ -40,11 +41,23 @@ export async function onRequestPatch(context) {
   const status = String(body.status || '');
   const note = String(body.note || '').trim().slice(0, 3000);
   if (!Number.isInteger(id) || !APPLICATION_STATUSES.has(status)) return jsonError('A valid id and status are required');
-  const existing = await env.DB.prepare('SELECT id, status FROM career_applications WHERE id = ?').bind(id).first();
+  const existing = await env.DB.prepare(
+    `SELECT a.id, a.status, a.applicant_name, a.email, j.title as job_title
+     FROM career_applications a JOIN career_jobs j ON j.id = a.job_id WHERE a.id = ?`
+  ).bind(id).first();
   if (!existing) return jsonError('Application not found', 404);
+  const statusChanged = existing.status !== status;
   await env.DB.prepare(`UPDATE career_applications SET status = ?, updated_at = datetime('now') WHERE id = ?`).bind(status, id).run();
-  if (existing.status !== status || note) await env.DB.prepare(`INSERT INTO career_application_events (application_id, event_type, from_status, to_status, note, created_by) VALUES (?, ?, ?, ?, ?, ?)`)
-    .bind(id, existing.status !== status ? 'status_changed' : 'note_added', existing.status, status, note || null, auth.user.id).run();
+  if (statusChanged || note) await env.DB.prepare(`INSERT INTO career_application_events (application_id, event_type, from_status, to_status, note, created_by) VALUES (?, ?, ?, ?, ?, ?)`)
+    .bind(id, statusChanged ? 'status_changed' : 'note_added', existing.status, status, note || null, auth.user.id).run();
   await logAudit(env, { userId: auth.user.id, action: 'update', resource: 'career_application', resourceId: id, diff: { from: existing.status, to: status, hasNote: !!note } });
+
+  if (statusChanged) {
+    context.waitUntil(notifyApplicantStatusChange(env, {
+      email: existing.email, applicantName: existing.applicant_name,
+      jobTitle: existing.job_title, toStatus: status,
+    }));
+  }
+
   return Response.json({ ok: true, id, status });
 }
