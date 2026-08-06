@@ -820,6 +820,12 @@ nav a.active:hover {
 .career-consent input { margin-top: .25rem; accent-color: var(--maroon); }
 .career-form-message { min-height: 1.5rem; color: #b42318; margin-bottom: .7rem; }
 .career-success { text-align: center; padding: 1.5rem 0; }
+/* Dialog (full) view: share button sits top-LEFT to clear the dialog's own
+   close (×) button, which is pinned top-right via .career-dialog__close */
+.career-detail .share-btn { left: 10px; right: auto; }
+
+/* List/preview card: anchor point for the top-right share button */
+.career-job-card { position: relative; }
 @media (max-width: 700px) { .careers-hero { min-height: 365px; padding-top: 4rem; padding-bottom: 4rem; } .careers-hero__ornament { display: none; } .careers-intro, .careers-talent { grid-template-columns: 1fr; gap: .5rem; padding-top: 3rem; padding-bottom: 3rem; } .careers-intro > p, .careers-talent > p { padding-top: .5rem; } .career-job-card { display: block; } .career-job-card__button { margin-top: 1.2rem; width: 100%; text-align: center; } .career-form-grid { grid-template-columns: 1fr; } }
 
 /* ── FORMS ── */

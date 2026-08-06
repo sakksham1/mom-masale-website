@@ -28,8 +28,15 @@
     };
 
     function card(job) {
-        return `<article class="career-job-card"><div class="career-job-card__main"><p class="career-job-card__department">${escapeHtml(job.department || 'Mom Masale')}</p><h3>${escapeHtml(job.title)}</h3><p>${escapeHtml(job.summary)}</p><div class="career-job-card__tags"><span>${escapeHtml(job.location)}</span><span>${escapeHtml(label(job.workplaceType))}</span><span>${escapeHtml(label(job.employmentType))}</span>${job.experienceLevel ? `<span>${escapeHtml(job.experienceLevel)}</span>` : ''}</div></div><button class="btn btn-outline career-job-card__button" type="button" data-job-slug="${escapeHtml(job.slug)}">View role & apply</button></article>`;
-    }
+    const shareUrl = `${location.origin}${location.pathname}?job=${encodeURIComponent(job.slug)}`;
+    return `<article class="career-job-card">
+        <button type="button" class="share-btn" data-share-title="${escapeHtml(job.title)} — Careers at Mom Masale" data-share-url="${escapeHtml(shareUrl)}" aria-label="Share this role">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
+        </button>
+        <div class="career-job-card__main"><p class="career-job-card__department">${escapeHtml(job.department || 'Mom Masale')}</p><h3>${escapeHtml(job.title)}</h3><p>${escapeHtml(job.summary)}</p><div class="career-job-card__tags"><span>${escapeHtml(job.location)}</span><span>${escapeHtml(label(job.workplaceType))}</span><span>${escapeHtml(label(job.employmentType))}</span>${job.experienceLevel ? `<span>${escapeHtml(job.experienceLevel)}</span>` : ''}</div></div>
+        <button class="btn btn-outline career-job-card__button" type="button" data-job-slug="${escapeHtml(job.slug)}">View role & apply</button>
+    </article>`;
+}
 
     async function openJob(slug, updateUrl = true) {
     try {
