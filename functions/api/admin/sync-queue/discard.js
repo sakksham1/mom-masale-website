@@ -29,6 +29,10 @@ export async function onRequestPost(context) {
     await env.DB.prepare(`DELETE FROM site_sync_queue WHERE id IN (${placeholders})`)
       .bind(...pendingIds).run();
 
+    await env.DB.prepare(
+      `DELETE FROM content_staging WHERE source_type IN ('recipes','blog','settings')`
+    ).run();
+
     await logAudit(env, {
       userId: user.id, action: 'discard', resource: 'site_sync_queue', resourceId: null,
       diff: { itemCount: pendingIds.length },

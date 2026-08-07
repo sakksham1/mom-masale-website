@@ -11,7 +11,9 @@
 // category here fails fast instead of breaking the next site build.
 
 import { requireAdmin, forbidden, jsonError, logAudit } from '../_utils/admin.js';
-import { readRepoFile, writeRepoFile } from '../_utils/github.js';
+import { readRepoFile } from '../_utils/github.js';
+import { readStagedOrLive, stageContent } from '../_utils/content-staging.js';
+import { enqueueSync } from '../_utils/sync-queue.js';
 
 const BLOG_PATH = 'data/blog.json';
 const PRODUCTS_PATH = 'data/products.json';
@@ -47,7 +49,7 @@ async function validateReferences(env, { relatedProducts, relatedRecipes }) {
     if (bad.length) return `relatedProducts references unknown product slug(s): ${bad.join(', ')}`;
   }
   if (relatedRecipes?.length) {
-    const { content } = await readRepoFile(env, RECIPES_PATH);
+    const { content } = await readStagedOrLive(env, 'recipes', RECIPES_PATH);
     const recipeSlugs = new Set(JSON.parse(content).map(r => r.slug));
     const bad = relatedRecipes.filter(s => !recipeSlugs.has(s));
     if (bad.length) return `relatedRecipes references unknown recipe slug(s): ${bad.join(', ')}`;
@@ -60,7 +62,7 @@ export async function onRequestGet(context) {
   const { isAdmin } = await requireAdmin(request, env);
   if (!isAdmin) return forbidden();
   try {
-    const { content } = await readRepoFile(env, BLOG_PATH);
+    const { content } = await readStagedOrLive(env, 'blog', BLOG_PATH);
     return new Response(content, { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (err) {
     return jsonError(err.message, 502);
@@ -87,7 +89,7 @@ export async function onRequestPost(context) {
   if (refError) return jsonError(refError);
 
   try {
-    const { content, sha } = await readRepoFile(env, BLOG_PATH);
+    const { content } = await readStagedOrLive(env, 'blog', BLOG_PATH);
     const blogPosts = JSON.parse(content);
 
     const slug = slugify(title);
@@ -106,10 +108,14 @@ export async function onRequestPost(context) {
 
     blogPosts.push(newPost);
     const newContent = JSON.stringify(blogPosts, null, 2) + '\n';
-    await writeRepoFile(env, BLOG_PATH, newContent, sha, `chore(studio): add blog post "${title}"`);
+    await stageContent(env, 'blog', newContent, user.id);
+    await enqueueSync(env, {
+      sourceType: 'blog', sourceId: null, productSlug: null,
+      summary: `Blog post added: "${title}"`, createdBy: user.id,
+    });
     await logAudit(env, { userId: user.id, action: 'create', resource: 'blog', resourceId: slug, diff: newPost });
 
-    return new Response(JSON.stringify({ ok: true, post: newPost }), {
+    return new Response(JSON.stringify({ ok: true, post: newPost, status: 'pending_publish' }), {
       status: 201, headers: { 'Content-Type': 'application/json' },
     });
   } catch (err) {
@@ -141,7 +147,7 @@ export async function onRequestPatch(context) {
   if (refError) return jsonError(refError);
 
   try {
-    const { content, sha } = await readRepoFile(env, BLOG_PATH);
+    const { content } = await readStagedOrLive(env, 'blog', BLOG_PATH);
     const blogPosts = JSON.parse(content);
     const idx = blogPosts.findIndex(b => b.slug === slug);
     if (idx === -1) return jsonError('Blog post not found', 404);
@@ -151,10 +157,14 @@ export async function onRequestPatch(context) {
     }
 
     const newContent = JSON.stringify(blogPosts, null, 2) + '\n';
-    await writeRepoFile(env, BLOG_PATH, newContent, sha, `chore(studio): update blog post "${slug}"`);
+    await stageContent(env, 'blog', newContent, user.id);
+    await enqueueSync(env, {
+      sourceType: 'blog', sourceId: null, productSlug: null,
+      summary: `Blog post updated: "${slug}"`, createdBy: user.id,
+    });
     await logAudit(env, { userId: user.id, action: 'update', resource: 'blog', resourceId: slug, diff: updates });
 
-    return new Response(JSON.stringify({ ok: true, post: blogPosts[idx] }), {
+    return new Response(JSON.stringify({ ok: true, post: blogPosts[idx], status: 'pending_publish' }), {
       status: 200, headers: { 'Content-Type': 'application/json' },
     });
   } catch (err) {
@@ -172,16 +182,20 @@ export async function onRequestDelete(context) {
   if (!slug) return jsonError('slug query param is required');
 
   try {
-    const { content, sha } = await readRepoFile(env, BLOG_PATH);
+    const { content } = await readStagedOrLive(env, 'blog', BLOG_PATH);
     const blogPosts = JSON.parse(content);
     const filtered = blogPosts.filter(b => b.slug !== slug);
     if (filtered.length === blogPosts.length) return jsonError('Blog post not found', 404);
 
     const newContent = JSON.stringify(filtered, null, 2) + '\n';
-    await writeRepoFile(env, BLOG_PATH, newContent, sha, `chore(studio): delete blog post "${slug}"`);
+    await stageContent(env, 'blog', newContent, user.id);
+    await enqueueSync(env, {
+      sourceType: 'blog', sourceId: null, productSlug: null,
+      summary: `Blog post deleted: "${slug}"`, createdBy: user.id,
+    });
     await logAudit(env, { userId: user.id, action: 'delete', resource: 'blog', resourceId: slug });
 
-    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ ok: true, status: 'pending_publish' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (err) {
     return jsonError(err.message, 502);
   }

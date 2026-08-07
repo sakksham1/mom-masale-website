@@ -10,6 +10,7 @@
 
 import { requireAdmin, forbidden, jsonError, logAudit } from '../../_utils/admin.js';
 import { syncProductsToGitHub } from '../../_utils/products-sync.js';
+import { publishStagedContent } from '../../_utils/content-staging.js';
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -43,6 +44,9 @@ export async function onRequestPost(context) {
 
     try {
       await syncProductsToGitHub(env, `chore(publish): sync ${pendingIds.length} pending change(s)`);
+      await publishStagedContent(env, 'recipes', 'data/recipes.json', `chore(publish): sync recipes`);
+      await publishStagedContent(env, 'blog', 'data/blog.json', `chore(publish): sync blog`);
+      await publishStagedContent(env, 'settings', 'data/settings.json', `chore(publish): sync site settings`);
 
       const placeholders = pendingIds.map(() => '?').join(',');
       await env.DB.prepare(

@@ -1,6 +1,8 @@
 // functions/api/admin/recipes.js
 import { requireAdmin, forbidden, jsonError } from '../_utils/admin.js';
-import { readRepoFile, writeRepoFile } from '../_utils/github.js';
+import { readRepoFile } from '../_utils/github.js';
+import { readStagedOrLive, stageContent, discardStagedContent } from '../_utils/content-staging.js';
+import { enqueueSync } from '../_utils/sync-queue.js';
 import { logAudit } from '../_utils/admin.js';
 
 const RECIPES_PATH = 'data/recipes.json';
@@ -36,7 +38,7 @@ export async function onRequestGet(context) {
   const { isAdmin } = await requireAdmin(request, env);
   if (!isAdmin) return forbidden();
   try {
-    const { content } = await readRepoFile(env, RECIPES_PATH);
+    const { content } = await readStagedOrLive(env, 'recipes', RECIPES_PATH);
     return new Response(content, { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (err) {
     return jsonError(err.message, 502);
@@ -61,7 +63,7 @@ export async function onRequestPost(context) {
   if (refError) return jsonError(refError);
 
   try {
-    const { content, sha } = await readRepoFile(env, RECIPES_PATH);
+    const { content } = await readStagedOrLive(env, 'recipes', RECIPES_PATH);
     const recipes = JSON.parse(content);
 
     const slug = slugify(title);
@@ -87,12 +89,16 @@ export async function onRequestPost(context) {
 
     recipes.push(newRecipe);
     const newContent = JSON.stringify(recipes, null, 2) + '\n';
-    await writeRepoFile(env, RECIPES_PATH, newContent, sha, `chore(studio): add recipe "${title}"`);
-    await logAudit(env, { userId: user.id, action: 'create', resource: 'recipe', resourceId: slug, diff: newRecipe });
+    await stageContent(env, 'recipes', newContent, user.id);
+    await enqueueSync(env, {
+    sourceType: 'recipe', sourceId: null, productSlug: null,
+    summary: `Recipe added: "${title}"`, createdBy: user.id,
+  });
+  await logAudit(env, { userId: user.id, action: 'create', resource: 'recipe', resourceId: slug, diff: newRecipe });
 
-    return new Response(JSON.stringify({ ok: true, recipe: newRecipe }), {
-      status: 201, headers: { 'Content-Type': 'application/json' },
-    });
+  return new Response(JSON.stringify({ ok: true, recipe: newRecipe, status: 'pending_publish' }), {
+    status: 201, headers: { 'Content-Type': 'application/json' },
+  });
   } catch (err) {
     return jsonError(err.message, 502);
   }
@@ -115,22 +121,26 @@ export async function onRequestPatch(context) {
   if (refError) return jsonError(refError);
 
   try {
-    const { content, sha } = await readRepoFile(env, RECIPES_PATH);
-    const recipes = JSON.parse(content);
-    const idx = recipes.findIndex(r => r.slug === slug);
-    if (idx === -1) return jsonError('Recipe not found', 404);
+    const { content } = await readStagedOrLive(env, 'recipes', RECIPES_PATH);
+const recipes = JSON.parse(content);
+const idx = recipes.findIndex(r => r.slug === slug);
+if (idx === -1) return jsonError('Recipe not found', 404);
 
-    for (const key of EDITABLE_FIELDS) {
-      if (key in updates) recipes[idx][key] = updates[key];
-    }
+for (const key of EDITABLE_FIELDS) {
+  if (key in updates) recipes[idx][key] = updates[key];
+}
 
-    const newContent = JSON.stringify(recipes, null, 2) + '\n';
-    await writeRepoFile(env, RECIPES_PATH, newContent, sha, `chore(studio): update recipe "${slug}"`);
-    await logAudit(env, { userId: user.id, action: 'update', resource: 'recipe', resourceId: slug, diff: updates });
+const newContent = JSON.stringify(recipes, null, 2) + '\n';
+await stageContent(env, 'recipes', newContent, user.id);
+await enqueueSync(env, {
+  sourceType: 'recipe', sourceId: null, productSlug: null,
+  summary: `Recipe updated: "${slug}"`, createdBy: user.id,
+});
+await logAudit(env, { userId: user.id, action: 'update', resource: 'recipe', resourceId: slug, diff: updates });
 
-    return new Response(JSON.stringify({ ok: true, recipe: recipes[idx] }), {
-      status: 200, headers: { 'Content-Type': 'application/json' },
-    });
+return new Response(JSON.stringify({ ok: true, recipe: recipes[idx], status: 'pending_publish' }), {
+  status: 200, headers: { 'Content-Type': 'application/json' },
+});
   } catch (err) {
     return jsonError(err.message, 502);
   }
@@ -150,7 +160,7 @@ export async function onRequestDelete(context) {
     // Recipes referencing this recipe: none by design (products/blog reference
     // recipes, not the other way around) — check blog.relatedRecipes only.
     if (!force) {
-      const { content: blogContent } = await readRepoFile(env, 'data/blog.json');
+      const { content: blogContent } = await readStagedOrLive(env, 'blog', 'data/blog.json');
       const blogPosts = JSON.parse(blogContent);
       const refs = blogPosts.filter(b => (b.relatedRecipes || []).includes(slug)).map(b => `blog post "${b.title}"`);
       if (refs.length) {
@@ -158,16 +168,20 @@ export async function onRequestDelete(context) {
       }
     }
 
-    const { content, sha } = await readRepoFile(env, RECIPES_PATH);
-    const recipes = JSON.parse(content);
-    const filtered = recipes.filter(r => r.slug !== slug);
-    if (filtered.length === recipes.length) return jsonError('Recipe not found', 404);
+    const { content } = await readStagedOrLive(env, 'recipes', RECIPES_PATH);
+const recipes = JSON.parse(content);
+const filtered = recipes.filter(r => r.slug !== slug);
+if (filtered.length === recipes.length) return jsonError('Recipe not found', 404);
 
-    const newContent = JSON.stringify(filtered, null, 2) + '\n';
-    await writeRepoFile(env, RECIPES_PATH, newContent, sha, `chore(studio): delete recipe "${slug}"`);
-    await logAudit(env, { userId: user.id, action: 'delete', resource: 'recipe', resourceId: slug });
+const newContent = JSON.stringify(filtered, null, 2) + '\n';
+await stageContent(env, 'recipes', newContent, user.id);
+await enqueueSync(env, {
+  sourceType: 'recipe', sourceId: null, productSlug: null,
+  summary: `Recipe deleted: "${slug}"`, createdBy: user.id,
+});
+await logAudit(env, { userId: user.id, action: 'delete', resource: 'recipe', resourceId: slug });
 
-    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+return new Response(JSON.stringify({ ok: true, status: 'pending_publish' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (err) {
     return jsonError(err.message, 502);
   }
