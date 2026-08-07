@@ -537,7 +537,7 @@ function buildRecipeVideoSchema(r) {
     name: r.video.title || r.title,
     description: r.video.description || r.description || r.title,
     thumbnailUrl: [thumbnailUrl],
-    uploadDate: r.video.uploadDate || undefined,
+    uploadDate: r.video.uploadDate || todayISO(),
     contentUrl: `https://www.youtube.com/watch?v=${r.video.youtubeId}`,
     embedUrl: `https://www.youtube.com/embed/${r.video.youtubeId}`,
   };

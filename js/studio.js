@@ -221,10 +221,13 @@
                     ${escapeHtml(t.label)}
                 </label>`).join('');
             const videoId = config.videoField && item[config.videoField] ? item[config.videoField].youtubeId || '' : '';
+            const videoUploadDate = config.videoField && item[config.videoField] ? item[config.videoField].uploadDate || '' : '';
             const videoControl = config.videoField ? `
                     <div class="studio-video-control">
                         <label for="studio-video-${escapeHtml(id)}">YouTube video</label>
                         <input id="studio-video-${escapeHtml(id)}" class="studio-video-input" data-resource="${resourceKey}" data-id="${escapeHtml(id)}" value="${escapeHtml(videoId)}" placeholder="YouTube URL or video ID">
+                        <label for="studio-video-date-${escapeHtml(id)}">Upload date</label>
+                        <input id="studio-video-date-${escapeHtml(id)}" type="date" class="studio-video-date-input" data-resource="${resourceKey}" data-id="${escapeHtml(id)}" value="${escapeHtml(videoUploadDate)}">
                         <button type="button" class="btn btn-outline studio-video-save-btn" data-resource="${resourceKey}" data-id="${escapeHtml(id)}">Save video</button>
                     </div>` : '';
             return `
@@ -263,17 +266,19 @@
         if (videoBtn) {
             const { resource, id } = videoBtn.dataset;
             const input = document.querySelector(`.studio-video-input[data-resource="${resource}"][data-id="${id}"]`);
+            const dateInput = document.querySelector(`.studio-video-date-input[data-resource="${resource}"][data-id="${id}"]`);
             const youtubeId = getYouTubeId(input.value);
             if (input.value.trim() && !youtubeId) {
                 alert('Enter a valid YouTube URL or 11-character video ID.');
                 return;
             }
+            const uploadDate = dateInput?.value || '';
             const config = RESOURCES[resource];
             videoBtn.disabled = true; videoBtn.textContent = 'Saving…';
             try {
                 await api(config.updatePath, {
                     method: 'PATCH',
-                    body: JSON.stringify({ [config.idField]: id, updates: { video: youtubeId ? { youtubeId } : null } }),
+                    body: JSON.stringify({ [config.idField]: id, updates: { video: youtubeId ? { youtubeId, ...(uploadDate ? { uploadDate } : {}) } : null } }),
                 });
                 showToast(youtubeId ? 'Video saved — the site will rebuild in a minute or two.' : 'Video removed — the site will rebuild in a minute or two.');
             } catch (err) {
