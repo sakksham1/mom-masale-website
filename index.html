@@ -28,6 +28,14 @@
     <meta property="og:image" content="https://mommasale.com/images/hero/hero1.webp">
     <meta property="og:url" content="https://mommasale.com/">
     <meta property="og:type" content="website">
+
+    <!-- Display typeface for the hero + section headings: a warm editorial serif
+         that reads as "spice market" rather than generic SaaS. Loaded only here
+         since it's only used for headline-weight text. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,380;0,9..144,520;0,9..144,600;1,9..144,480&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="css/style.min.css">
     <script type="application/ld+json">
 {
@@ -110,17 +118,63 @@
 <div class="nav-overlay" id="nav-overlay"></div>
 <div class="promo-banner">🚚 Free Shipping &amp; Same-Day Delivery in Kanpur</div>
 <main>
-<!-- HERO -->
-<section class="hero-modern">
-    <div class="hero-blob hero-blob-1"></div>
-    <div class="hero-blob hero-blob-2"></div>
-    <div class="hero-blob hero-blob-3"></div>
 
-    <div class="hero-modern-content">
-        <h2>Hand-crafted for Every Kitchen</h2>
-        <a class="btn" href="products">Explore Spices</a>
+<!-- ═══════════ HERO ═══════════
+     Split layout: editorial headline + CTA on one side, a hand-built
+     "spice wheel" signature visual on the other — six real product
+     categories arranged like a masala dabba (spice tin), spinning slowly.
+     No dependency on external photography, so it renders identically
+     everywhere and never shows a broken image. -->
+<section class="hero-redesign">
+    <div class="hero-redesign-inner">
+        <div class="hero-copy">
+            <span class="hero-eyebrow">✦ Serving Taste since 2023 · Kanpur</span>
+            <h1 class="hero-headline">A promise<br><em>from one mom to another.</em></h1>
+            <p class="hero-sub">30+ pure, preservative-free blends — hand-checked in small batches and on your doorstep the same day, right across Kanpur.</p>
+            <div class="hero-cta-row">
+                <a class="btn hero-btn-primary" href="products">Explore Spices</a>
+                <a class="hero-btn-secondary" href="about">Our Story <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="hero-trust-row">
+                <div class="hero-trust-item">
+                    <strong>30+</strong>
+                    <span>Pure Spices</span>
+                </div>
+                <div class="hero-trust-divider" aria-hidden="true"></div>
+                <div class="hero-trust-item">
+                    <strong>No</strong>
+                    <span>Preservatives</span>
+                </div>
+                <div class="hero-trust-divider" aria-hidden="true"></div>
+                <div class="hero-trust-item">
+                    <strong>FSSAI</strong>
+                    <span>Certified</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="spice-wheel">
+                <div class="spice-wheel-disc"></div>
+                <div class="spice-wheel-labels">
+                    <span class="wheel-label wl-1">Turmeric</span>
+                    <span class="wheel-label wl-2">Red Chilli</span>
+                    <span class="wheel-label wl-3">Garam Masala</span>
+                    <span class="wheel-label wl-4">Chai Masala</span>
+                    <span class="wheel-label wl-5">Biryani Masala</span>
+                    <span class="wheel-label wl-6">Chaat Masala</span>
+                </div>
+                <div class="spice-wheel-hub">
+                    <span class="hub-glyph" aria-hidden="true">✦</span>
+                    <span class="hub-text">MOM<br>MASALE</span>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="hero-scroll-cue" aria-hidden="true"><span></span></div>
 </section>
+
 <div class="marquee-strip" aria-hidden="true">
     <div class="marquee-track">
         <span>Pure & Natural</span><span class="dot">✦</span>
@@ -189,7 +243,7 @@
                 <div class="why-flip-inner">
                     <div class="why-face why-face-front">
                         <div class="why-icon">🏠</div>
-                        <h3>Made in Unnao</h3>
+                        <h3>Made in Kanpur</h3>
                         <p>Proudly local — supporting Indian farmers and Indian kitchens.</p>
                     </div>
                     <div class="why-face why-face-back">
