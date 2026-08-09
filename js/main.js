@@ -2237,3 +2237,51 @@ searchToggle.addEventListener('animationend', () => {
 
     initSearchPage();
 })();
+
+// ── SITE THEME (festival overrides — degrades to default on any issue) ──
+const DEFAULT_COLOR_VARS = {
+  maroon: '#7b1120', maroonDark: '#5a0d18', gold: '#d4a017',
+  goldLight: '#f0c040', cream: '#fff8e7', creamDark: '#f5edda', brown: '#5a3a22',
+};
+const CSS_VAR_MAP = {
+  maroon: '--maroon', maroonDark: '--maroon-dark', gold: '--gold',
+  goldLight: '--gold-light', cream: '--cream', creamDark: '--cream-dark', brown: '--brown',
+};
+
+function resetThemeOverrides() {
+  Object.values(CSS_VAR_MAP).forEach(cssVar => document.documentElement.style.removeProperty(cssVar));
+  const promoEl = document.querySelector('.promo-banner');
+  if (promoEl && promoEl.dataset.defaultText) promoEl.textContent = promoEl.dataset.defaultText;
+  const featuredTitle = document.querySelector('#featured-section .section-title');
+  if (featuredTitle && featuredTitle.dataset.defaultText) featuredTitle.textContent = featuredTitle.dataset.defaultText;
+}
+
+async function loadSiteTheme() {
+  // Stash defaults once so resets are exact, not guessed.
+  const promoEl = document.querySelector('.promo-banner');
+  if (promoEl && !promoEl.dataset.defaultText) promoEl.dataset.defaultText = promoEl.textContent;
+  const featuredTitle = document.querySelector('#featured-section .section-title');
+  if (featuredTitle && !featuredTitle.dataset.defaultText) featuredTitle.dataset.defaultText = featuredTitle.textContent;
+
+  try {
+    const res = await fetch('/api/theme/active');
+    const data = await res.json();
+    const theme = data && data.theme;
+
+    if (!theme) { resetThemeOverrides(); return; }
+
+    Object.entries(theme.colors || {}).forEach(([key, value]) => {
+      if (CSS_VAR_MAP[key]) document.documentElement.style.setProperty(CSS_VAR_MAP[key], value);
+    });
+    if (promoEl && theme.promoBannerText) promoEl.textContent = theme.promoBannerText;
+    if (featuredTitle && theme.featuredSectionTitle) featuredTitle.textContent = theme.featuredSectionTitle;
+
+    window._activeTheme = theme; // read by the coupon UI / popup banner below
+  } catch (err) {
+    // Network hiccup, bad JSON, whatever — fall back to default, never leave
+    // the page half-themed.
+    resetThemeOverrides();
+    window._activeTheme = null;
+  }
+}
+loadSiteTheme();

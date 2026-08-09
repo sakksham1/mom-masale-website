@@ -9,13 +9,14 @@
 // items come back as per-item failures rather than failing the whole batch.
 
 import { requireApprover, forbidden, jsonError, logAudit } from '../../_utils/admin.js';
-import { applyRawMaterialDecision, applyPackagingDecision, applyProductCoreDecision } from './_handlers.js';
+import { applyRawMaterialDecision, applyPackagingDecision, applyProductCoreDecision, applyCouponDecision } from './_handlers.js';
 import { createNotification } from '../../_utils/notify.js';
 
 const HANDLERS = {
   raw_material: applyRawMaterialDecision,
   packaging: applyPackagingDecision,
   product_core: applyProductCoreDecision,
+  coupon: applyCouponDecision,
 };
 
 const MAX_ITEMS = 100;
@@ -42,8 +43,8 @@ export async function onRequestPost(context) {
   let succeeded = 0;
 
   for (const item of items) {
-    if (item.type === 'product_core' && role !== 'admin') {
-      results.push({ id: item.id, type: item.type, ok: false, error: 'Only an admin can approve product catalog changes' });
+    if ((item.type === 'product_core' || item.type === 'coupon') && role !== 'admin') {
+      results.push({ id: item.id, type: item.type, ok: false, error: 'Only an admin can approve this type of change' });
       continue;
     }
     try {

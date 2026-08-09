@@ -22,6 +22,8 @@ import { createRazorpayOrder } from './_utils/razorpay.js';
 import { notifyOrderPlaced } from './_utils/notify.js';
 import { formatOrderCode } from './_utils/order-code.js';
 import { sendCustomerOrderConfirmationEmail, sendCustomerOrderConfirmationWhatsApp } from './_utils/customer-notify.js';
+import { getActiveTheme } from './_utils/active-theme.js';
+import { validateCoupon, redeemCoupon, rollbackCouponRedemption } from './_utils/coupons.js';
 
 function jsonError(message, status = 400) {
   return new Response(JSON.stringify({ error: message }), {
@@ -97,7 +99,8 @@ export async function onRequestPost(context) {
   } catch {
     return jsonError('Could not verify pricing settings right now. Please try again.', 502);
   }
-  const { discountPercent } = settings.commerce;
+  const activeTheme = await getActiveTheme(env);
+  const discountPercent = activeTheme?.discountPercent ?? settings.commerce.discountPercent;
 
   // Cart items are keyed by product NAME (matches how the cart has always
   // stored them — no slug client-side), so group D1 rows by name here too.
@@ -141,7 +144,6 @@ export async function onRequestPost(context) {
   }
 
   const { fee: shippingFee } = resolveShipping(pincode, subtotal, settings);
-  const total = subtotal + shippingFee;
 
   const user = await getUserFromSession(request, env);
   if (!user) {
@@ -153,12 +155,25 @@ export async function onRequestPost(context) {
       code: 'email_not_verified',
     }), { status: 403, headers: { 'Content-Type': 'application/json' } });
   }
+
+ // ── Coupon (optional) — re-validated server-side, never trusted from the
+  // client's earlier preview call. Redeemed only after the order row exists,
+  // so a failed order never eats a redemption slot.
+  let couponResult = null;
+  const couponCodeInput = body.couponCode ? String(body.couponCode).trim() : '';
+  if (couponCodeInput) {
+    couponResult = await validateCoupon(env, { code: couponCodeInput, userId: user.id, subtotal });
+    if (!couponResult.valid) return jsonError(couponResult.error, 400);
+  }
+  const couponDiscountAmount = couponResult ? couponResult.discountAmount : 0;
+  const total = subtotal + shippingFee - couponDiscountAmount;
+
   const initialPaymentStatus = paymentMethod === 'cod' ? 'cod' : 'created';
 
   const insertResult = await env.DB.prepare(
     `INSERT INTO orders
-       (user_id, customer_name, phone, email, address, city, pincode, subtotal, shipping_fee, total, status, payment_status)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'placed', ?)`
+       (user_id, customer_name, phone, email, address, city, pincode, subtotal, shipping_fee, total, status, payment_status, coupon_code, coupon_discount_amount)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'placed', ?, ?, ?)`
   ).bind(
     user ? user.id : null,
     String(customer.name).trim(),
@@ -170,10 +185,29 @@ export async function onRequestPost(context) {
     subtotal,
     shippingFee,
     total,
-    initialPaymentStatus
+    initialPaymentStatus,
+    couponResult ? couponResult.coupon.code : null,
+    couponDiscountAmount
   ).run();
 
   const orderId = insertResult.meta.last_row_id;
+
+  // Redeem now that the order row exists — if this throws (coupon just ran
+  // out between validate and here), delete the order and surface the error
+  // before any stock is touched.
+  if (couponResult) {
+    try {
+      await redeemCoupon(env, {
+        couponId: couponResult.coupon.id,
+        userId: user.id,
+        orderId,
+        discountAmount: couponDiscountAmount,
+      });
+    } catch (err) {
+      await env.DB.prepare('DELETE FROM orders WHERE id = ?').bind(orderId).run();
+      return jsonError(err.message || 'Could not apply coupon. Please try again.', 409);
+    }
+  }
   const orderCode = formatOrderCode(orderId, new Date().toISOString());
 
   for (const item of validatedItems) {
@@ -195,6 +229,7 @@ export async function onRequestPost(context) {
 
     if (res.meta.changes === 0) {
       await restoreStock(env, decremented, orderId, 'checkout rollback: another item in the same order was out of stock');
+      if (couponResult) await rollbackCouponRedemption(env, { couponId: couponResult.coupon.id, orderId });
       await env.DB.prepare('DELETE FROM orders WHERE id = ?').bind(orderId).run(); // cascades order_items
       return jsonError(`${item.product_name} (${item.size}) is out of stock`, 409);
     }
@@ -218,6 +253,8 @@ export async function onRequestPost(context) {
     context.waitUntil(sendCustomerOrderConfirmationWhatsApp(env, { phone, orderCode, total }));
     return new Response(JSON.stringify({
       orderId, orderCode, subtotal, shippingFee, total, paymentMethod: 'cod',
+      couponCode: couponResult ? couponResult.coupon.code : null,
+      couponDiscountAmount,
     }), { status: 201, headers: { 'Content-Type': 'application/json' } });
   }
 
@@ -244,6 +281,8 @@ export async function onRequestPost(context) {
       razorpayKeyId: env.RAZORPAY_KEY_ID,
       amount: razorpayOrder.amount,
       currency: razorpayOrder.currency,
+      couponCode: couponResult ? couponResult.coupon.code : null,
+      couponDiscountAmount,
     }), { status: 201, headers: { 'Content-Type': 'application/json' } });
   } catch (err) {
     // Order + items rows already exist and stock is already decremented —
@@ -251,6 +290,7 @@ export async function onRequestPost(context) {
     // silently stuck on 'created' with no Razorpay order and no inventory.
     await env.DB.prepare(`UPDATE orders SET payment_status = 'failed' WHERE id = ?`).bind(orderId).run();
     await restoreStock(env, decremented, orderId, 'checkout rollback: Razorpay order creation failed');
+    if (couponResult) await rollbackCouponRedemption(env, { couponId: couponResult.coupon.id, orderId });
     return jsonError('Could not initiate payment. Please try again.', 502);
   }
 }

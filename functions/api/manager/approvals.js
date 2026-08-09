@@ -8,7 +8,7 @@ export async function onRequestGet(context) {
   const { ok } = await requireApprover(request, env);
   if (!ok) return forbidden();
 
-  const [rawMaterial, packaging, productCore, productStock] = await Promise.all([
+  const [rawMaterial, packaging, productCore, productStock, coupon] = await Promise.all([
     env.DB.prepare(
       `SELECT t.id, t.raw_material_id, m.name as material_name, t.delta, t.reason, t.note,
         t.input_amount, t.input_unit,
@@ -45,6 +45,14 @@ export async function onRequestGet(context) {
      JOIN users u ON u.id = t.requested_by
      WHERE t.status = 'pending' ORDER BY t.created_at`
   ).all(),
+    env.DB.prepare(
+      `SELECT c.id, c.coupon_id, sc.code as coupon_code, c.action, c.payload,
+              c.requested_by, u.name as requested_by_name, c.created_at
+       FROM coupon_change_requests c
+       LEFT JOIN site_coupons sc ON sc.id = c.coupon_id
+       JOIN users u ON u.id = c.requested_by
+       WHERE c.status = 'pending' ORDER BY c.created_at`
+    ).all(),
   ]);
 
   return new Response(JSON.stringify({
@@ -52,5 +60,6 @@ export async function onRequestGet(context) {
     packaging: packaging.results || [],
     productCore: productCore.results || [],
     productStock: productStock.results || [],
+    coupon: (coupon.results || []).map(r => ({ ...r, payload: JSON.parse(r.payload) })),
   }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 }

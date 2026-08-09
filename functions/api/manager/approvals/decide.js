@@ -1,10 +1,11 @@
 import { requireApprover, forbidden, jsonError, logAudit } from '../../_utils/admin.js';
-import { applyRawMaterialDecision, applyPackagingDecision, applyProductCoreDecision } from './_handlers.js';
+import { applyRawMaterialDecision, applyPackagingDecision, applyProductCoreDecision, applyCouponDecision } from './_handlers.js';
 
 const HANDLERS = {
   raw_material: applyRawMaterialDecision,
   packaging: applyPackagingDecision,
   product_core: applyProductCoreDecision,
+  coupon: applyCouponDecision,
 };
 
 export async function onRequestPost(context) {
@@ -24,8 +25,8 @@ export async function onRequestPost(context) {
   // live website), so — unlike raw material / packaging approvals, which
   // any manager or admin can decide — product_core requests are reserved
   // for admins only.
-  if (type === 'product_core' && role !== 'admin') {
-    return forbidden('Only an admin can approve product catalog changes');
+  if ((type === 'product_core' || type === 'coupon') && role !== 'admin') {
+    return forbidden('Only an admin can approve this type of change');
   }
 
   try {
