@@ -5181,19 +5181,33 @@ a.rating-badge-overlay:hover .rating-badge-stars {
 .spice-wheel-rotor {
     position: absolute;
     inset: 0;
-    animation: spiceWheelSpin 45s linear infinite;
     transform-origin: 50% 50%;
+    /* rotation is now driven entirely by js/spice-wheel.js's rAF loop —
+       idle spin, drag, and momentum all set this element's transform
+       directly, so there's no CSS animation to fight with. */
 }
-.spice-wheel:hover .spice-wheel-rotor,
-.spice-wheel:focus-within .spice-wheel-rotor {
-    animation-play-state: paused;
+.spice-wheel {
+    cursor: grab;
+    touch-action: none; /* dragging the wheel shouldn't scroll the page */
 }
-@keyframes spiceWheelSpin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+.spice-wheel.is-dragging {
+    cursor: grabbing;
 }
-@media (prefers-reduced-motion: reduce) {
-    .spice-wheel-rotor { animation: none; }
+/* Fixed indicator at 12 o'clock — shows which wedge is "selected" as the
+   wheel spins past it, independent of hover. */
+.spice-wheel-marker {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 14px solid var(--gold);
+    filter: drop-shadow(0 3px 6px rgba(123,17,32,0.35));
+    z-index: 4;
+    pointer-events: none;
 }
 
 .spice-wheel-svg {
@@ -5215,21 +5229,24 @@ a.rating-badge-overlay:hover .rating-badge-stars {
     outline-offset: -3px;
 }
 .wedge {
+    fill: var(--wedge-fill, var(--gold));
     transition: transform 0.22s ease, filter 0.22s ease;
     transform-origin: 100px 100px;
 }
-.wedge-turmeric  { fill: var(--spice-turmeric); }
-.wedge-chilli    { fill: var(--spice-chilli); }
-.wedge-coriander { fill: var(--spice-coriander); }
-.wedge-cardamom  { fill: var(--spice-cardamom); }
-.wedge-cinnamon  { fill: var(--spice-cinnamon); }
-.wedge-clove     { fill: var(--spice-clove); }
 
 .wedge-link:hover .wedge,
 .wedge-link:focus-visible .wedge,
 .wedge-link.is-linked-active .wedge {
     transform: scale(1.055);
     filter: brightness(1.16) saturate(1.08);
+}
+/* Marker-selected wedge (whatever's currently under the 12-o'clock pointer
+   as the wheel turns) gets its own, calmer highlight so it reads distinctly
+   from a hover state. */
+.wedge-link.is-marker-active .wedge {
+    filter: brightness(1.08) saturate(1.05);
+    stroke: rgba(255,255,255,0.55);
+    stroke-width: 1.5;
 }
 
 /* Rim ring so the wedge tips read as a clean circle, like a spice-tin lid. */
@@ -5244,6 +5261,24 @@ a.rating-badge-overlay:hover .rating-badge-stars {
 [data-theme="dark"] .spice-wheel-rotor::after { border-color: #090e16; }
 
 .spice-wheel-labels { position: absolute; inset: 0; z-index: 3; }
+
+.spice-wheel-noscript-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    padding-top: 40%;
+}
+.spice-wheel-noscript-list a {
+    background: var(--white);
+    color: var(--maroon);
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-decoration: none;
+}
 
 .wheel-label {
     position: absolute;
@@ -5281,23 +5316,18 @@ a.rating-badge-overlay:hover .rating-badge-stars {
    constant 360deg (i.e. visually 0deg) at every instant. */
 .wheel-label-inner {
     display: inline-block;
-    animation: spiceWheelSpin 45s linear infinite reverse;
+    /* Counter-rotation is applied inline per-frame by JS (to stay in sync
+       with drag/momentum), not via a CSS animation. */
 }
-.spice-wheel:hover .wheel-label-inner,
-.spice-wheel:focus-within .wheel-label-inner {
-    animation-play-state: paused;
+.wheel-label.is-marker-active {
+    background: var(--cream-dark);
+    box-shadow: 0 8px 20px rgba(212,160,23,0.35);
 }
-@media (prefers-reduced-motion: reduce) {
-    .wheel-label-inner { animation: none; }
+[data-theme="dark"] .wheel-label.is-marker-active {
+    background: #23304a;
 }
-
-/* Bisector angle of each wedge (matches the SVG path order above) */
-.wl-1 { --ang: 30deg; }
-.wl-2 { --ang: 90deg; }
-.wl-3 { --ang: 150deg; }
-.wl-4 { --ang: 210deg; }
-.wl-5 { --ang: 270deg; }
-.wl-6 { --ang: 330deg; }
+/* --ang is now set inline per label by JS (dynamic wedge count), so the
+   fixed .wl-1..6 rules are gone. */
 
 @media (max-width: 640px) {
     .spice-wheel { width: min(300px, 78vw); }

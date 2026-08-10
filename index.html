@@ -154,51 +154,25 @@
         </div>
 
         <div class="hero-visual">
-            <!-- Interactive spice wheel: each wedge + label is a real link to
-                 that product's page. Wedges and labels sit inside one rotor
-                 so they wobble together and never drift out of alignment.
-                 Hover pauses the wobble; hover on either a wedge or its label
-                 highlights both (see js/spice-wheel.js). Click plays a quick
-                 particle-burst + pulse before navigating, so tapping never
-                 feels dead even though the page is about to change. -->
-            <div class="spice-wheel">
-                <div class="spice-wheel-rotor">
-                    <svg class="spice-wheel-svg" viewBox="0 0 200 200" role="group" aria-label="Shop by spice">
-                        <a class="wedge-link" href="products/turmeric-powder" aria-label="Shop Turmeric Powder">
-                            <path class="wedge wedge-turmeric" d="M100,100 L100,0 A100,100 0 0,1 186.6,50 Z"/>
-                        </a>
-                        <a class="wedge-link" href="products/red-chilli-powder" aria-label="Shop Red Chilli Powder">
-                            <path class="wedge wedge-chilli" d="M100,100 L186.6,50 A100,100 0 0,1 186.6,150 Z"/>
-                        </a>
-                        <a class="wedge-link" href="products/chaat-masala" aria-label="Shop Chaat Masala">
-                            <path class="wedge wedge-coriander" d="M100,100 L186.6,150 A100,100 0 0,1 100,200 Z"/>
-                        </a>
-                        <a class="wedge-link" href="products/biryani-masala" aria-label="Shop Biryani Masala">
-                            <path class="wedge wedge-cardamom" d="M100,100 L100,200 A100,100 0 0,1 13.4,150 Z"/>
-                        </a>
-                        <a class="wedge-link" href="products/chai-masala" aria-label="Shop Chai Masala">
-                            <path class="wedge wedge-cinnamon" d="M100,100 L13.4,150 A100,100 0 0,1 13.4,50 Z"/>
-                        </a>
-                        <a class="wedge-link" href="products/garam-masala" aria-label="Shop Garam Masala">
-                            <path class="wedge wedge-clove" d="M100,100 L13.4,50 A100,100 0 0,1 100,0 Z"/>
-                        </a>
-                    </svg>
-                    <div class="spice-wheel-labels">
-                        <a class="wheel-label wl-1" href="products/turmeric-powder"><span class="wheel-label-inner">Turmeric</span></a>
-                        <a class="wheel-label wl-2" href="products/red-chilli-powder"><span class="wheel-label-inner">Red Chilli</span></a>
-                        <a class="wheel-label wl-3" href="products/chaat-masala"><span class="wheel-label-inner">Chaat Masala</span></a>
-                        <a class="wheel-label wl-4" href="products/biryani-masala"><span class="wheel-label-inner">Biryani Masala</span></a>
-                        <a class="wheel-label wl-5" href="products/chai-masala"><span class="wheel-label-inner">Chai Masala</span></a>
-                        <a class="wheel-label wl-6" href="products/garam-masala"><span class="wheel-label-inner">Garam Masala</span></a>
-                    </div>
-                </div>
-                <a class="spice-wheel-hub" href="products" aria-label="Shop all Mom Masale products">
-                    <span class="hub-glyph" aria-hidden="true">✦</span>
-                    <span class="hub-text hub-text-default">MOM<br>MASALE</span>
-                    <span class="hub-text hub-text-hover">Shop All<span aria-hidden="true"> →</span></span>
-                </a>
+            <!-- Fully data-driven now — js/spice-wheel.js fetches data/spice-wheel.json
+                 (swap for /api/spice-wheel later, nothing else here changes) and
+                 builds however many wedges/labels/colors it returns. Supports
+                 mouse + touch drag-to-spin with momentum, a 12-o'clock marker that
+                 highlights whatever wedge is currently selected, and tap-to-navigate
+                 with the existing particle-burst feedback. -->
+            <div id="spice-wheel-mount" class="spice-wheel" role="group" aria-label="Shop by spice — drag to spin, or tap a spice">
+                <noscript>
+                    <ul class="spice-wheel-noscript-list">
+                        <li><a href="products/turmeric-powder">Turmeric</a></li>
+                        <li><a href="products/red-chilli-powder">Red Chilli</a></li>
+                        <li><a href="products/chaat-masala">Chaat Masala</a></li>
+                        <li><a href="products/biryani-masala">Biryani Masala</a></li>
+                        <li><a href="products/chai-masala">Chai Masala</a></li>
+                        <li><a href="products/garam-masala">Garam Masala</a></li>
+                    </ul>
+                </noscript>
             </div>
-            <p class="hero-visual-hint">Tap a spice to shop it</p>
+            <p class="hero-visual-hint">Drag to spin · Tap a spice to shop it</p>
         </div>
     </div>
 

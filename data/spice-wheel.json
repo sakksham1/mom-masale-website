@@ -1,0 +1,10 @@
+{
+  "items": [
+    { "id": "turmeric", "label": "Turmeric",       "href": "products/turmeric-powder",   "color": "#d4a017" },
+    { "id": "chilli",   "label": "Red Chilli",      "href": "products/red-chilli-powder", "color": "#ad2b17" },
+    { "id": "chaat",    "label": "Chaat Masala",    "href": "products/chaat-masala",      "color": "#7c8b4a" },
+    { "id": "biryani",  "label": "Biryani Masala",  "href": "products/biryani-masala",    "color": "#3f6b54" },
+    { "id": "chai",     "label": "Chai Masala",     "href": "products/chai-masala",       "color": "#8b5a2b" },
+    { "id": "garam",    "label": "Garam Masala",    "href": "products/garam-masala",      "color": "#3a2420" }
+  ]
+}
