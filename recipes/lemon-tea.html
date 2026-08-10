@@ -163,30 +163,51 @@
 <div class="nav-overlay" id="nav-overlay"></div>
 <div class="promo-banner">🚚 Free Shipping &amp; Same-Day Delivery in Kanpur</div>
 <main>
-<div class="container" style="padding-bottom:0.5rem">
-    <a href="../recipes" style="color:var(--maroon);text-decoration:none;font-size:0.9rem;font-weight:600">← Back to All Recipes</a>
+
+<div class="container recipe-back-link-wrap">
+    <a href="../recipes" class="recipe-back-link">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        All Recipes
+    </a>
 </div>
 
-<div class="container">
-    <div class="recipe-detail-card">
-        <div class="recipe-detail-image">
-            <img src="../images/recipes/lemon-tea.webp" alt="Lemon Tea" loading="lazy" width="500" height="500"
-                onerror="this.src='https://placehold.co/500x500/7b1120/fff?text=Lemon Tea'">
+<div class="container recipe-hero-container">
+    <div class="recipe-hero">
+        <div class="recipe-hero-media">
+            <img src="../images/recipes/lemon-tea.webp" alt="Lemon Tea" loading="eager" fetchpriority="high" width="600" height="600"
+                onerror="this.src='https://placehold.co/600x600/7b1120/fff?text=Lemon Tea'">
             <button type="button" class="share-btn" data-share-title="Lemon Tea" aria-label="Share this recipe">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
             </button>
         </div>
-        <div class="recipe-detail-body">
-            <span class="card-category">Beverage</span>
-            <h1 class="recipe-detail-title">Lemon Tea</h1>
-            <p class="recipe-detail-description">Step-by-step Lemon Tea recipe made with Mom Masale ingredients for authentic Indian flavour.</p>
-
-            <div class="recipe-meta-badges">
-                <span class="recipe-meta-badge">⏱ Prep: 1 min</span>
-                <span class="recipe-meta-badge">🔥 Cook: 2 min</span>
-                <span class="recipe-meta-badge">🍽 Serves: 4</span>
+        <div class="recipe-hero-info">
+            <span class="recipe-hero-eyebrow">Beverage</span>
+            <h1 class="recipe-hero-title">Lemon Tea</h1>
+            <p class="recipe-hero-desc">Step-by-step Lemon Tea recipe made with Mom Masale ingredients for authentic Indian flavour.</p>
+            <div class="recipe-hero-meta">
+                <div class="recipe-hero-meta-item">
+                    <span class="rhm-icon" aria-hidden="true">⏱</span>
+                    <span class="rhm-label">Prep</span>
+                    <span class="rhm-value">1 min</span>
+                </div>
+                <div class="recipe-hero-meta-item">
+                    <span class="rhm-icon" aria-hidden="true">🔥</span>
+                    <span class="rhm-label">Cook</span>
+                    <span class="rhm-value">2 min</span>
+                </div>
+                <div class="recipe-hero-meta-item">
+                    <span class="rhm-icon" aria-hidden="true">🍽</span>
+                    <span class="rhm-label">Serves</span>
+                    <span class="rhm-value">4</span>
+                </div>
             </div>
+        </div>
+    </div>
+</div>
 
+<div class="container recipe-body-container">
+    <div class="recipe-body-grid">
+        <div class="recipe-ingredients-col">
             <h2 class="recipe-section-heading">Ingredients</h2>
             <ul class="ingredients-list">
             <li class="ingredient-item">
@@ -198,7 +219,8 @@
                 
             </li>
             </ul>
-
+        </div>
+        <div class="recipe-method-col">
             <h2 class="recipe-section-heading">Method</h2>
             <ol class="recipe-steps-list">
             <li class="recipe-step" id="step-1">Bring 4 cups of water to a rolling boil in a saucepan.</li>
@@ -209,6 +231,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="container">
     <h2 class="section-title">Watch How It's Made</h2>
