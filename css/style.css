@@ -4992,8 +4992,6 @@ a.rating-badge-overlay:hover .rating-badge-stars {
     border: 0;
 }
 
-/* Spice-palette tokens, kept separate from the site's --maroon/--gold
-   so they only ever apply to the hero's spice-wheel visual. */
 :root {
     --spice-turmeric: #d4a017;
     --spice-chilli: #ad2b17;
@@ -5003,8 +5001,6 @@ a.rating-badge-overlay:hover .rating-badge-stars {
     --spice-clove: #3a2420;
 }
 
-/* Editorial serif, used only for the hero headline + section titles —
-   everything else on the site stays on Arial for continuity. */
 .hero-headline,
 .hub-text,
 .hero-trust-item strong,
@@ -5133,11 +5129,7 @@ a.rating-badge-overlay:hover .rating-badge-stars {
 @media (max-width: 900px) {
     .hero-trust-row { justify-content: center; }
 }
-.hero-trust-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
+.hero-trust-item { display: flex; flex-direction: column; align-items: flex-start; }
 @media (max-width: 900px) {
     .hero-trust-item { align-items: center; }
 }
@@ -5156,16 +5148,25 @@ a.rating-badge-overlay:hover .rating-badge-stars {
     margin-top: 5px;
     font-weight: 600;
 }
-.hero-trust-divider {
-    width: 1px;
-    height: 32px;
-    background: rgba(123, 17, 32, 0.15);
-}
+.hero-trust-divider { width: 1px; height: 32px; background: rgba(123, 17, 32, 0.15); }
 [data-theme="dark"] .hero-trust-divider { background: rgba(212, 160, 23, 0.2); }
 
-/* ── HERO VISUAL: the spice wheel ── */
+/* ══════════════════════════════════════════════════════════════
+   HERO VISUAL — INTERACTIVE SPICE WHEEL
+   Structure:
+     .spice-wheel                 (hover/focus container, fixed size)
+       .spice-wheel-rotor         (gently wobbles; holds wedges + labels
+                                    together so they never fall out of sync)
+         svg.spice-wheel-svg      (6 clickable pie-wedge links)
+         .spice-wheel-labels      (6 clickable pill links, positioned to
+                                    sit on their matching wedge)
+       .spice-wheel-hub           (fixed center, own link to /products,
+                                    text crossfades on hover)
+   ══════════════════════════════════════════════════════════════ */
+
 .hero-visual {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
@@ -5177,67 +5178,78 @@ a.rating-badge-overlay:hover .rating-badge-stars {
     aspect-ratio: 1 / 1;
 }
 
-.spice-wheel-disc {
+.spice-wheel-rotor {
+    position: absolute;
+    inset: 0;
+    animation: spiceWheelSpin 45s linear infinite;
+    transform-origin: 50% 50%;
+}
+.spice-wheel:hover .spice-wheel-rotor,
+.spice-wheel:focus-within .spice-wheel-rotor {
+    animation-play-state: paused;
+}
+@keyframes spiceWheelSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .spice-wheel-rotor { animation: none; }
+}
+
+.spice-wheel-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: 0 26px 60px rgba(123, 17, 32, 0.25);
+    overflow: visible;
+}
+[data-theme="dark"] .spice-wheel-svg {
+    box-shadow: 0 26px 60px rgba(0, 0, 0, 0.5);
+}
+
+.wedge-link { cursor: pointer; }
+.wedge-link:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: -3px;
+}
+.wedge {
+    transition: transform 0.22s ease, filter 0.22s ease;
+    transform-origin: 100px 100px;
+}
+.wedge-turmeric  { fill: var(--spice-turmeric); }
+.wedge-chilli    { fill: var(--spice-chilli); }
+.wedge-coriander { fill: var(--spice-coriander); }
+.wedge-cardamom  { fill: var(--spice-cardamom); }
+.wedge-cinnamon  { fill: var(--spice-cinnamon); }
+.wedge-clove     { fill: var(--spice-clove); }
+
+.wedge-link:hover .wedge,
+.wedge-link:focus-visible .wedge,
+.wedge-link.is-linked-active .wedge {
+    transform: scale(1.055);
+    filter: brightness(1.16) saturate(1.08);
+}
+
+/* Rim ring so the wedge tips read as a clean circle, like a spice-tin lid. */
+.spice-wheel-rotor::after {
+    content: '';
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: conic-gradient(
-        var(--spice-turmeric) 0deg 60deg,
-        var(--spice-chilli) 60deg 120deg,
-        var(--spice-coriander) 120deg 180deg,
-        var(--spice-cardamom) 180deg 240deg,
-        var(--spice-cinnamon) 240deg 300deg,
-        var(--spice-clove) 300deg 360deg
-    );
-    box-shadow: 0 26px 60px rgba(123, 17, 32, 0.25), inset 0 0 0 9px var(--cream);
-    animation: spiceWheelSpin 60s linear infinite;
+    border: 9px solid var(--cream);
+    pointer-events: none;
 }
-[data-theme="dark"] .spice-wheel-disc {
-    box-shadow: 0 26px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 9px #090e16;
-}
-@keyframes spiceWheelSpin {
-    to { transform: rotate(360deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-    .spice-wheel-disc { animation: none; }
-}
+[data-theme="dark"] .spice-wheel-rotor::after { border-color: #090e16; }
 
-.spice-wheel-hub {
-    position: absolute;
-    inset: 17%;
-    border-radius: 50%;
-    background: var(--cream);
-    border: 3px solid var(--gold);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
-}
-[data-theme="dark"] .spice-wheel-hub {
-    background: #12192a;
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
-}
-.hub-glyph {
-    font-size: 1.3rem;
-    color: var(--gold);
-    margin-bottom: 4px;
-}
-.hub-text {
-    font-weight: 600;
-    font-size: clamp(0.88rem, 2vw, 1.05rem);
-    color: var(--maroon);
-    letter-spacing: 0.05em;
-    line-height: 1.25;
-}
-[data-theme="dark"] .hub-text { color: #f5e4c8; }
+.spice-wheel-labels { position: absolute; inset: 0; z-index: 3; }
 
-.spice-wheel-labels { position: absolute; inset: 0; }
 .wheel-label {
     position: absolute;
     top: 50%;
     left: 50%;
+    --radius: -182px;
     background: var(--white);
     color: var(--brown);
     font-size: 0.72rem;
@@ -5246,44 +5258,103 @@ a.rating-badge-overlay:hover .rating-badge-stars {
     border-radius: 20px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
     white-space: nowrap;
+    text-decoration: none;
+    transform: translate(-50%, -50%) rotate(var(--ang)) translate(0, var(--radius)) rotate(calc(var(--ang) * -1));
+    transition: transform 0.22s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.22s ease;
 }
-[data-theme="dark"] .wheel-label {
-    background: #1a2540;
-    color: #e8e8e8;
+[data-theme="dark"] .wheel-label { background: #1a2540; color: #e8e8e8; }
+
+.wheel-label:hover,
+.wheel-label:focus-visible,
+.wheel-label.is-linked-active {
+    transform: translate(-50%, -50%) rotate(var(--ang)) translate(0, var(--radius)) rotate(calc(var(--ang) * -1)) scale(1.14);
+    background: var(--gold);
+    color: #1a1200;
+    box-shadow: 0 12px 26px rgba(212, 160, 23, 0.45);
+    z-index: 5;
 }
-/* Six labels around the rim, 60° apart — translate distance ≈ half the
-   wheel's rendered width (min(400px,82vw) → ~185px radius at desktop). */
-.wl-1 { transform: translate(-50%, -50%) rotate(0deg)   translate(0, -182px) rotate(0deg); }
-.wl-2 { transform: translate(-50%, -50%) rotate(60deg)  translate(0, -182px) rotate(-60deg); }
-.wl-3 { transform: translate(-50%, -50%) rotate(120deg) translate(0, -182px) rotate(-120deg); }
-.wl-4 { transform: translate(-50%, -50%) rotate(180deg) translate(0, -182px) rotate(-180deg); }
-.wl-5 { transform: translate(-50%, -50%) rotate(240deg) translate(0, -182px) rotate(-240deg); }
-.wl-6 { transform: translate(-50%, -50%) rotate(300deg) translate(0, -182px) rotate(-300deg); }
+.wheel-label:focus-visible { outline: 2px solid var(--maroon); outline-offset: 2px; }
+
+/* Bisector angle of each wedge (matches the SVG path order above) */
+.wl-1 { --ang: 30deg; }
+.wl-2 { --ang: 90deg; }
+.wl-3 { --ang: 150deg; }
+.wl-4 { --ang: 210deg; }
+.wl-5 { --ang: 270deg; }
+.wl-6 { --ang: 330deg; }
 
 @media (max-width: 640px) {
     .spice-wheel { width: min(300px, 78vw); }
-    .wheel-label { font-size: 0.64rem; padding: 5px 10px; }
-    .wl-1 { transform: translate(-50%, -50%) rotate(0deg)   translate(0, -136px) rotate(0deg); }
-    .wl-2 { transform: translate(-50%, -50%) rotate(60deg)  translate(0, -136px) rotate(-60deg); }
-    .wl-3 { transform: translate(-50%, -50%) rotate(120deg) translate(0, -136px) rotate(-120deg); }
-    .wl-4 { transform: translate(-50%, -50%) rotate(180deg) translate(0, -136px) rotate(-180deg); }
-    .wl-5 { transform: translate(-50%, -50%) rotate(240deg) translate(0, -136px) rotate(-240deg); }
-    .wl-6 { transform: translate(-50%, -50%) rotate(300deg) translate(0, -136px) rotate(-300deg); }
+    .wheel-label { font-size: 0.64rem; padding: 5px 10px; --radius: -136px; }
 }
 
-/* Small scroll cue beneath the hero — subtle, ignorable, doesn't fight
-   for attention with the CTA above it. */
-.hero-scroll-cue {
+/* ── Center hub — its own link, text crossfades on hover ── */
+.spice-wheel-hub {
+    position: absolute;
+    inset: 17%;
+    border-radius: 50%;
+    background: var(--cream);
+    border: 3px solid var(--gold);
     display: flex;
+    align-items: center;
     justify-content: center;
-    margin-top: clamp(2rem, 5vw, 3rem);
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    cursor: pointer;
 }
-.hero-scroll-cue span {
-    position: relative;
-    width: 1px;
-    height: 34px;
-    background: linear-gradient(var(--gold), transparent);
+[data-theme="dark"] .spice-wheel-hub {
+    background: #12192a;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
 }
+.spice-wheel-hub:hover,
+.spice-wheel-hub:focus-visible {
+    transform: scale(1.07);
+    box-shadow: 0 16px 36px rgba(212, 160, 23, 0.4);
+}
+.spice-wheel-hub:focus-visible { outline: 2px solid var(--maroon); outline-offset: 3px; }
+
+.hub-glyph {
+    position: absolute;
+    top: 22%;
+    font-size: 1.1rem;
+    color: var(--gold);
+}
+.hub-text {
+    font-weight: 600;
+    font-size: clamp(0.82rem, 1.9vw, 1rem);
+    color: var(--maroon);
+    letter-spacing: 0.05em;
+    line-height: 1.25;
+    transition: opacity 0.2s ease;
+}
+[data-theme="dark"] .hub-text { color: #f5e4c8; }
+.hub-text-hover { position: absolute; opacity: 0; }
+.spice-wheel-hub:hover .hub-text-default,
+.spice-wheel-hub:focus-visible .hub-text-default { opacity: 0; }
+.spice-wheel-hub:hover .hub-text-hover,
+.spice-wheel-hub:focus-visible .hub-text-hover { opacity: 1; }
+
+/* Click feedback — a quick, satisfying pulse while the burst particles
+   (see js/spice-wheel.js) play, right before navigating. */
+.spice-wheel.is-clicking { animation: wheelClickPulse 0.32s ease; }
+@keyframes wheelClickPulse {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(0.965); }
+    100% { transform: scale(1); }
+}
+
+.hero-visual-hint {
+    margin-top: 1.1rem;
+    font-size: 0.78rem;
+    color: var(--text-light);
+    letter-spacing: 0.03em;
+}
+
+/* ── Scroll cue ── */
+.hero-scroll-cue { display: flex; justify-content: center; margin-top: clamp(2rem, 5vw, 3rem); }
+.hero-scroll-cue span { position: relative; width: 1px; height: 34px; background: linear-gradient(var(--gold), transparent); }
 .hero-scroll-cue span::after {
     content: '';
     position: absolute;
@@ -5303,3 +5374,4 @@ a.rating-badge-overlay:hover .rating-badge-stars {
 @media (prefers-reduced-motion: reduce) {
     .hero-scroll-cue span::after { animation: none; opacity: 1; transform: translate(-50%, 0); }
 }
+
