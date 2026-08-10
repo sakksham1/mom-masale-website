@@ -5275,6 +5275,22 @@ a.rating-badge-overlay:hover .rating-badge-stars {
 }
 .wheel-label:focus-visible { outline: 2px solid var(--maroon); outline-offset: 2px; }
 
+/* Counter-rotate the label's content against the rotor's spin so the chip
+   stays upright while still orbiting with the wheel. Same duration as
+   spiceWheelSpin, opposite playback direction — the two rotations sum to a
+   constant 360deg (i.e. visually 0deg) at every instant. */
+.wheel-label-inner {
+    display: inline-block;
+    animation: spiceWheelSpin 45s linear infinite reverse;
+}
+.spice-wheel:hover .wheel-label-inner,
+.spice-wheel:focus-within .wheel-label-inner {
+    animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+    .wheel-label-inner { animation: none; }
+}
+
 /* Bisector angle of each wedge (matches the SVG path order above) */
 .wl-1 { --ang: 30deg; }
 .wl-2 { --ang: 90deg; }
@@ -5579,3 +5595,54 @@ a.rating-badge-overlay:hover .rating-badge-stars {
     flex-shrink: 0;
 }
 [data-theme="dark"] .recipe-step::before { background: var(--gold); color: #000; }
+
+/* ── ACCOUNT PAGE: wider layout, profile edit card, redesigned orders ── */
+.account-page { max-width: 1100px; }
+.account-auth-card, .profile-info-card, .profile-edit-card, .profile-cart-card { max-width: 640px; margin: 0 auto; }
+.profile-orders-card { max-width: none; }
+
+.profile-edit-card .form-group { margin-bottom: 0.9rem; }
+.profile-email-row {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--cream-dark);
+}
+[data-theme="dark"] .profile-email-row { border-top-color: rgba(255,255,255,0.08); }
+.profile-email-row label { display: block; font-weight: 600; color: var(--brown); font-size: 0.85rem; margin-bottom: 2px; }
+[data-theme="dark"] .profile-email-row label { color: var(--gold); }
+.profile-email-row p { color: var(--text-light); font-size: 0.92rem; }
+#change-email-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed rgba(212,160,23,0.4); }
+
+#orders-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.1rem;
+    align-items: start;
+}
+@media (max-width: 640px) { #orders-list { grid-template-columns: 1fr; } }
+
+.order-card-v2 {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1.2rem 1.3rem; display: flex; flex-direction: column; gap: 0.7rem;
+}
+.order-card-v2-top {
+    display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;
+    padding-bottom: 0.6rem; border-bottom: 1px solid rgba(123,17,32,0.1);
+}
+[data-theme="dark"] .order-card-v2-top { border-bottom-color: rgba(255,255,255,0.08); }
+.order-card-v2-idblock { display: flex; flex-direction: column; gap: 2px; }
+.order-card-v2-items { display: flex; flex-direction: column; gap: 6px; }
+.order-v2-item-row { display: flex; justify-content: space-between; gap: 10px; font-size: 0.9rem; color: var(--text); }
+[data-theme="dark"] .order-v2-item-row { color: #e8e8e8; }
+.order-v2-item-size { color: var(--text-light); font-size: 0.85rem; }
+.order-v2-item-price { font-weight: 600; white-space: nowrap; }
+.order-v2-item-more { font-size: 0.8rem; color: var(--text-light); font-style: italic; }
+.order-toggle-btn { align-self: flex-start; background: none; border: none; color: var(--maroon); font-weight: 700; font-size: 0.82rem; cursor: pointer; padding: 0; }
+[data-theme="dark"] .order-toggle-btn { color: var(--gold); }
+.order-toggle-btn:hover { text-decoration: underline; }
+.order-card-v2-footer {
+    display: flex; justify-content: space-between; align-items: center; font-weight: 700;
+    padding-top: 0.6rem; border-top: 1px solid rgba(123,17,32,0.1);
+}
+[data-theme="dark"] .order-card-v2-footer { border-top-color: rgba(255,255,255,0.08); }
+.order-card-v2-footer .order-total { color: var(--maroon); font-size: 1.05rem; }
+[data-theme="dark"] .order-card-v2-footer .order-total { color: var(--gold); }

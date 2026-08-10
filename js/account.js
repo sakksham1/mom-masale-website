@@ -6,6 +6,7 @@
     const authSection = document.getElementById('auth-section');
     const profileSection = document.getElementById('profile-section');
     const verifyEmailSection = document.getElementById('verify-email-section');
+    let currentUser = null;
 
     // ── GOOGLE SIGN-IN ──
     const GOOGLE_CLIENT_ID = '1032815088680-e28jfn9hvjrfkm57js1vlul37tb0rf7k.apps.googleusercontent.com';
@@ -143,6 +144,11 @@
         document.getElementById('profile-email').textContent = user.email;
         document.getElementById('profile-phone').textContent = user.phone ? `📞 ${user.phone}` : '';
         document.getElementById('profile-avatar').textContent = (user.name || '?').trim().charAt(0).toUpperCase();
+
+        currentUser = user;
+        document.getElementById('edit-name').value = user.name || '';
+        document.getElementById('edit-phone').value = user.phone || '';
+        document.getElementById('current-email-display').textContent = user.email;
 
         loadOrders();
         renderProfileCart();
@@ -288,6 +294,127 @@
         else alert('If your email needs a new code, one has just been sent.');
     });
 
+    // ── PROFILE EDIT ──
+    const profileEditForm = document.getElementById('profile-edit-form');
+    profileEditForm?.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('profile-edit-error');
+        const successEl = document.getElementById('profile-edit-success');
+        errorEl.classList.remove('show');
+        successEl.classList.remove('show');
+
+        const name = document.getElementById('edit-name').value.trim();
+        const phone = document.getElementById('edit-phone').value.trim();
+
+        const btn = profileEditForm.querySelector('button[type="submit"]');
+        btn.disabled = true; btn.textContent = 'Saving…';
+        try {
+            const res = await fetch('/api/auth/update-profile', {
+                method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, phone }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                errorEl.textContent = data.error || 'Could not save changes.';
+                errorEl.classList.add('show');
+                return;
+            }
+            currentUser = data.user;
+            document.getElementById('profile-name').textContent = data.user.name;
+            document.getElementById('profile-phone').textContent = data.user.phone ? `📞 ${data.user.phone}` : '';
+            document.getElementById('profile-avatar').textContent = (data.user.name || '?').trim().charAt(0).toUpperCase();
+            successEl.classList.add('show');
+            setTimeout(() => successEl.classList.remove('show'), 2500);
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            btn.disabled = false; btn.textContent = 'Save Changes';
+        }
+    });
+
+    // ── EMAIL CHANGE ──
+    const changeEmailToggleBtn = document.getElementById('change-email-toggle-btn');
+    const changeEmailSection = document.getElementById('change-email-section');
+    const changeEmailRequestForm = document.getElementById('change-email-request-form');
+    const changeEmailConfirmForm = document.getElementById('change-email-confirm-form');
+    const cancelChangeEmailLink = document.getElementById('cancel-change-email-link');
+
+    changeEmailToggleBtn?.addEventListener('click', () => {
+        changeEmailSection.hidden = !changeEmailSection.hidden;
+        changeEmailRequestForm.hidden = false;
+        changeEmailConfirmForm.hidden = true;
+    });
+    cancelChangeEmailLink?.addEventListener('click', e => {
+        e.preventDefault();
+        changeEmailSection.hidden = true;
+        changeEmailRequestForm.reset();
+        changeEmailConfirmForm.reset();
+    });
+
+    changeEmailRequestForm?.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('change-email-error');
+        errorEl.classList.remove('show');
+        const newEmail = document.getElementById('new-email-input').value.trim();
+
+        const btn = changeEmailRequestForm.querySelector('.auth-submit-btn');
+        btn.disabled = true; btn.textContent = 'Sending…';
+        try {
+            const res = await fetch('/api/auth/request-email-change', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ newEmail }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                errorEl.textContent = data.error || 'Could not send verification code.';
+                errorEl.classList.add('show');
+                return;
+            }
+            changeEmailRequestForm.hidden = true;
+            changeEmailConfirmForm.hidden = false;
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            btn.disabled = false; btn.textContent = 'Send Verification Code';
+        }
+    });
+
+    changeEmailConfirmForm?.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('change-email-confirm-error');
+        errorEl.classList.remove('show');
+        const otp = document.getElementById('change-email-otp').value.trim();
+
+        const btn = changeEmailConfirmForm.querySelector('.auth-submit-btn');
+        btn.disabled = true; btn.textContent = 'Confirming…';
+        try {
+            const res = await fetch('/api/auth/confirm-email-change', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ otp }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                errorEl.textContent = data.error || 'Incorrect code.';
+                errorEl.classList.add('show');
+                return;
+            }
+            currentUser = data.user;
+            document.getElementById('profile-email').textContent = data.user.email;
+            document.getElementById('current-email-display').textContent = data.user.email;
+            changeEmailSection.hidden = true;
+            changeEmailRequestForm.reset();
+            changeEmailConfirmForm.reset();
+            if (typeof showCartToast === 'function') showCartToast('Email updated successfully.');
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            btn.disabled = false; btn.textContent = 'Confirm Email Change';
+        }
+    });
+
     // ── ORDER HISTORY ──
     async function loadOrders() {
         const listEl = document.getElementById('orders-list');
@@ -329,19 +456,25 @@
         const date = new Date(order.created_at).toLocaleDateString('en-IN', {
             day: 'numeric', month: 'short', year: 'numeric',
         });
-        const itemsHtml = (order.items || []).map(item => `
-            <div class="order-item-row">
-                <span>${escapeHtml(item.product_name)} (${escapeHtml(item.size)}) × ${item.qty}</span>
-                <span class="order-id">Order ${formatOrderCode(order.id, order.created_at)}</span>
-                <span>₹${item.unit_price * item.qty}</span>
-            </div>
-        `).join('');
+        const items = order.items || [];
+        const previewItems = items.slice(0, 2);
+        const extraCount = items.length - previewItems.length;
+
+        const itemRow = item => `
+            <div class="order-v2-item-row">
+                <span class="order-v2-item-name">${escapeHtml(item.product_name)} <span class="order-v2-item-size">(${escapeHtml(item.size)})</span> × ${item.qty}</span>
+                <span class="order-v2-item-price">₹${item.unit_price * item.qty}</span>
+            </div>`;
+
+        const previewHtml = previewItems.map(itemRow).join('')
+            + (extraCount > 0 ? `<div class="order-v2-item-more">+ ${extraCount} more item${extraCount === 1 ? '' : 's'}</div>` : '');
+        const fullHtml = items.map(itemRow).join('');
 
         return `
-            <div class="order-card">
-                <div class="order-card-header">
-                    <div>
-                        <span class="order-id">Order #${order.id}</span>
+            <div class="order-card-v2">
+                <div class="order-card-v2-top">
+                    <div class="order-card-v2-idblock">
+                        <span class="order-id">${formatOrderCode(order.id, order.created_at)}</span>
                         <span class="order-date">${date}</span>
                     </div>
                     <div class="order-badges">
@@ -349,14 +482,29 @@
                         <span class="order-status-badge order-payment-${escapeHtml(order.payment_status)}">${escapeHtml(order.payment_status)}</span>
                     </div>
                 </div>
-                <div class="order-items-list">${itemsHtml}</div>
-                <div class="order-card-footer">
+                <div class="order-card-v2-items" data-preview>${previewHtml}</div>
+                <div class="order-card-v2-items" data-full hidden>${fullHtml}</div>
+                ${items.length > 2 ? `<button type="button" class="order-toggle-btn">Show all ${items.length} items ▾</button>` : ''}
+                <div class="order-card-v2-footer">
                     <span>Total</span>
                     <span class="order-total">₹${order.total}</span>
                 </div>
             </div>
         `;
     }
+
+    document.addEventListener('click', e => {
+        const toggleBtn = e.target.closest('.order-toggle-btn');
+        if (!toggleBtn) return;
+        const card = toggleBtn.closest('.order-card-v2');
+        const preview = card.querySelector('[data-preview]');
+        const full = card.querySelector('[data-full]');
+        const isOpen = !full.hidden;
+        full.hidden = isOpen;
+        preview.hidden = !isOpen;
+        const total = full.querySelectorAll('.order-v2-item-row').length;
+        toggleBtn.textContent = isOpen ? `Show all ${total} items ▾` : `Hide items ▴`;
+    });
 
     function escapeHtml(str) {
         return String(str)
