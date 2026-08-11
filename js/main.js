@@ -161,12 +161,14 @@ document.querySelectorAll('nav a').forEach(a => {
     const toggle = group.querySelector('.nav-dropdown-toggle');
 
     function setOpen(willOpen) {
-        navMenu.querySelectorAll('.nav-dropdown.open').forEach(item => {
-            if (item !== group) item.classList.remove('open');
-        });
-        navMenu.querySelectorAll('.nav-dropdown-toggle').forEach(btn => {
-            if (btn !== toggle) btn.setAttribute('aria-expanded', 'false');
-        });
+        if (willOpen) {
+            navMenu.querySelectorAll('.nav-dropdown.open').forEach(item => {
+                if (item !== group) item.classList.remove('open');
+            });
+            navMenu.querySelectorAll('.nav-dropdown-toggle').forEach(btn => {
+                if (btn !== toggle) btn.setAttribute('aria-expanded', 'false');
+            });
+        }
         group.classList.toggle('open', willOpen);
         toggle.setAttribute('aria-expanded', String(willOpen));
     }
