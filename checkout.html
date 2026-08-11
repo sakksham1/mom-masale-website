@@ -113,22 +113,42 @@
         </form>
 
         <div class="checkout-summary-card" id="checkout-summary" hidden>
-            <h2 class="section-title">Order Summary</h2>
-            <div id="checkout-items-list" class="checkout-items-list"></div>
-            <div class="checkout-summary-line">
-                <span>Subtotal</span>
-                <span id="checkout-subtotal"></span>
-            </div>
-            <div class="checkout-summary-line">
-                <span id="checkout-shipping-label">Shipping</span>
-                <span id="checkout-shipping"></span>
-            </div>
-            <div class="checkout-summary-line checkout-summary-total">
-                <span>Total</span>
-                <span id="checkout-total"></span>
-            </div>
-            <p class="checkout-summary-note">Final amount is confirmed securely on our server before payment.</p>
+    <h2 class="section-title">Order Summary</h2>
+    <div id="checkout-items-list" class="checkout-items-list"></div>
+
+    <div class="checkout-coupon-block">
+        <div class="cart-coupon-input-row" id="checkout-coupon-input-row">
+            <input type="text" id="checkout-coupon-input" placeholder="Have a coupon code?" autocomplete="off">
+            <button type="button" class="btn btn-outline cart-coupon-apply-btn" id="checkout-coupon-apply-btn">Apply</button>
         </div>
+        <div class="cart-coupon-applied" id="checkout-coupon-applied" hidden>
+            <span class="cart-coupon-chip">
+                <span class="cart-coupon-chip-icon">🏷️</span>
+                <span id="checkout-coupon-applied-code"></span>
+                <button type="button" id="checkout-coupon-remove-btn" aria-label="Remove coupon">✕</button>
+            </span>
+        </div>
+        <div class="field-error" id="checkout-coupon-error"></div>
+    </div>
+
+    <div class="checkout-summary-line">
+        <span>Subtotal</span>
+        <span id="checkout-subtotal"></span>
+    </div>
+    <div class="checkout-summary-line checkout-summary-discount-line" id="checkout-summary-discount-line" hidden>
+        <span>Coupon discount</span>
+        <span id="checkout-discount"></span>
+    </div>
+    <div class="checkout-summary-line">
+        <span id="checkout-shipping-label">Shipping</span>
+        <span id="checkout-shipping"></span>
+    </div>
+    <div class="checkout-summary-line checkout-summary-total">
+        <span>Total</span>
+        <span id="checkout-total"></span>
+    </div>
+    <p class="checkout-summary-note">Final amount is confirmed securely on our server before payment.</p>
+</div>
 
     </div>
 </div>

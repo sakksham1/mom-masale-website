@@ -52,6 +52,16 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
         summaryEl.hidden = true;
     }
 
+    const COUPON_STORAGE_KEY = 'mm_applied_coupon';
+
+    function getAppliedCoupon() {
+    try { const raw = sessionStorage.getItem(COUPON_STORAGE_KEY); return raw ? JSON.parse(raw) : null; }
+    catch (err) { return null; }
+    }
+
+    function setAppliedCoupon(coupon) { sessionStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(coupon)); }
+    function clearAppliedCoupon() { sessionStorage.removeItem(COUPON_STORAGE_KEY); }
+
     function showVerificationRequired() {
         if (loginRequiredEl) {
             loginRequiredEl.hidden = false;
@@ -76,46 +86,113 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
     }
 
     function renderCartSummary() {
-        const cart = getCartItems();
+    const cart = getCartItems();
 
-        if (cart.length === 0) {
-            emptyEl.hidden = false;
-            formEl.hidden = true;
-            summaryEl.hidden = true;
+    if (cart.length === 0) {
+        emptyEl.hidden = false;
+        formEl.hidden = true;
+        summaryEl.hidden = true;
+        return;
+    }
+
+    emptyEl.hidden = true;
+    formEl.hidden = false;
+    summaryEl.hidden = false;
+    trackAnalyticsEvent('checkout_step', { step: 'checkout_started' }, { session: true });
+
+    itemsListEl.innerHTML = cart.map(item => `
+        <div class="checkout-item-row">
+            <span>${escapeHtml(item.name)} (${escapeHtml(item.size)}) × ${item.qty}</span>
+            <span>₹${(item.price || 0) * item.qty}</span>
+        </div>
+    `).join('');
+
+    const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
+    document.getElementById('checkout-subtotal').textContent = `₹${subtotal}`;
+
+    renderCouponUI();
+    const discount = getAppliedCoupon()?.discountAmount || 0;
+
+    const shippingLabelEl = document.getElementById('checkout-shipping-label');
+    const shippingValueEl = document.getElementById('checkout-shipping');
+
+    if (subtotal < DISPLAY_SMALL_ORDER_THRESHOLD) {
+        if (shippingLabelEl) shippingLabelEl.textContent = `Small Order Fee (orders under ₹${DISPLAY_SMALL_ORDER_THRESHOLD})`;
+        shippingValueEl.textContent = `₹${DISPLAY_SMALL_ORDER_FEE}`;
+        document.getElementById('checkout-total').textContent = `₹${Math.max(subtotal + DISPLAY_SMALL_ORDER_FEE - discount, 0)}`;
+    } else {
+        if (shippingLabelEl) shippingLabelEl.textContent = 'Shipping';
+        const freeShipping = subtotal >= DISPLAY_FREE_SHIPPING_THRESHOLD;
+        shippingValueEl.textContent = freeShipping ? 'Free' : 'Check below ↓';
+        document.getElementById('checkout-total').textContent = freeShipping
+            ? `₹${Math.max(subtotal - discount, 0)}`
+            : `₹${Math.max(subtotal - discount, 0)} + shipping`;
+    }
+}
+
+function renderCouponUI() {
+    const inputRow = document.getElementById('checkout-coupon-input-row');
+    const appliedEl = document.getElementById('checkout-coupon-applied');
+    const discountLine = document.getElementById('checkout-summary-discount-line');
+    const coupon = getAppliedCoupon();
+    if (coupon) {
+        inputRow.hidden = true;
+        appliedEl.hidden = false;
+        document.getElementById('checkout-coupon-applied-code').textContent = coupon.code;
+        discountLine.hidden = false;
+        document.getElementById('checkout-discount').textContent = `− ₹${coupon.discountAmount}`;
+    } else {
+        inputRow.hidden = false;
+        appliedEl.hidden = true;
+        discountLine.hidden = true;
+    }
+}
+
+const checkoutCouponInput = document.getElementById('checkout-coupon-input');
+const checkoutCouponApplyBtn = document.getElementById('checkout-coupon-apply-btn');
+const checkoutCouponErrorEl = document.getElementById('checkout-coupon-error');
+
+async function applyCheckoutCoupon() {
+    const code = checkoutCouponInput.value.trim();
+    checkoutCouponErrorEl.classList.remove('show');
+    if (!code) {
+        checkoutCouponErrorEl.textContent = 'Please enter a coupon code.';
+        checkoutCouponErrorEl.classList.add('show');
+        return;
+    }
+    const subtotal = getCartItems().reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
+    checkoutCouponApplyBtn.disabled = true;
+    checkoutCouponApplyBtn.textContent = 'Applying…';
+    try {
+        const res = await fetch('/api/coupons/validate', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code, subtotal }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.valid) {
+            checkoutCouponErrorEl.textContent = data.error || 'This coupon could not be applied.';
+            checkoutCouponErrorEl.classList.add('show');
             return;
         }
-
-        emptyEl.hidden = true;
-        formEl.hidden = false;
-        summaryEl.hidden = false;
-        trackAnalyticsEvent('checkout_step', { step: 'checkout_started' }, { session: true });
-
-        itemsListEl.innerHTML = cart.map(item => `
-            <div class="checkout-item-row">
-                <span>${escapeHtml(item.name)} (${escapeHtml(item.size)}) × ${item.qty}</span>
-                <span>₹${(item.price || 0) * item.qty}</span>
-            </div>
-        `).join('');
-
-        const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
-
-        document.getElementById('checkout-subtotal').textContent = `₹${subtotal}`;
-
-        const shippingLabelEl = document.getElementById('checkout-shipping-label');
-        const shippingValueEl = document.getElementById('checkout-shipping');
-
-        if (subtotal < DISPLAY_SMALL_ORDER_THRESHOLD) {
-            // Flat fee, doesn't depend on pincode — known immediately.
-            if (shippingLabelEl) shippingLabelEl.textContent = `Small Order Fee (orders under ₹${DISPLAY_SMALL_ORDER_THRESHOLD})`;
-            shippingValueEl.textContent = `₹${DISPLAY_SMALL_ORDER_FEE}`;
-            document.getElementById('checkout-total').textContent = `₹${subtotal + DISPLAY_SMALL_ORDER_FEE}`;
-        } else {
-            if (shippingLabelEl) shippingLabelEl.textContent = 'Shipping';
-            const freeShipping = subtotal >= DISPLAY_FREE_SHIPPING_THRESHOLD;
-            shippingValueEl.textContent = freeShipping ? 'Free' : 'Check below ↓';
-            document.getElementById('checkout-total').textContent = freeShipping ? `₹${subtotal}` : `₹${subtotal} + shipping`;
-        }
+        setAppliedCoupon({ code: data.code, description: data.description, discountAmount: data.discountAmount });
+        checkoutCouponInput.value = '';
+        renderCartSummary();
+    } catch (err) {
+        checkoutCouponErrorEl.textContent = 'Could not reach the server. Please try again.';
+        checkoutCouponErrorEl.classList.add('show');
+    } finally {
+        checkoutCouponApplyBtn.disabled = false;
+        checkoutCouponApplyBtn.textContent = 'Apply';
     }
+}
+checkoutCouponApplyBtn?.addEventListener('click', applyCheckoutCoupon);
+checkoutCouponInput?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); applyCheckoutCoupon(); }
+});
+document.getElementById('checkout-coupon-remove-btn')?.addEventListener('click', () => {
+    clearAppliedCoupon();
+    renderCartSummary();
+});
 
     const checkShippingBtn = document.getElementById('check-shipping-btn');
     const shippingResultEl = document.getElementById('pincode-shipping-result');
@@ -173,8 +250,9 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
                     ? `${data.area} — Free shipping`
                     : `${data.area} — ₹${data.fee} shipping`;
 
+            const discount = getAppliedCoupon()?.discountAmount || 0;
             document.getElementById('checkout-shipping').textContent = data.fee === 0 ? 'Free' : `₹${data.fee}`;
-            document.getElementById('checkout-total').textContent = `₹${subtotal + data.fee}`;
+            document.getElementById('checkout-total').textContent = `₹${Math.max(subtotal + data.fee - discount, 0)}`;
         } catch (err) {
             shippingResultEl.hidden = false;
             shippingResultEl.classList.add('error');
@@ -200,11 +278,12 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
     }
 
     function completeOrder(orderId, orderCode) {
-        saveCart([]);
-        updateCartBadge();
-        const codeParam = orderCode ? `&code=${encodeURIComponent(orderCode)}` : '';
-        window.location.href = `order-confirmation?order=${encodeURIComponent(orderId)}${codeParam}`;
-    }
+    saveCart([]);
+    updateCartBadge();
+    clearAppliedCoupon();
+    const codeParam = orderCode ? `&code=${encodeURIComponent(orderCode)}` : '';
+    window.location.href = `order-confirmation?order=${encodeURIComponent(orderId)}${codeParam}`;
+}
 
     formEl.addEventListener('submit', async e => {
         e.preventDefault();
@@ -263,6 +342,7 @@ fetch('data/settings.json').then(r => r.json()).then(s => {
                     customer: { name, phone, email, address, city, pincode },
                     items: cart.map(i => ({ name: i.name, size: i.size, qty: i.qty })),
                     paymentMethod,
+                    couponCode: getAppliedCoupon()?.code, 
                 }),
             });
             data = await res.json();

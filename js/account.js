@@ -545,7 +545,7 @@
         `;
 
         openBtn.onclick = () => {
-            if (typeof openCart === 'function') openCart();
+            window.location.href = 'cart';
         };
     }
 

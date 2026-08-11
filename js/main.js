@@ -257,12 +257,12 @@ function placeThemeToggle() {
 placeThemeToggle();
 window.addEventListener('resize', placeThemeToggle);
 
-// ── CART ICON (injected into navbar) ──
-const cartPill = document.createElement('button');
+// ── CART ICON (injected into navbar) — now a link to /cart, not a drawer toggle ──
+const cartPill = document.createElement('a');
 cartPill.className = 'cart-toggle';
 cartPill.id = 'cart-toggle';
+cartPill.href = (/\/(products|recipes|guide)\//.test(location.pathname) ? '../' : '') + 'cart';
 cartPill.setAttribute('aria-label', 'View cart');
-cartPill.setAttribute('aria-expanded', 'false');
 cartPill.innerHTML = `
     <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="21" r="1"></circle>
@@ -346,92 +346,6 @@ document.addEventListener('click', e => {
     const title = shareBtn.dataset.shareTitle || document.title;
     const url = shareBtn.dataset.shareUrl || location.href;
     shareLink(title, url);
-});
-
-// ── CART DRAWER ──
-function buildCartDrawer() {
-    if (document.getElementById('cart-drawer')) return;
-
-    const overlay = document.createElement('div');
-    overlay.className = 'cart-overlay';
-    overlay.id = 'cart-overlay';
-
-    const drawer = document.createElement('div');
-    drawer.className = 'cart-drawer';
-    drawer.id = 'cart-drawer';
-    drawer.innerHTML = `
-        <div class="cart-drawer-header">
-            <h3>Your Cart</h3>
-            <button class="cart-close" id="cart-close" aria-label="Close cart">✕</button>
-        </div>
-        <div class="cart-promo-line">🚚 Free Shipping &amp; Same-Day Delivery in Kanpur</div>
-        <div class="cart-items" id="cart-items"></div>
-        <div class="cart-footer" id="cart-footer">
-            <div class="cart-footer-top">
-                <div class="shipping-progress" id="shipping-progress" hidden>
-                    <div class="shipping-progress-text" id="shipping-progress-text"></div>
-                    <div class="shipping-progress-bar"><div class="shipping-progress-fill" id="shipping-progress-fill"></div></div>
-                </div>
-                <div class="cart-total" id="cart-total"></div>
-            </div>
-            <a href="/checkout" class="btn cart-checkout-online-btn">Checkout &amp; Pay Online</a>
-            <button class="btn btn-outline cart-clear-btn" id="cart-clear-btn">Clear Cart</button>
-            <button class="btn btn-outline cart-checkout-btn" id="cart-checkout-btn">Or Checkout via WhatsApp</button>
-        </div>
-    `;
-
-    document.body.appendChild(overlay);
-    document.body.appendChild(drawer);
-
-    overlay.addEventListener('click', closeCart);
-    document.getElementById('cart-close').addEventListener('click', closeCart);
-}
-
-function openCart() {
-    buildCartDrawer();
-    renderCartItems();
-    if (getCart().length > 0) {
-        sessionStorage.removeItem('mm_checkout_session_id'); // fresh funnel session per cart-open
-        trackAnalyticsEvent('checkout_step', { step: 'cart_opened' }, { session: true });
-    }
-    document.getElementById('cart-drawer').classList.add('open');
-    document.getElementById('cart-overlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
-    document.getElementById('cart-toggle')?.setAttribute('aria-expanded', 'true');
-    document.getElementById('cart-close')?.focus();
-}
-
-function closeCart() {
-    const drawer = document.getElementById('cart-drawer');
-    const overlay = document.getElementById('cart-overlay');
-    if (drawer) drawer.classList.remove('open');
-    if (overlay) overlay.classList.remove('active');
-    document.body.style.overflow = '';
-    document.getElementById('cart-toggle')?.setAttribute('aria-expanded', 'false');
-    document.getElementById('cart-toggle')?.focus();
-}
-document.addEventListener('keydown', e => {
-    const drawer = document.getElementById('cart-drawer');
-    if (!drawer || !drawer.classList.contains('open')) return;
-
-    if (e.key === 'Escape') {
-        closeCart();
-        return;
-    }
-
-    if (e.key === 'Tab') {
-        const focusable = drawer.querySelectorAll('button, a[href]');
-        if (!focusable.length) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
-            e.preventDefault();
-            last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-            e.preventDefault();
-            first.focus();
-        }
-    }
 });
 
 // ── PRODUCT DETAIL OVERLAY ──
@@ -535,138 +449,6 @@ document.addEventListener('keydown', e => {
             e.preventDefault();
             first.focus();
         }
-    }
-});
-
-function updateShippingProgress(total) {
-    const wrap = document.getElementById('shipping-progress');
-    const text = document.getElementById('shipping-progress-text');
-    const fill = document.getElementById('shipping-progress-fill');
-    if (!wrap || !text || !fill) return;
-    wrap.classList.remove('unlocked', 'warning');
-
-    if (total < SMALL_ORDER_THRESHOLD_CFG) {
-        const remaining = SMALL_ORDER_THRESHOLD_CFG - total;
-        const pct = Math.min((total / SMALL_ORDER_THRESHOLD_CFG) * 100, 100);
-        fill.style.width = `${pct}%`;
-        text.textContent = `⚠️ Add ₹${remaining} more to avoid the ₹${SMALL_ORDER_FEE_CFG} Small Order Fee`;
-        wrap.classList.add('warning');
-        return;
-    }
-
-    const remaining = FREE_SHIPPING_THRESHOLD_CFG - total;
-    const pct = Math.min((total / FREE_SHIPPING_THRESHOLD_CFG) * 100, 100);
-    fill.style.width = `${pct}%`;
-    if (remaining <= 0) {
-        text.textContent = "✅ You've unlocked free shipping!";
-        wrap.classList.add('unlocked');
-    } else {
-        text.textContent = `🚚 Add ₹${remaining} more for free shipping`;
-    }
-}
-
-function renderCartItems() {
-    const container = document.getElementById('cart-items');
-    if (!container) return;
-    const cart = getCart();
-
-    const footer = document.getElementById('cart-footer');
-    const shippingWrap = document.getElementById('shipping-progress');
-    if (cart.length === 0) {
-        container.innerHTML = `
-            <div class="cart-empty">
-                <svg class="cart-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                <p>Your cart is empty.</p>
-                <a href="products" class="btn cart-browse-btn">Browse Products</a>
-            </div>
-        `;
-        if (footer) footer.hidden = true;
-        if (shippingWrap) shippingWrap.hidden = true;
-        return;
-    }
-    if (footer) footer.hidden = false;
-    if (shippingWrap) shippingWrap.hidden = false;
-
-    container.innerHTML = cart.map((item, i) => `
-        <div class="cart-item">
-            <img class="cart-item-img" src="${escapeHtml(item.image || 'https://placehold.co/60x60/7b1120/fff?text=' + encodeURIComponent(item.name[0]))}" alt="${escapeHtml(item.name)}" loading="lazy">
-            <div class="cart-item-info">
-                <span class="cart-item-name">${escapeHtml(item.name)}</span>
-                <span class="cart-item-size">${escapeHtml(item.size)}${item.price ? ` · ₹${item.price} each` : ''}</span>
-                ${item.price ? `<span class="cart-item-subtotal">₹${item.price * item.qty}</span>` : ''}
-            </div>
-            <div class="cart-item-controls">
-                <button class="qty-btn" data-action="dec" data-index="${i}">−</button>
-                <span class="qty-value">${item.qty}</span>
-                <button class="qty-btn" data-action="inc" data-index="${i}">+</button>
-                <button class="cart-remove" data-index="${i}" aria-label="Remove item">🗑</button>
-            </div>
-        </div>
-    `).join('');
-    const total = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
-const totalEl = document.getElementById('cart-total');
-if (totalEl) totalEl.textContent = total ? `Total: ₹${total}` : '';
-updateShippingProgress(total);
-}
-
-function buildWhatsAppMessage(cart) {
-    const lines = cart.map(item => `- ${item.name} (${item.size}) x${item.qty}${item.price ? ` = ₹${item.price * item.qty}` : ''}`);
-    const total = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
-    const message = `Hi, I'd like to order:\n${lines.join('\n')}${total ? `\n\nTotal: ₹${total}` : ''}\n\nPlease confirm availability & order details`;
-    return encodeURIComponent(message);
-}
-
-document.addEventListener('click', e => {
-    if (e.target.closest('#cart-clear-btn')) {
-        if (confirm('Clear all items from your cart?')) {
-            saveCart([]);
-            updateCartBadge();
-            renderCartItems();
-            syncAllCardUI();
-        }
-    }
-
-    if (e.target.closest('#cart-checkout-btn')) {
-        const cart = getCart();
-        if (cart.length === 0) return;
-        const msg = buildWhatsAppMessage(cart);
-        window.open(`https://wa.me/917905391434?text=${msg}`, '_blank', 'noopener');
-    }
-});
-
-document.addEventListener('click', e => {
-    const cartToggleBtn = e.target.closest('#cart-toggle');
-    if (cartToggleBtn) openCart();
-
-    const qtyBtn = e.target.closest('.qty-btn');
-    if (qtyBtn) {
-        const cart = getCart();
-        const idx = parseInt(qtyBtn.dataset.index);
-        if (qtyBtn.dataset.action === 'inc') cart[idx].qty += 1;
-        if (qtyBtn.dataset.action === 'dec') {
-            cart[idx].qty -= 1;
-            if (cart[idx].qty <= 0) cart.splice(idx, 1);
-        }
-        saveCart(cart);
-        updateCartBadge();
-        renderCartItems();
-        syncAllCardUI();
-        pulseCartPill(qtyBtn.dataset.action === 'inc' ? 'add' : 'remove');
-    }
-
-    const removeBtn = e.target.closest('.cart-remove');
-    if (removeBtn) {
-        const cart = getCart();
-        cart.splice(parseInt(removeBtn.dataset.index), 1);
-        saveCart(cart);
-        updateCartBadge();
-        renderCartItems();
-        syncAllCardUI();
-        pulseCartPill('remove');
     }
 });
 
@@ -1432,7 +1214,6 @@ window.cartReady = (async function initCart() {
     }
     updateCartBadge();
     syncAllCardUI();
-    if (document.getElementById('cart-drawer')?.classList.contains('open')) renderCartItems();
 })();
 
 function goToAccountForLogin() {
