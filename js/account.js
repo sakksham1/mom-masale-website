@@ -7,6 +7,7 @@
     const profileSection = document.getElementById('profile-section');
     const verifyEmailSection = document.getElementById('verify-email-section');
     let currentUser = null;
+    let lastOrders = [];
 
     // ── GOOGLE SIGN-IN ──
     const GOOGLE_CLIENT_ID = '1032815088680-e28jfn9hvjrfkm57js1vlul37tb0rf7k.apps.googleusercontent.com';
@@ -41,10 +42,7 @@
 
     initGoogleSignIn();
 
-    // ── REDIRECT-AFTER-AUTH (e.g. ?redirect=checkout from checkout.html,
-    // or ?redirect=cart-login&return=<path> from tapping "Add to Cart"
-    // while logged out — sends the person back to the exact product page
-    // they were on, not just the generic profile view) ──
+    // ── REDIRECT-AFTER-AUTH ──
     const urlParams = new URLSearchParams(location.search);
     const redirectTarget = urlParams.get('redirect');
     const returnPath = urlParams.get('return');
@@ -56,7 +54,6 @@
         }
         if (redirectTarget === 'cart-login' && returnPath) {
             const decoded = decodeURIComponent(returnPath);
-            // only ever navigate to a same-site path — never an absolute/external URL
             if (decoded.startsWith('/') && !decoded.startsWith('//')) {
                 window.location.href = decoded;
                 return true;
@@ -70,29 +67,54 @@
         'cart-login': 'Log in or sign up to add items to your cart.',
     };
 
-    if (REDIRECT_BANNER_TEXT[redirectTarget]) {
-        const banner = document.createElement('p');
-        banner.style.cssText = 'text-align:center;color:var(--maroon);font-weight:600;font-size:0.9rem;margin-bottom:1rem';
-        banner.textContent = REDIRECT_BANNER_TEXT[redirectTarget];
-        authSection.parentElement.insertBefore(banner, authSection);
+    const redirectBanner = document.getElementById('auth-redirect-banner');
+    if (redirectBanner && REDIRECT_BANNER_TEXT[redirectTarget]) {
+        redirectBanner.textContent = REDIRECT_BANNER_TEXT[redirectTarget];
+        redirectBanner.hidden = false;
     }
 
-    // ── TAB SWITCHING (Login / Sign Up) ──
-    const tabBtns = document.querySelectorAll('.auth-tab-btn');
+    // ── AUTH TAB SWITCHING (Login / Sign Up) ──
+    const tabBtns = document.querySelectorAll('.acct-tab-btn');
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
 
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            tabBtns.forEach(b => b.classList.remove('active'));
+            tabBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
             btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
             const showLogin = btn.dataset.tab === 'login';
             loginForm.hidden = !showLogin;
             signupForm.hidden = showLogin;
         });
     });
 
-    // ── INIT: check session, show the right section ──
+    // ── DASHBOARD SIDEBAR NAV ──
+    const acctNav = document.getElementById('acct-nav');
+    const acctPanels = document.querySelectorAll('.acct-panel');
+
+    function switchPanel(panelKey) {
+        acctPanels.forEach(p => { p.hidden = p.id !== `acct-panel-${panelKey}`; });
+        acctNav?.querySelectorAll('.acct-nav-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.panel === panelKey);
+        });
+        document.getElementById('profile-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    acctNav?.addEventListener('click', e => {
+        const btn = e.target.closest('.acct-nav-btn');
+        if (!btn) return;
+        switchPanel(btn.dataset.panel);
+    });
+
+    document.querySelectorAll('[data-goto]').forEach(el => {
+        el.addEventListener('click', e => {
+            e.preventDefault();
+            switchPanel(el.dataset.goto);
+        });
+    });
+
+    // ── INIT ──
     init();
 
     async function init() {
@@ -106,7 +128,6 @@
                 showAuth();
             }
         } catch (err) {
-            // API unreachable — fall back to showing login rather than a blank page.
             showAuth();
         }
     }
@@ -122,9 +143,6 @@
         profileSection.hidden = true;
         verifyEmailSection.hidden = false;
         document.getElementById('verify-email-address').textContent = user.email;
-        // Send a code the first time this gate appears on a page load — the
-        // endpoint's own 60s cooldown means this is a no-op if signup (or a
-        // prior visit) already sent one recently.
         if (!window._verifyOtpRequested) {
             window._verifyOtpRequested = true;
             fetch('/api/auth/send-verify-otp', { method: 'POST' }).catch(() => {});
@@ -140,15 +158,20 @@
         verifyEmailSection.hidden = true;
         profileSection.hidden = false;
 
-        document.getElementById('profile-name').textContent = user.name;
-        document.getElementById('profile-email').textContent = user.email;
-        document.getElementById('profile-phone').textContent = user.phone ? `📞 ${user.phone}` : '';
-        document.getElementById('profile-avatar').textContent = (user.name || '?').trim().charAt(0).toUpperCase();
+        const initial = (user.name || '?').trim().charAt(0).toUpperCase();
+        document.getElementById('profile-avatar').textContent = initial;
+        document.getElementById('sidebar-name').textContent = user.name;
+        document.getElementById('sidebar-email').textContent = user.email;
+
+        const firstName = (user.name || '').trim().split(' ')[0];
+        document.getElementById('overview-first-name').textContent = firstName ? `, ${firstName}` : '';
+        document.getElementById('overview-verified-badge').textContent = user.emailVerified ? '✓' : '—';
 
         currentUser = user;
         document.getElementById('edit-name').value = user.name || '';
         document.getElementById('edit-phone').value = user.phone || '';
         document.getElementById('current-email-display').textContent = user.email;
+        document.getElementById('change-password-email-display').textContent = user.email;
 
         loadOrders();
         renderProfileCart();
@@ -236,9 +259,7 @@
     document.getElementById('logout-btn').addEventListener('click', async () => {
         try {
             await fetch('/api/auth/logout', { method: 'POST' });
-        } catch (err) {
-            // even if the request fails, drop the user back to the login view
-        }
+        } catch (err) {}
         showAuth();
         loginForm.reset();
         signupForm.reset();
@@ -294,7 +315,7 @@
         else alert('If your email needs a new code, one has just been sent.');
     });
 
-    // ── PROFILE EDIT ──
+    // ── PROFILE EDIT (name / phone) ──
     const profileEditForm = document.getElementById('profile-edit-form');
     profileEditForm?.addEventListener('submit', async e => {
         e.preventDefault();
@@ -320,9 +341,10 @@
                 return;
             }
             currentUser = data.user;
-            document.getElementById('profile-name').textContent = data.user.name;
-            document.getElementById('profile-phone').textContent = data.user.phone ? `📞 ${data.user.phone}` : '';
             document.getElementById('profile-avatar').textContent = (data.user.name || '?').trim().charAt(0).toUpperCase();
+            document.getElementById('sidebar-name').textContent = data.user.name;
+            const firstName = (data.user.name || '').trim().split(' ')[0];
+            document.getElementById('overview-first-name').textContent = firstName ? `, ${firstName}` : '';
             successEl.classList.add('show');
             setTimeout(() => successEl.classList.remove('show'), 2500);
         } catch (err) {
@@ -401,8 +423,9 @@
                 return;
             }
             currentUser = data.user;
-            document.getElementById('profile-email').textContent = data.user.email;
             document.getElementById('current-email-display').textContent = data.user.email;
+            document.getElementById('change-password-email-display').textContent = data.user.email;
+            document.getElementById('sidebar-email').textContent = data.user.email;
             changeEmailSection.hidden = true;
             changeEmailRequestForm.reset();
             changeEmailConfirmForm.reset();
@@ -415,6 +438,128 @@
         }
     });
 
+    // ── PASSWORD CHANGE (reuses the forgot-password OTP flow, scoped to the
+    // logged-in user's own email — no separate backend endpoint needed).
+    // NOTE: reset-password.js logs the account out everywhere on success, so
+    // after this completes we send the person back to the login screen. ──
+    const changePasswordToggleBtn = document.getElementById('change-password-toggle-btn');
+    const changePasswordSection = document.getElementById('change-password-section');
+    const changePasswordSendForm = document.getElementById('change-password-send-form');
+    const changePasswordOtpForm = document.getElementById('change-password-otp-form');
+    const changePasswordNewForm = document.getElementById('change-password-new-form');
+    const cancelChangePasswordLink = document.getElementById('cancel-change-password-link');
+    let changePasswordResetToken = '';
+
+    function resetChangePasswordFlow() {
+        changePasswordSection.hidden = true;
+        changePasswordSendForm.hidden = false;
+        changePasswordOtpForm.hidden = true;
+        changePasswordNewForm.hidden = true;
+        changePasswordOtpForm.reset();
+        changePasswordNewForm.reset();
+    }
+
+    changePasswordToggleBtn?.addEventListener('click', () => {
+        const willOpen = changePasswordSection.hidden;
+        resetChangePasswordFlow();
+        changePasswordSection.hidden = !willOpen;
+    });
+    cancelChangePasswordLink?.addEventListener('click', e => {
+        e.preventDefault();
+        resetChangePasswordFlow();
+    });
+
+    changePasswordSendForm?.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('change-password-send-error');
+        errorEl.classList.remove('show');
+        const btn = changePasswordSendForm.querySelector('.auth-submit-btn');
+        btn.disabled = true; btn.textContent = 'Sending…';
+        try {
+            await fetch('/api/auth/forgot-password', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: currentUser?.email }),
+            });
+            changePasswordSendForm.hidden = true;
+            changePasswordOtpForm.hidden = false;
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            btn.disabled = false; btn.textContent = 'Send Code';
+        }
+    });
+
+    changePasswordOtpForm?.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('change-password-otp-error');
+        errorEl.classList.remove('show');
+        const otp = document.getElementById('change-password-otp').value.trim();
+
+        const btn = changePasswordOtpForm.querySelector('.auth-submit-btn');
+        btn.disabled = true; btn.textContent = 'Verifying…';
+        try {
+            const res = await fetch('/api/auth/verify-reset-otp', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: currentUser?.email, otp }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                errorEl.textContent = data.error || 'Incorrect code.';
+                errorEl.classList.add('show');
+                return;
+            }
+            changePasswordResetToken = data.resetToken;
+            changePasswordOtpForm.hidden = true;
+            changePasswordNewForm.hidden = false;
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+        } finally {
+            btn.disabled = false; btn.textContent = 'Verify Code';
+        }
+    });
+
+    changePasswordNewForm?.addEventListener('submit', async e => {
+        e.preventDefault();
+        const errorEl = document.getElementById('change-password-new-error');
+        errorEl.classList.remove('show');
+        const newPassword = document.getElementById('change-password-new').value;
+
+        const btn = changePasswordNewForm.querySelector('.auth-submit-btn');
+        btn.disabled = true; btn.textContent = 'Updating…';
+        try {
+            const res = await fetch('/api/auth/reset-password', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: currentUser?.email, resetToken: changePasswordResetToken, newPassword }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                errorEl.textContent = data.error || 'Could not update password.';
+                errorEl.classList.add('show');
+                btn.disabled = false; btn.textContent = 'Update Password';
+                return;
+            }
+            // Password changed — every session (including this one) was just
+            // revoked server-side, so send the person back to log in fresh.
+            resetChangePasswordFlow();
+            showAuth();
+            loginForm.reset();
+            if (currentUser?.email) document.getElementById('login-email').value = currentUser.email;
+            alert('Password updated! Please log in again with your new password.');
+        } catch (err) {
+            errorEl.textContent = 'Could not reach the server. Please try again.';
+            errorEl.classList.add('show');
+            btn.disabled = false; btn.textContent = 'Update Password';
+        }
+    });
+
+    attachPasswordChecklist(
+        document.getElementById('change-password-new'),
+        document.getElementById('change-password-checklist'),
+        changePasswordNewForm?.querySelector('.auth-submit-btn')
+    );
+
     // ── ORDER HISTORY ──
     async function loadOrders() {
         const listEl = document.getElementById('orders-list');
@@ -425,12 +570,13 @@
         try {
             const res = await fetch('/api/orders');
             if (res.status === 401) {
-                // session expired between page load and this call
                 showAuth();
                 return;
             }
             const data = await res.json();
             const orders = data.orders || [];
+            lastOrders = orders;
+            document.getElementById('overview-order-count').textContent = orders.length;
 
             if (orders.length === 0) {
                 emptyEl.hidden = false;
@@ -523,6 +669,8 @@
         const browseBtn = document.getElementById('browse-products-btn');
 
         const cart = typeof getCart === 'function' ? getCart() : [];
+        const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+        document.getElementById('overview-cart-count').textContent = totalQty;
 
         if (cart.length === 0) {
             summaryEl.innerHTML = '';
@@ -536,7 +684,6 @@
         openBtn.hidden = false;
         browseBtn.hidden = true;
 
-        const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
         const totalPrice = cart.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
 
         summaryEl.innerHTML = `
@@ -545,7 +692,7 @@
         `;
 
         openBtn.onclick = () => {
-            window.location.href = 'cart';
+            if (typeof openCart === 'function') openCart();
         };
     }
 
@@ -556,7 +703,7 @@
         signupForm.querySelector('.auth-submit-btn')
     );
 
-    // ── FORGOT PASSWORD FLOW ──
+    // ── FORGOT PASSWORD FLOW (logged-out) ──
     const forgotLink = document.getElementById('forgot-password-link');
     const backToLoginLink = document.getElementById('back-to-login-link');
     const forgotSection = document.getElementById('forgot-password-section');
@@ -592,7 +739,11 @@
     backToLoginLink?.addEventListener('click', e => {
         e.preventDefault();
         showAuthForms();
-        tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === 'login'));
+        tabBtns.forEach(b => {
+            const isLogin = b.dataset.tab === 'login';
+            b.classList.toggle('active', isLogin);
+            b.setAttribute('aria-selected', String(isLogin));
+        });
     });
 
     forgotEmailForm.addEventListener('submit', async e => {
@@ -637,7 +788,11 @@
         e.preventDefault();
         otpLoginSection.hidden = true;
         loginForm.hidden = false;
-        tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === 'login'));
+        tabBtns.forEach(b => {
+            const isLogin = b.dataset.tab === 'login';
+            b.classList.toggle('active', isLogin);
+            b.setAttribute('aria-selected', String(isLogin));
+        });
     });
 
     otpEmailForm.addEventListener('submit', async e => {
