@@ -148,9 +148,11 @@
 
     function applyRotation() {
       rotor.style.transform = `rotate(${rotation}deg)`;
-      labelsWrap.querySelectorAll('.wheel-label-inner').forEach(el => {
-        el.style.transform = `rotate(${-rotation}deg)`;
-      });
+      // Cancel the wheel's live spin on the label pills themselves (not
+      // just their text) via a shared CSS var — see .wheel-label's
+      // transform in css/style.css. Setting it once on the wheel root is
+      // enough since custom properties inherit down to every label.
+      wheel.style.setProperty('--rotation', `${rotation}deg`);
       syncMarker();
     }
 
