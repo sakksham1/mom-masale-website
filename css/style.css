@@ -6281,12 +6281,10 @@ a.rating-badge-overlay:hover .rating-badge-stars {
 @media (max-width: 900px) {
     .acct-nav {
         flex-direction: row;
-        overflow-x: auto;
+        flex-wrap: wrap;
         gap: 8px;
         padding-bottom: 2px;
-        scrollbar-width: none;
     }
-    .acct-nav::-webkit-scrollbar { display: none; }
 }
 .acct-nav-btn {
     display: flex;
@@ -6315,7 +6313,6 @@ a.rating-badge-overlay:hover .rating-badge-stars {
 [data-theme="dark"] .acct-nav-btn.active { background: var(--gold); color: #1a1200; }
 
 .acct-logout-btn { width: 100%; font-size: 0.88rem; padding: 0.6rem; }
-@media (max-width: 900px) { .acct-logout-btn { display: none; } }
 
 .acct-content { min-width: 0; }
 .acct-panel-heading {
@@ -6343,18 +6340,18 @@ a.rating-badge-overlay:hover .rating-badge-stars {
     border: 1px solid var(--card-border);
     border-radius: 14px;
     box-shadow: var(--shadow);
-    padding: 1.3rem 1rem;
+    padding: 2rem 1.2rem;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
 }
 [data-theme="dark"] .acct-stat-card { background: #141c2e; }
-.acct-stat-icon { font-size: 1.4rem; }
-.acct-stat-num { font-size: 1.6rem; font-weight: 700; color: var(--maroon); }
+.acct-stat-icon { font-size: 1.9rem; }
+.acct-stat-num { font-size: 2.2rem; font-weight: 700; color: var(--maroon); }
 [data-theme="dark"] .acct-stat-num { color: var(--gold); }
-.acct-stat-label { font-size: 0.78rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.4px; }
+.acct-stat-label { font-size: .82rem; color: var(--text-light); text-transform: uppercase; letter-spacing: .4px; margin-top: 2px; }
 
 .acct-quicklinks {
     display: flex;
