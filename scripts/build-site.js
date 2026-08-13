@@ -168,6 +168,24 @@ function validateProducts(products) {
   });
 }
 
+function validateTables(tables, ownerLabel) {
+  if (tables === undefined) return;
+  if (!Array.isArray(tables)) throw new Error(`${ownerLabel} has a "tables" field that isn't an array`);
+  tables.forEach((t, i) => {
+    if (!Array.isArray(t.headers) || !t.headers.length) {
+      throw new Error(`${ownerLabel} tables[${i}] is missing a non-empty "headers" array`);
+    }
+    if (!Array.isArray(t.rows)) {
+      throw new Error(`${ownerLabel} tables[${i}] is missing a "rows" array`);
+    }
+    t.rows.forEach((row, ri) => {
+      if (!Array.isArray(row) || row.length !== t.headers.length) {
+        throw new Error(`${ownerLabel} tables[${i}].rows[${ri}] must have exactly ${t.headers.length} cell(s)`);
+      }
+    });
+  });
+}
+
 function validateRecipes(recipes, productSlugSet) {
   const seen = new Set();
   recipes.forEach((r, i) => {
@@ -176,6 +194,8 @@ function validateRecipes(recipes, productSlugSet) {
     if (!/^[a-z0-9-]+$/.test(r.slug)) throw new Error(`Recipe "${r.title}" has an invalid slug "${r.slug}" (lowercase letters, numbers, hyphens only)`);
     if (seen.has(r.slug)) throw new Error(`Duplicate recipe slug detected: "${r.slug}" — slugs must be unique`);
     seen.add(r.slug);
+
+    validateTables(r.tables, `Recipe "${r.title}"`);
 
     (r.ingredients || []).forEach(ing => {
       if (ing.productSlug && !productSlugSet.has(ing.productSlug)) {
@@ -203,6 +223,7 @@ function validateBlog(blogPosts, productSlugSet, recipeSlugSet) {
     if (!BLOG_CATEGORIES.includes(b.category)) {
       throw new Error(`Blog post "${b.title}" has an unrecognized category "${b.category}" — must be one of: ${BLOG_CATEGORIES.join(', ')}`);
     }
+    validateTables(b.tables, `Blog post "${b.title}"`);
     (b.relatedProducts || []).forEach(slug => {
       if (!productSlugSet.has(slug)) {
         throw new Error(`Blog post "${b.title}" references unknown product slug "${slug}" in relatedProducts`);
@@ -364,6 +385,23 @@ function buildRatingBadgeHtml(p) {
             </a>`;
 }
 
+function buildDataTablesHtml(tables, headingLevel = 'h2') {
+  if (!tables || !tables.length) return '';
+  const blocks = tables.map(t => `
+    <div class="data-table-wrap">
+        ${t.title ? `<h3 class="data-table-title">${escapeHtml(t.title)}</h3>` : ''}
+        <table class="data-table">
+            <thead><tr>${t.headers.map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr></thead>
+            <tbody>${t.rows.map(row => `<tr>${row.map(c => `<td>${escapeHtml(String(c))}</td>`).join('')}</tr>`).join('')}</tbody>
+        </table>
+    </div>`).join('');
+  return `
+<div class="container">
+    <${headingLevel} class="section-title">Reference Tables</${headingLevel}>
+    <div class="data-table-list">${blocks}</div>
+</div>`;
+}
+
 function buildFaqHtml(p) {
   if (!p.faq || !p.faq.length) return '';
   const items = p.faq.map(f => `
@@ -417,6 +455,52 @@ function buildReviewsHtml(p) {
     <div id="review-summary-mount">${summaryHtml}</div>
     <div id="reviews-list-mount" class="review-list" data-product-slug="${p.slug}">${listHtml}</div>
     <div id="review-form-mount" data-product-slug="${p.slug}"></div>
+</div>`;
+}
+
+function buildRecipeReviewsHtml(r) {
+  const agg = r.aggregateRating;
+  const reviews = r.reviews || [];
+  const summaryHtml = (agg && agg.reviewCount)
+    ? `<div class="review-summary">
+                <span class="review-summary-value">${agg.ratingValue.toFixed(1)}</span>
+                <span class="review-summary-stars" aria-hidden="true">${starString(agg.ratingValue)}</span>
+                <span class="review-summary-count">Based on ${agg.reviewCount} review${agg.reviewCount === 1 ? '' : 's'}</span>
+            </div>`
+    : `<p class="empty-state-msg">No reviews yet — be the first to review this recipe.</p>`;
+  const listHtml = reviews.map(rv => `
+            <div class="review-card">
+                <div class="review-card-header">
+                    <span class="review-card-stars" aria-hidden="true">${starString(rv.rating)}</span>
+                    <span class="review-card-author">${escapeHtml(rv.authorName)}</span>
+                    <span class="review-card-date">${escapeHtml(rv.datePublished)}</span>
+                </div>
+                <p class="review-card-body">${escapeHtml(rv.body)}</p>
+            </div>`).join('');
+  return `
+<div class="container reviews-section">
+    <h2 class="section-title">Reader Reviews</h2>
+    <div id="review-summary-mount">${summaryHtml}</div>
+    <div id="reviews-list-mount" class="review-list" data-recipe-slug="${r.slug}">${listHtml}</div>
+    <div id="review-form-mount" data-recipe-slug="${r.slug}"></div>
+</div>`;
+}
+
+function buildBlogCommentsHtml(b) {
+  const comments = b.comments || [];
+  const listHtml = comments.map(c => `
+            <div class="comment-card">
+                <div class="comment-card-header">
+                    <span class="comment-card-author">${escapeHtml(c.authorName)}</span>
+                    <span class="comment-card-date">${escapeHtml(c.datePublished)}</span>
+                </div>
+                <p class="comment-card-body">${escapeHtml(c.body)}</p>
+            </div>`).join('');
+  return `
+<div class="container comments-section">
+    <h2 class="section-title">Comments</h2>
+    <div id="comments-list-mount" class="comment-list" data-blog-slug="${b.slug}">${listHtml || '<p class="empty-state-msg">No comments yet.</p>'}</div>
+    <div id="comment-form-mount" data-blog-slug="${b.slug}"></div>
 </div>`;
 }
 
@@ -699,7 +783,9 @@ function renderRecipe(r, allRecipes, productBySlug, blogPosts, template) {
     '{{RECIPE_SERVINGS}}': String(r.servings || ''),
     '{{RECIPE_INGREDIENTS_LIST}}': buildIngredientsHtml(r, productBySlug),
     '{{RECIPE_STEPS_LIST}}': buildStepsHtml(r),
+    '{{RECIPE_TABLES_BLOCK}}': buildDataTablesHtml(r.tables),
     '{{RECIPE_VIDEO_BLOCK}}': buildRecipeVideoHtml(r),
+    '{{RECIPE_REVIEWS_BLOCK}}': buildRecipeReviewsHtml(r),
     '{{RECIPE_SHOP_INGREDIENTS_BLOCK}}': buildShopIngredientsHtml(r, productBySlug),
     '{{RECIPE_RELATED_BLOG_BLOCK}}': buildRelatedBlogForRecipeHtml(r, blogPosts),
     '{{RECIPE_RELATED_BLOCK}}': buildRelatedRecipesForRecipeHtml(r, allRecipes),
@@ -815,6 +901,8 @@ function renderBlog(b, productBySlug, recipeBySlug, template) {
     '{{BLOG_IMAGE}}': escapeHtml(b.image),
     '{{BLOG_IMAGE_ALT}}': escapeHtml(b.imageAlt || b.title),
     '{{BLOG_BODY_HTML}}': buildBlogBodyHtml(b),
+    '{{BLOG_TABLES_BLOCK}}': buildDataTablesHtml(b.tables),
+    '{{BLOG_COMMENTS_BLOCK}}': buildBlogCommentsHtml(b),
     '{{BLOG_RELATED_PRODUCTS_BLOCK}}': buildRelatedProductsForBlogHtml(b, productBySlug),
     '{{BLOG_RELATED_RECIPES_BLOCK}}': buildRelatedRecipesForBlogHtml(b, recipeBySlug),
   };

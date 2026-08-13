@@ -23,7 +23,7 @@ const BLOG_CATEGORIES = ['Articles', 'FAQs', 'Buying Guides', 'Cooking Tips', 'I
 
 const EDITABLE_FIELDS = [
   'title', 'category', 'description', 'image', 'imageAlt',
-  'body', 'relatedProducts', 'relatedRecipes', 'seo',
+  'body', 'relatedProducts', 'relatedRecipes', 'seo', 'tables',
 ];
 
 function slugify(name) {
@@ -88,6 +88,16 @@ export async function onRequestPost(context) {
   const refError = await validateReferences(env, { relatedProducts, relatedRecipes });
   if (refError) return jsonError(refError);
 
+  if (body.tables !== undefined) {
+  if (!Array.isArray(body.tables)) return jsonError('tables must be an array');
+  for (const t of body.tables) {
+    if (!Array.isArray(t.headers) || !t.headers.length) return jsonError('Each table needs a non-empty headers array');
+    if (!Array.isArray(t.rows) || t.rows.some(row => !Array.isArray(row) || row.length !== t.headers.length)) {
+      return jsonError('Each table row must match the headers length');
+    }
+  }
+}
+
   try {
     const { content } = await readStagedOrLive(env, 'blog', BLOG_PATH);
     const blogPosts = JSON.parse(content);
@@ -102,6 +112,7 @@ export async function onRequestPost(context) {
       imageAlt: body.imageAlt || title,
       description,
       body: Array.isArray(body.body) ? body.body : [],
+      tables: Array.isArray(body.tables) ? body.tables : [],
       relatedProducts, relatedRecipes,
       seo: body.seo || defaultSeo(title, description),
     };
@@ -139,6 +150,16 @@ export async function onRequestPatch(context) {
   if ('body' in updates && !Array.isArray(updates.body)) {
     return jsonError('body must be an array of paragraph strings');
   }
+  
+  if (body.tables !== undefined) {
+  if (!Array.isArray(body.tables)) return jsonError('tables must be an array');
+  for (const t of body.tables) {
+    if (!Array.isArray(t.headers) || !t.headers.length) return jsonError('Each table needs a non-empty headers array');
+    if (!Array.isArray(t.rows) || t.rows.some(row => !Array.isArray(row) || row.length !== t.headers.length)) {
+      return jsonError('Each table row must match the headers length');
+    }
+  }
+}
 
   const refError = await validateReferences(env, {
     relatedProducts: updates.relatedProducts,
