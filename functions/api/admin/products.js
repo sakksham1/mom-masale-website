@@ -62,14 +62,13 @@ async function findProductReferences(env, slug) {
 }
 
 async function loadFullProduct(env, id) {
-  const [product, sizes, aliases, faq, related] = await Promise.all([
+  const [product, sizes, aliases, faq, related, gallery] = await Promise.all([
     env.DB.prepare('SELECT * FROM products WHERE id = ?').bind(id).first(),
     env.DB.prepare('SELECT size, price, stock_qty, sort_order FROM product_sizes WHERE product_id = ? ORDER BY sort_order, id').bind(id).all(),
     env.DB.prepare('SELECT alias FROM product_aliases WHERE product_id = ? ORDER BY id').bind(id).all(),
     env.DB.prepare('SELECT question, answer FROM product_faq WHERE product_id = ? ORDER BY sort_order, id').bind(id).all(),
-    env.DB.prepare(
-      `SELECT p.slug FROM product_related pr JOIN products p ON p.id = pr.related_product_id WHERE pr.product_id = ?`
-    ).bind(id).all(),
+    env.DB.prepare(`SELECT p.slug FROM product_related pr JOIN products p ON p.id = pr.related_product_id WHERE pr.product_id = ?`).bind(id).all(),
+    env.DB.prepare('SELECT id, image, alt, sort_order FROM product_images WHERE product_id = ? ORDER BY sort_order, id').bind(id).all(),
   ]);
   if (!product) return null;
   return {
@@ -78,6 +77,7 @@ async function loadFullProduct(env, id) {
     aliases: (aliases.results || []).map(a => a.alias),
     faq: faq.results || [],
     related_products: (related.results || []).map(r => r.slug),
+    images: (gallery.results || []).map(g => ({ id: g.id, image: g.image, alt: g.alt, sortOrder: g.sort_order })),
   };
 }
 

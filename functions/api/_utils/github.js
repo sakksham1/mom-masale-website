@@ -75,3 +75,55 @@ export async function writeRepoFile(env, path, newContent, sha, message) {
   }
   return res.json();
 }
+
+// Binary-safe variants — the existing readRepoFile/writeRepoFile assume
+// UTF-8 text (used for data/*.json) and will corrupt image bytes.
+
+export async function readRepoFileBinary(env, path) {
+  if (!env.GITHUB_TOKEN || !env.GITHUB_REPO) {
+    throw new Error('GITHUB_TOKEN / GITHUB_REPO are not configured for this environment');
+  }
+  const branch = env.GITHUB_BRANCH || 'main';
+  const res = await fetch(`${API}/repos/${env.GITHUB_REPO}/contents/${path}?ref=${branch}`, {
+    headers: {
+      Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+      'User-Agent': 'mom-masale-admin-dashboard',
+      Accept: 'application/vnd.github+json',
+    },
+  });
+  if (res.status === 404) return null; // doesn't exist yet — caller creates instead of updates
+  if (!res.ok) throw new Error(`GitHub read failed (${res.status}): ${await res.text()}`);
+  const data = await res.json();
+  return { sha: data.sha };
+}
+
+export async function writeRepoBinaryFile(env, path, arrayBuffer, message, sha) {
+  if (!env.GITHUB_TOKEN || !env.GITHUB_REPO) {
+    throw new Error('GITHUB_TOKEN / GITHUB_REPO are not configured for this environment');
+  }
+  const branch = env.GITHUB_BRANCH || 'main';
+  const bytes = new Uint8Array(arrayBuffer);
+  let binary = '';
+  const chunk = 0x8000; // avoid blowing the call stack on String.fromCharCode(...bytes) for big files
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  const res = await fetch(`${API}/repos/${env.GITHUB_REPO}/contents/${path}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+      'User-Agent': 'mom-masale-admin-dashboard',
+      Accept: 'application/vnd.github+json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      message,
+      content: btoa(binary),
+      ...(sha ? { sha } : {}),
+      branch,
+      committer: { name: 'Mom Masale Admin Dashboard', email: 'admin-bot@mommasale.com' },
+    }),
+  });
+  if (!res.ok) throw new Error(`GitHub binary write failed (${res.status}): ${await res.text()}`);
+  return res.json();
+}

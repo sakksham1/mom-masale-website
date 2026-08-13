@@ -27,23 +27,15 @@ function shortAuthorName(fullName) {
 }
 
 export async function buildProductsJsonArray(env) {
-  const [products, sizes, aliases, faqs, related, reviewAgg, topReviews] = await Promise.all([
+  const [products, sizes, aliases, faqs, related, reviewAgg, topReviews, galleryImages] = await Promise.all([
     env.DB.prepare('SELECT * FROM products ORDER BY slug').all(),
     env.DB.prepare('SELECT * FROM product_sizes ORDER BY product_id, sort_order, id').all(),
     env.DB.prepare('SELECT * FROM product_aliases ORDER BY product_id, id').all(),
     env.DB.prepare('SELECT * FROM product_faq ORDER BY product_id, sort_order, id').all(),
     env.DB.prepare('SELECT * FROM product_related').all(),
-    env.DB.prepare(
-      `SELECT product_id, COUNT(*) as cnt, AVG(rating) as avg_rating
-       FROM product_reviews WHERE status = 'approved' GROUP BY product_id`
-    ).all(),
-    // Capped per-product below (not in SQL) — this pulls all approved
-    // reviews once, cheaply, rather than N queries (one per product).
-    env.DB.prepare(
-      `SELECT pr.product_id, pr.rating, pr.body, pr.created_at, u.name as author_name
-       FROM product_reviews pr JOIN users u ON u.id = pr.user_id
-       WHERE pr.status = 'approved' ORDER BY pr.product_id, pr.created_at DESC`
-    ).all(),
+    env.DB.prepare(`SELECT product_id, COUNT(*) as cnt, AVG(rating) as avg_rating FROM product_reviews WHERE status = 'approved' GROUP BY product_id`).all(),
+    env.DB.prepare(`SELECT pr.product_id, pr.rating, pr.body, pr.created_at, u.name as author_name FROM product_reviews pr JOIN users u ON u.id = pr.user_id WHERE pr.status = 'approved' ORDER BY pr.product_id, pr.created_at DESC`).all(),
+    env.DB.prepare('SELECT * FROM product_images ORDER BY product_id, sort_order, id').all(),
   ]);
 
   const productRows = products.results || [];
@@ -52,6 +44,7 @@ export async function buildProductsJsonArray(env) {
   const aliasesByProduct = groupBy(aliases.results || [], 'product_id');
   const faqByProduct = groupBy(faqs.results || [], 'product_id');
   const relatedByProduct = groupBy(related.results || [], 'product_id');
+  const galleryByProduct = groupBy(galleryImages.results || [], 'product_id');
 
   const ratingByProduct = new Map(
     (reviewAgg.results || []).map(r => [r.product_id, { reviewCount: r.cnt, ratingValue: Math.round(r.avg_rating * 10) / 10 }])
@@ -75,6 +68,11 @@ export async function buildProductsJsonArray(env) {
     const productSizes = sizesByProduct[p.id] || [];
     const prices = {};
     productSizes.forEach(s => { prices[s.size] = s.price; });
+    const gallery = (galleryByProduct[p.id] || []).map(g => ({
+      path: g.image,
+      alt: g.alt || `Mom Masale ${p.name}`,
+    }));
+    const images = [{ path: p.image, alt: p.image_alt || `Mom Masale ${p.name} retail pack` }, ...gallery];
 
     return {
       name: p.name,
@@ -82,6 +80,7 @@ export async function buildProductsJsonArray(env) {
       sizes: productSizes.map(s => s.size),
       prices,
       image: p.image,
+      images,
       amazon: p.amazon_url || '#',
       flipkart: p.flipkart_url || '#',
       meesho: p.meesho_url || '#',

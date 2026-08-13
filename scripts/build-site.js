@@ -66,6 +66,7 @@ const STATIC_PAGES = [
 const SETTINGS_PATH = path.join(ROOT, 'data', 'settings.json');
 if (!fs.existsSync(SETTINGS_PATH)) throw new Error(`Cannot find ${SETTINGS_PATH}.`);
 const DISCOUNT_PERCENT = readJSON(SETTINGS_PATH).commerce.discountPercent;
+
 // ── shared helpers ──────────────────────────────────────
 
 function readJSON(p) {
@@ -85,8 +86,41 @@ function discountedPrice(original) {
   return Math.round(original * (1 - DISCOUNT_PERCENT / 100));
 }
 
-// ── lastmod tracking (content-hash based, persisted across builds) ──
+function productImages(p) {
+  if (Array.isArray(p.images) && p.images.length) {
+    return p.images.map(img => ({ path: img.path || img.image || p.image, alt: img.alt || p.imageAlt || p.name }));
+  }
+  return [{ path: p.image, alt: p.imageAlt || p.name }]; // pre-migration products / no gallery
+}
 
+function buildGallerySlidesHtml(p) {
+  return productImages(p).map((img, i) => `
+            <div class="product-gallery-slide" data-index="${i}">
+                <img src="../${escapeHtml(img.path)}" alt="${escapeHtml(img.alt)}" ${i === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'} width="600" height="600"
+                    onerror="this.src='https://placehold.co/600x600/7b1120/fff?text=${encodeURIComponent(p.name)}'">
+            </div>`).join('');
+}
+
+function buildGalleryThumbsHtml(p) {
+  const images = productImages(p);
+  if (images.length < 2) return '';
+  return `
+        <div class="product-gallery-thumbs" role="tablist" aria-label="Product images">${images.map((img, i) => `
+            <button type="button" class="product-gallery-thumb${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="View image ${i + 1} of ${images.length}">
+                <img src="../${escapeHtml(img.path)}" alt="" loading="lazy" width="80" height="80">
+            </button>`).join('')}
+        </div>`;
+}
+
+function buildGalleryDotsHtml(p) {
+  const images = productImages(p);
+  if (images.length < 2) return '';
+  return `
+                    <div class="product-gallery-dots" aria-hidden="true">${images.map((_, i) => `<span class="product-gallery-dot${i === 0 ? ' active' : ''}" data-index="${i}"></span>`).join('')}
+                    </div>`;
+}
+
+// ── lastmod tracking (content-hash based, persisted across builds) ──
 function hashItem(obj) {
   return crypto.createHash('sha256').update(JSON.stringify(obj)).digest('hex');
 }
@@ -265,6 +299,7 @@ function findBlogForRecipe(recipeSlug, blogPosts) {
 // ── PRODUCT rendering ────────────────────────────────────
 
 function buildProductSchema(p) {
+  const images = productImages(p).map(img => `${SITE_URL}/${img.path}`);
   const priceValues = Object.values(p.prices || {});
   const lowPrice = priceValues.length ? Math.min(...priceValues) : undefined;
   const highPrice = priceValues.length ? Math.max(...priceValues) : undefined;
@@ -272,7 +307,7 @@ function buildProductSchema(p) {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: p.name,
-    image: `${SITE_URL}/${p.image}`,
+    image: images,
     description: (p.seo && (p.seo.shortDescription || p.seo.metaDescription)) || p.name,
     brand: { '@type': 'Brand', name: 'Mom Masale' },
   };
@@ -578,6 +613,10 @@ function renderProduct(p, allProducts, recipes, blogPosts, template) {
     '{{PRODUCT_SLUG}}': p.slug,
     '{{PRODUCT_IMAGE}}': escapeHtml(p.image),
     '{{PRODUCT_IMAGE_ALT}}': escapeHtml(p.imageAlt || p.name),
+    '{{PRODUCT_GALLERY_SLIDES}}': buildGallerySlidesHtml(p),
+    '{{PRODUCT_GALLERY_THUMBS}}': buildGalleryThumbsHtml(p),
+    '{{PRODUCT_GALLERY_DOTS}}': buildGalleryDotsHtml(p),
+    '{{PRODUCT_GALLERY_MULTI_CLASS}}': productImages(p).length > 1 ? ' product-gallery--multi' : '',
     '{{PRODUCT_LONG_DESCRIPTION}}': longDesc,
     '{{PRODUCT_COMING_SOON_CLASS}}': p.comingSoon ? ' card--coming-soon' : '',
     '{{PRODUCT_COMING_SOON_RIBBON}}': p.comingSoon ? '<span class="launching-ribbon">Launching Soon</span>' : '',

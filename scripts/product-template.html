@@ -29,6 +29,10 @@
     <meta property="og:url" content="{{CANONICAL_URL}}">
     <meta property="og:type" content="product">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,380;0,9..144,520;0,9..144,600;1,9..144,480&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="../css/style.min.css">
     <script type="application/ld+json">
 {{PRODUCT_SCHEMA_JSON}}
@@ -76,31 +80,47 @@
 <div class="nav-overlay" id="nav-overlay"></div>
 <div class="promo-banner">🚚 Free Shipping &amp; Same-Day Delivery in Kanpur</div>
 <main>
-<div class="container" style="padding-bottom:0.5rem">
-    <a href="../products" style="color:var(--maroon);text-decoration:none;font-size:0.9rem;font-weight:600">← Back to All Products</a>
+
+<div class="container recipe-back-link-wrap">
+    <a href="../products" class="recipe-back-link">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        All Products
+    </a>
 </div>
 
-<div class="container">
-    <div class="card product-detail-card{{PRODUCT_COMING_SOON_CLASS}}" data-category="{{PRODUCT_CATEGORY}}">
-        <div class="card-image">
-            {{PRODUCT_RATING_BADGE}}
-            <img src="../{{PRODUCT_IMAGE}}" alt="{{PRODUCT_IMAGE_ALT}}" loading="lazy" width="400" height="400"
-                onload="this.closest('.card-image').classList.add('img-loaded')"
-                onerror="this.src='https://placehold.co/400x400/7b1120/fff?text={{PRODUCT_NAME}}'">
-            {{PRODUCT_COMING_SOON_RIBBON}}
-            <button type="button" class="share-btn" data-share-title="{{PRODUCT_NAME}}" aria-label="Share this product">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
-            </button>
-        </div>
-        <div class="card-body">
-            <span class="card-category">{{PRODUCT_CATEGORY}}</span>
-            <h1 class="product-detail-title">{{PRODUCT_NAME}}</h1>
+<div class="container product-hero-container">
+    <div class="card product-detail-shell{{PRODUCT_COMING_SOON_CLASS}}" data-category="{{PRODUCT_CATEGORY}}">
+        <div class="product-hero">
 
-            <p style="color:var(--text-light);font-size:0.98rem;line-height:1.7;margin:0.5rem 0 1rem">{{PRODUCT_LONG_DESCRIPTION}}</p>
-            {{PRODUCT_PURCHASE_BLOCK}}
+            <div class="product-gallery{{PRODUCT_GALLERY_MULTI_CLASS}}" id="product-gallery">
+                <div class="product-gallery-main">
+                    {{PRODUCT_RATING_BADGE}}
+                    <button type="button" class="share-btn" data-share-title="{{PRODUCT_NAME}}" aria-label="Share this product">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
+                    </button>
+                    <div class="product-gallery-track" id="product-gallery-track">
+                        {{PRODUCT_GALLERY_SLIDES}}
+                    </div>
+                    {{PRODUCT_COMING_SOON_RIBBON}}
+                    <button type="button" class="product-gallery-zoom-btn" id="product-gallery-zoom-btn" aria-label="View full-size image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                    </button>
+                    {{PRODUCT_GALLERY_DOTS}}
+                </div>
+                {{PRODUCT_GALLERY_THUMBS}}
+            </div>
+
+            <div class="product-info">
+                <span class="product-hero-eyebrow">{{PRODUCT_CATEGORY}}</span>
+                <h1 class="product-hero-title">{{PRODUCT_NAME}}</h1>
+                <p class="product-hero-desc">{{PRODUCT_LONG_DESCRIPTION}}</p>
+                {{PRODUCT_PURCHASE_BLOCK}}
+            </div>
+
         </div>
     </div>
 </div>
+
 {{PRODUCT_FAQ_BLOCK}}
 {{PRODUCT_REVIEWS_BLOCK}}
 {{PRODUCT_RELATED_RECIPES_BLOCK}}
@@ -196,5 +216,6 @@
 </button>
 <script src="../js/main.min.js" defer></script>
 <script src="../js/product-reviews.js" defer></script>
+<script src="../js/product-gallery.js" defer></script>
 </body>
 </html>
