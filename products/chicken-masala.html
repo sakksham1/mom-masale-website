@@ -29,13 +29,19 @@
     <meta property="og:url" content="https://mommasale.com/products/chicken-masala">
     <meta property="og:type" content="product">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,380;0,9..144,520;0,9..144,600;1,9..144,480&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="../css/style.min.css">
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Product",
   "name": "Chicken Masala",
-  "image": "https://mommasale.com/images/products/chicken.webp",
+  "image": [
+    "https://mommasale.com/images/products/chicken.webp"
+  ],
   "description": "Premium quality chicken masala prepared from carefully selected ingredients to deliver authentic taste, rich aroma and consistent flavour for everyday Indian cooking.",
   "brand": {
     "@type": "Brand",
@@ -118,28 +124,45 @@
 <div class="nav-overlay" id="nav-overlay"></div>
 <div class="promo-banner">🚚 Free Shipping &amp; Same-Day Delivery in Kanpur</div>
 <main>
-<div class="container" style="padding-bottom:0.5rem">
-    <a href="../products" style="color:var(--maroon);text-decoration:none;font-size:0.9rem;font-weight:600">← Back to All Products</a>
+
+<div class="container recipe-back-link-wrap">
+    <a href="../products" class="recipe-back-link">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        All Products
+    </a>
 </div>
 
-<div class="container">
-    <div class="card product-detail-card" data-category="Blended Spices">
-        <div class="card-image">
-            
-            <img src="../images/products/chicken.webp" alt="Mom Masale Chicken Masala retail pack" loading="lazy" width="400" height="400"
-                onload="this.closest('.card-image').classList.add('img-loaded')"
-                onerror="this.src='https://placehold.co/400x400/7b1120/fff?text=Chicken Masala'">
-            
-            <button type="button" class="share-btn" data-share-title="Chicken Masala" aria-label="Share this product">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
-            </button>
-        </div>
-        <div class="card-body">
-            <span class="card-category">Blended Spices</span>
-            <h1 class="product-detail-title">Chicken Masala</h1>
+<div class="container product-hero-container">
+    <div class="card product-detail-shell" data-category="Blended Spices">
+        <div class="product-hero">
 
-            <p style="color:var(--text-light);font-size:0.98rem;line-height:1.7;margin:0.5rem 0 1rem">Mom Masale Chicken Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.</p>
-            
+            <div class="product-gallery" id="product-gallery">
+                <div class="product-gallery-main">
+                    
+                    <button type="button" class="share-btn" data-share-title="Chicken Masala" aria-label="Share this product">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
+                    </button>
+                    <div class="product-gallery-track" id="product-gallery-track">
+                        
+            <div class="product-gallery-slide" data-index="0">
+                <img src="../images/products/chicken.webp" alt="Mom Masale Chicken Masala retail pack" loading="eager" fetchpriority="high" width="600" height="600"
+                    onerror="this.src='https://placehold.co/600x600/7b1120/fff?text=Chicken%20Masala'">
+            </div>
+                    </div>
+                    
+                    <button type="button" class="product-gallery-zoom-btn" id="product-gallery-zoom-btn" aria-label="View full-size image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                    </button>
+                    
+                </div>
+                
+            </div>
+
+            <div class="product-info">
+                <span class="product-hero-eyebrow">Blended Spices</span>
+                <h1 class="product-hero-title">Chicken Masala</h1>
+                <p class="product-hero-desc">Mom Masale Chicken Masala is crafted using carefully selected ingredients and hygienically processed to preserve natural aroma, freshness and authentic flavour. Perfect for home kitchens as well as restaurants, it blends easily into a wide variety of Indian recipes while delivering consistent taste in every serving. Available in multiple pack sizes, it is a reliable choice for everyday cooking and special occasions alike.</p>
+                
             <div class="purchase-row" style="display:flex">
                 <div class="product-controls">
                     <div class="size-chip-row" data-selected="10rs" data-selected-price="8" data-selected-original="10">
@@ -161,9 +184,12 @@
                 </div>
             </div>
             <div class="other-size-note" hidden></div>
+            </div>
+
         </div>
     </div>
 </div>
+
 
 <div class="container">
     <h2 class="section-title">Frequently Asked Questions</h2>
@@ -299,5 +325,6 @@
 </button>
 <script src="../js/main.min.js" defer></script>
 <script src="../js/product-reviews.js" defer></script>
+<script src="../js/product-gallery.js" defer></script>
 </body>
 </html>
