@@ -1,70 +1,147 @@
 // js/spice-wheel.js
-// Data-driven, fully interactive spice wheel. Renders N wedges from JSON,
-// not a fixed 6 — swap the fetch URL below for an API later and nothing
-// else needs to change. No-ops instantly if #spice-wheel-mount isn't on
-// the page (i.e. every page except index.html).
+// Modular multi-mode hero wheel. Data comes from GET /api/wheel (D1-backed,
+// managed via /api/admin/wheel/modes + /api/admin/wheel/items — see the
+// Flutter admin app). Falls back to DEFAULT_MODES below if the API is
+// unreachable (e.g. local dev before migrations/027_wheel.sql has run).
 //
-// Motion model: everything (idle spin, drag, momentum) is ONE JS
-// requestAnimationFrame loop driving a single `rotation` value in degrees.
-// This is what lets mouse-drag, touch-drag, and idle auto-spin all behave
-// identically instead of fighting a separate CSS animation.
+// MODE CYCLING: tapping the center hub advances to the next active mode
+// (wraps around). Dragging/spinning and tap-to-navigate on a wedge behave
+// identically no matter which mode is showing — only wedge count, labels,
+// colors, and center text change between modes. Adding a 3rd mode later
+// is a pure data change (POST a mode + items) — no code change needed.
 
 (function () {
   const mount = document.getElementById('spice-wheel-mount');
   if (!mount) return;
 
-  const DEFAULT_ITEMS = [
-    { id: 'turmeric', label: 'Turmeric',      href: 'products/turmeric-powder',   color: '#d4a017' },
-    { id: 'chilli',   label: 'Red Chilli',     href: 'products/red-chilli-powder', color: '#ad2b17' },
-    { id: 'chaat',    label: 'Chaat Masala',   href: 'products/chaat-masala',      color: '#7c8b4a' },
-    { id: 'biryani',  label: 'Biryani Masala', href: 'products/biryani-masala',    color: '#3f6b54' },
-    { id: 'chai',     label: 'Chai Masala',    href: 'products/chai-masala',       color: '#8b5a2b' },
-    { id: 'garam',    label: 'Garam Masala',   href: 'products/garam-masala',      color: '#3a2420' },
+  const DEFAULT_MODES = [
+    {
+      key: 'shop',
+      centerLabel: 'MOM|MASALE',
+      centerLabelHover: 'Find Recipes',
+      centerGlyph: '✦',
+      items: [
+        { label: 'Turmeric', href: 'products/turmeric-powder', color: '#d4a017' },
+        { label: 'Red Chilli', href: 'products/red-chilli-powder', color: '#ad2b17' },
+        { label: 'Chaat Masala', href: 'products/chaat-masala', color: '#7c8b4a' },
+        { label: 'Biryani Masala', href: 'products/biryani-masala', color: '#3f6b54' },
+        { label: 'Chai Masala', href: 'products/chai-masala', color: '#8b5a2b' },
+        { label: 'Garam Masala', href: 'products/garam-masala', color: '#3a2420' },
+      ],
+    },
+    {
+      key: 'recipes',
+      centerLabel: 'Looking for a|recipe?',
+      centerLabelHover: 'Shop Spices',
+      centerGlyph: '🍲',
+      items: [
+        { label: 'Kadak Chai', href: 'recipes/kadak-masala-chai', color: '#8b5a2b' },
+        { label: 'Pani Puri', href: 'recipes/pani-puri', color: '#3f6b54' },
+        { label: 'Veg Biryani', href: 'recipes/vegetable-biryani', color: '#ad2b17' },
+        { label: 'Dal Makhani', href: 'recipes/dal-makhani', color: '#3a2420' },
+        { label: 'Shahi Paneer', href: 'recipes/shahi-paneer', color: '#d4a017' },
+        { label: 'Shahi Thandai', href: 'recipes/shahi-thandai', color: '#7c8b4a' },
+      ],
+    },
   ];
   const PALETTE = ['#d4a017', '#ad2b17', '#7c8b4a', '#3f6b54', '#8b5a2b', '#3a2420', '#7b1120', '#c98a2b'];
 
   const inSubdir = /\/(products|recipes|guide)\//.test(location.pathname);
   const SITE_PREFIX = inSubdir ? '../' : '';
 
-  // ── SWAP THIS for the future API call, e.g. fetch(SITE_PREFIX + '/api/spice-wheel') ──
-  fetch(SITE_PREFIX + 'data/spice-wheel.json')
-    .then(r => (r.ok ? r.json() : Promise.reject()))
-    .then(data => build(Array.isArray(data?.items) && data.items.length ? data.items : DEFAULT_ITEMS))
-    .catch(() => build(DEFAULT_ITEMS));
-
   function resolveHref(href) {
     return /^https?:\/\//.test(href) ? href : SITE_PREFIX + href;
   }
-
+  function escapeHtmlLite(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function twoLine(text) {
+    return String(text || '').split('|').map(escapeHtmlLite).join('<br>');
+  }
   function pointOnCircle(cx, cy, r, angleDeg) {
     const rad = (angleDeg * Math.PI) / 180;
     return [cx + r * Math.cos(rad), cy + r * Math.sin(rad)];
   }
 
-  // ── BUILD DOM from data ──
-  function build(items) {
-    const n = items.length;
-    const svgNS = 'http://www.w3.org/2000/svg';
-    const cx = 100, cy = 100, r = 100;
-    const slice = 360 / n;
+  let modesData = [];
+  let modeIndex = 0;
+  let entries = []; // current mode's { wedgeEl, labelEl, centerAngle }
 
+  let svg, labelsWrap, rotor, marker, hub, hubGlyphEl, hubDefaultEl, hubHoverEl;
+  let applyRotation = function () {}; // real implementation assigned in setupInteraction()
+
+  fetch('/api/wheel')
+    .then(r => (r.ok ? r.json() : Promise.reject()))
+    .then(data => {
+      modesData = Array.isArray(data?.modes) && data.modes.length ? data.modes : DEFAULT_MODES;
+      init();
+    })
+    .catch(() => { modesData = DEFAULT_MODES; init(); });
+
+  function init() {
+    buildShell();
+    setupInteraction();
+    renderMode(0);
+  }
+
+  // ── STATIC SHELL — svg/labels/marker/hub containers, built once ──
+  function buildShell() {
     mount.innerHTML = '';
 
-    const rotor = document.createElement('div');
+    rotor = document.createElement('div');
     rotor.className = 'spice-wheel-rotor';
 
-    const svg = document.createElementNS(svgNS, 'svg');
+    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 200 200');
     svg.setAttribute('class', 'spice-wheel-svg');
 
-    const labelsWrap = document.createElement('div');
+    labelsWrap = document.createElement('div');
     labelsWrap.className = 'spice-wheel-labels';
 
-    const entries = []; // { wedgeEl, labelEl, centerAngle, href }
+    rotor.appendChild(svg);
+    rotor.appendChild(labelsWrap);
+    mount.appendChild(rotor);
+
+    marker = document.createElement('div');
+    marker.className = 'spice-wheel-marker';
+    marker.setAttribute('aria-hidden', 'true');
+    mount.appendChild(marker);
+
+    hub = document.createElement('button');
+    hub.type = 'button';
+    hub.className = 'spice-wheel-hub';
+    hub.setAttribute('aria-label', 'Switch wheel mode');
+    hub.innerHTML =
+      '<span class="hub-glyph" aria-hidden="true"></span>' +
+      '<span class="hub-text hub-text-default"></span>' +
+      '<span class="hub-text hub-text-hover"></span>';
+    mount.appendChild(hub);
+
+    hubGlyphEl = hub.querySelector('.hub-glyph');
+    hubDefaultEl = hub.querySelector('.hub-text-default');
+    hubHoverEl = hub.querySelector('.hub-text-hover');
+
+    hub.addEventListener('click', onHubActivate);
+    hub.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onHubActivate(); }
+    });
+  }
+
+  // ── RENDER a mode's wedges/labels/center text into the existing shell ──
+  function renderMode(idx) {
+    modeIndex = ((idx % modesData.length) + modesData.length) % modesData.length;
+    const mode = modesData[modeIndex];
+    const items = mode.items || [];
+    const n = items.length;
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const cx = 100, cy = 100, r = 100;
+    const slice = n ? 360 / n : 0;
+
+    svg.innerHTML = '';
+    labelsWrap.innerHTML = '';
+    entries = [];
 
     items.forEach((item, i) => {
-      // 0deg = 3 o'clock, clockwise (standard SVG/atan2 convention).
-      // Shifted by -90 so wedge 0 starts at 12 o'clock, matching the marker.
       const startAngle = i * slice - 90;
       const endAngle = startAngle + slice;
       const centerAngle = startAngle + slice / 2;
@@ -77,7 +154,8 @@
       const a = document.createElementNS(svgNS, 'a');
       a.setAttribute('class', 'wedge-link');
       a.setAttribute('href', href);
-      a.setAttribute('aria-label', `Shop ${item.label}`);
+      a.setAttribute('aria-label', item.label);
+      a.dataset.idx = String(i);
 
       const path = document.createElementNS(svgNS, 'path');
       path.setAttribute('d', d);
@@ -89,10 +167,7 @@
       const label = document.createElement('a');
       label.className = 'wheel-label';
       label.href = href;
-      // NOTE: this angle offset (+90) reconciles the SVG path's 0°=3-o'clock
-      // convention with the label's translate/rotate CSS trick below, which
-      // expects 0°=12-o'clock. If labels ever look rotated off their wedge
-      // after editing wedge counts, this +90 is the constant to retune.
+      label.dataset.idx = String(i);
       label.style.setProperty('--ang', `${centerAngle + 90}deg`);
       const inner = document.createElement('span');
       inner.className = 'wheel-label-inner';
@@ -100,65 +175,52 @@
       label.appendChild(inner);
       labelsWrap.appendChild(label);
 
-      entries.push({ wedgeEl: a, labelEl: label, centerAngle, href });
+      entries.push({ wedgeEl: a, labelEl: label, centerAngle });
     });
 
-    rotor.appendChild(svg);
-    rotor.appendChild(labelsWrap);
-    mount.appendChild(rotor);
+    hubGlyphEl.textContent = mode.centerGlyph || '✦';
+    hubDefaultEl.innerHTML = twoLine(mode.centerLabel);
+    hubHoverEl.innerHTML = escapeHtmlLite(mode.centerLabelHover || 'Tap to switch') + ' <span aria-hidden="true">→</span>';
 
-    const marker = document.createElement('div');
-    marker.className = 'spice-wheel-marker';
-    marker.setAttribute('aria-hidden', 'true');
-    mount.appendChild(marker);
+    applyRotation();
+  }
 
-    const hub = document.createElement('a');
-    hub.className = 'spice-wheel-hub';
-    hub.href = resolveHref('products');
-    hub.setAttribute('aria-label', 'Shop all Mom Masale products');
-    hub.innerHTML =
-      '<span class="hub-glyph" aria-hidden="true">✦</span>' +
-      '<span class="hub-text hub-text-default">MOM<br>MASALE</span>' +
-      '<span class="hub-text hub-text-hover">Shop All<span aria-hidden="true"> →</span></span>';
-    mount.appendChild(hub);
-
-    setupInteraction(mount, rotor, labelsWrap, entries, hub);
+  function onHubActivate() {
+    if (modesData.length < 2) return; // nothing to switch to
+    mount.classList.add('is-switching');
+    hub.classList.remove('is-switching');
+    void hub.offsetWidth; // restart the pulse animation
+    hub.classList.add('is-switching');
+    setTimeout(() => {
+      renderMode(modeIndex + 1);
+      mount.classList.remove('is-switching');
+    }, 170);
   }
 
   // ── INTERACTION: unified idle/drag/momentum loop + tap-vs-drag + marker sync ──
-  function setupInteraction(wheel, rotor, labelsWrap, entries, hub) {
+  function setupInteraction() {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const IDLE_VELOCITY = reduceMotion ? 0 : 9; // deg/sec — ~40s per revolution
+    const IDLE_VELOCITY = reduceMotion ? 0 : 9;
 
-    let rotation = 0;
-    let velocity = IDLE_VELOCITY;
-    let dragging = false;
-    let pointerId = null;
-    let hovering = false;
-    let lastAngle = 0, lastMoveTime = 0;
-    let startX = 0, startY = 0, startTime = 0, moved = 0;
-    let lastFrameTime = 0;
+    let rotation = 0, velocity = IDLE_VELOCITY, dragging = false, pointerId = null;
+    let hovering = false, lastAngle = 0, lastMoveTime = 0;
+    let startX = 0, startY = 0, startTime = 0, moved = 0, lastFrameTime = 0;
 
     function angleFromCenter(clientX, clientY) {
-      const rect = wheel.getBoundingClientRect();
+      const rect = mount.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
       return (Math.atan2(clientY - cy, clientX - cx) * 180) / Math.PI;
     }
 
-    function applyRotation() {
+    applyRotation = function () {
       rotor.style.transform = `rotate(${rotation}deg)`;
-      // Cancel the wheel's live spin on the label pills themselves (not
-      // just their text) via a shared CSS var — see .wheel-label's
-      // transform in css/style.css. Setting it once on the wheel root is
-      // enough since custom properties inherit down to every label.
-      wheel.style.setProperty('--rotation', `${rotation}deg`);
+      mount.style.setProperty('--rotation', `${rotation}deg`);
       syncMarker();
-    }
+    };
 
     function syncMarker() {
-      // Which wedge center is currently nearest the fixed 12-o'clock marker
-      // (marker sits at absolute -90deg; wedges are rotated by `rotation`).
+      if (!entries.length) return;
       const target = ((-90 - rotation) % 360 + 360) % 360;
       let nearest = entries[0], best = Infinity;
       entries.forEach(en => {
@@ -187,23 +249,23 @@
       requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
-    syncMarker();
 
-    wheel.style.touchAction = 'none'; // let drag control the gesture, not page scroll
+    mount.style.touchAction = 'none';
 
-    wheel.addEventListener('pointerdown', e => {
+    mount.addEventListener('pointerdown', e => {
+      if (e.target.closest('.spice-wheel-hub')) return; // hub handles its own tap
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       dragging = true;
       pointerId = e.pointerId;
-      try { wheel.setPointerCapture(pointerId); } catch (err) {}
+      try { mount.setPointerCapture(pointerId); } catch (err) {}
       startX = e.clientX; startY = e.clientY; startTime = performance.now(); moved = 0;
       lastAngle = angleFromCenter(e.clientX, e.clientY);
       lastMoveTime = startTime;
       velocity = 0;
-      wheel.classList.add('is-dragging');
+      mount.classList.add('is-dragging');
     });
 
-    wheel.addEventListener('pointermove', e => {
+    mount.addEventListener('pointermove', e => {
       if (!dragging || e.pointerId !== pointerId) return;
       moved = Math.max(moved, Math.hypot(e.clientX - startX, e.clientY - startY));
       const angle = angleFromCenter(e.clientX, e.clientY);
@@ -222,58 +284,62 @@
     function endDrag(e) {
       if (!dragging) return;
       dragging = false;
-      wheel.classList.remove('is-dragging');
-      if (pointerId !== null) { try { wheel.releasePointerCapture(pointerId); } catch (err) {} }
+      mount.classList.remove('is-dragging');
+      if (pointerId !== null) { try { mount.releasePointerCapture(pointerId); } catch (err) {} }
       pointerId = null;
 
       const duration = performance.now() - startTime;
       const isTap = moved < 8 && duration < 350;
       if (isTap) {
-        const target = e.target.closest('.wedge-link, .wheel-label, .spice-wheel-hub');
+        const target = e.target.closest('.wedge-link, .wheel-label');
         if (target) handleActivate(target, e);
       }
-      // else: released mid-spin — `velocity` carries momentum into the idle loop above
     }
-    wheel.addEventListener('pointerup', endDrag);
-    wheel.addEventListener('pointercancel', endDrag);
+    mount.addEventListener('pointerup', endDrag);
+    mount.addEventListener('pointercancel', endDrag);
 
-    wheel.addEventListener('mouseenter', () => { hovering = true; });
-    wheel.addEventListener('mouseleave', () => { hovering = false; });
-    wheel.addEventListener('focusin', () => { hovering = true; });
-    wheel.addEventListener('focusout', () => { hovering = false; });
+    mount.addEventListener('mouseenter', () => { hovering = true; });
+    mount.addEventListener('mouseleave', () => { hovering = false; });
+    mount.addEventListener('focusin', () => { hovering = true; });
+    mount.addEventListener('focusout', () => { hovering = false; });
 
-    // Hover-sync a wedge with its matching label (desktop)
-    entries.forEach(en => {
-      [en.wedgeEl, en.labelEl].forEach(el => {
-        el.addEventListener('mouseenter', () => setActive(en, true));
-        el.addEventListener('mouseleave', () => setActive(en, false));
-        el.addEventListener('focus', () => setActive(en, true));
-        el.addEventListener('blur', () => setActive(en, false));
-      });
+    // Delegated hover-sync between a wedge and its matching label — rebuilt
+    // DOM after every mode switch still works since this is delegated.
+    mount.addEventListener('mouseover', e => {
+      const el = e.target.closest('.wedge-link, .wheel-label');
+      if (el) setLinkedActive(el.dataset.idx, true);
     });
-    function setActive(en, on) {
-      en.wedgeEl.classList.toggle('is-linked-active', on);
-      en.labelEl.classList.toggle('is-linked-active', on);
+    mount.addEventListener('mouseout', e => {
+      const el = e.target.closest('.wedge-link, .wheel-label');
+      if (el) setLinkedActive(el.dataset.idx, false);
+    });
+    function setLinkedActive(idx, on) {
+      entries.forEach((en, i) => {
+        if (String(i) !== idx) return;
+        en.wedgeEl.classList.toggle('is-linked-active', on);
+        en.labelEl.classList.toggle('is-linked-active', on);
+      });
     }
 
-    // Click/keyboard activation — suppressed if it followed a real drag.
-    [...entries.map(en => en.wedgeEl), ...entries.map(en => en.labelEl), hub].forEach(el => {
-      el.addEventListener('click', e => {
-        if (moved >= 8) { e.preventDefault(); return; }
-        handleActivate(el, e);
-      });
-      el.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') handleActivate(el, e);
-      });
+    mount.addEventListener('click', e => {
+      const el = e.target.closest('.wedge-link, .wheel-label');
+      if (!el) return;
+      if (moved >= 8) { e.preventDefault(); return; }
+      handleActivate(el, e);
+    });
+    mount.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const el = e.target.closest('.wedge-link, .wheel-label');
+      if (el) handleActivate(el, e);
     });
 
     function handleActivate(el, e) {
       const href = el.getAttribute('href');
       if (!href) return;
       e.preventDefault();
-      wheel.classList.remove('is-clicking');
-      void wheel.offsetWidth;
-      wheel.classList.add('is-clicking');
+      mount.classList.remove('is-clicking');
+      void mount.offsetWidth;
+      mount.classList.add('is-clicking');
       const point = e.clientX !== undefined && e.clientY
         ? { x: e.clientX, y: e.clientY }
         : el.getBoundingClientRect();
