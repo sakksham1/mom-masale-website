@@ -21,6 +21,15 @@ import { readRepoFile } from '../_utils/github.js';
 import { enqueueSync, describeCatalogUpdates } from '../_utils/sync-queue.js';
 
 const DEFAULT_STOCK = 100;
+// GET is hit from Dashboard, Catalog, Stock, Packaging, and Sales screens
+// against data that changes relatively rarely. Cached at the edge for a
+// short TTL rather than invalidated explicitly on every write — the
+// mutating endpoints below (POST/PATCH/DELETE, plus decide.js's
+// applyProductCoreDecision) don't bust this cache, so a change can take up
+// to this long to show up on a read-only screen. Deliberate simplicity
+// tradeoff per the perf-pass spec; revisit with explicit invalidation if
+// staleness ever actually causes a problem.
+const PRODUCTS_CACHE_TTL_SECONDS = 45;
 
 function slugify(name) {
   return String(name).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-+|-+$)/g, '');
@@ -88,6 +97,16 @@ export async function onRequestGet(context) {
   const { ok } = await requireRole(request, env, ['admin', 'manager', 'warehouser', 'packaging']);
   if (!ok) return forbidden();
 
+  // Cache after the auth check, not instead of it — every request still
+  // re-verifies role, only the (identical-across-roles) query result is
+  // shared. Synthetic cache key rather than the real request, since the
+  // real request carries the session cookie and we don't want Cache API
+  // key variance on that.
+  const cache = caches.default;
+  const cacheKey = new Request('https://internal-cache.mommasale.workers.dev/admin-products');
+  const cached = await cache.match(cacheKey);
+  if (cached) return cached;
+
   const [products, sizes, aliases, faqs, related] = await Promise.all([
     env.DB.prepare('SELECT * FROM products ORDER BY name').all(),
     env.DB.prepare('SELECT * FROM product_sizes ORDER BY product_id, sort_order, id').all(),
@@ -112,10 +131,15 @@ export async function onRequestGet(context) {
     related_products: (relatedByProduct[p.id] || []).map(r => r.slug),
   }));
 
-  return new Response(JSON.stringify({ products: out }), {
+  const response = new Response(JSON.stringify({ products: out }), {
     status: 200,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': `public, max-age=${PRODUCTS_CACHE_TTL_SECONDS}`,
+    },
   });
+  context.waitUntil(cache.put(cacheKey, response.clone()));
+  return response;
 }
 
 export async function onRequestPost(context) {
@@ -162,20 +186,30 @@ export async function onRequestPost(context) {
 
   const productId = insert.meta.last_row_id;
 
+   // Batched — none of these inserts depend on each other's result (unlike
+  // e.g. checkout.js's stock-decrement loop, which needs sequential
+  // guarded UPDATEs), so one env.DB.batch() call replaces what used to be
+  // 2×sizes + aliases sequential round trips. Same pattern as
+  // activate.js / manager/approvals/_handlers.js.
   let sortOrder = 0;
+  const statements = [];
   for (const [size, price] of Object.entries(prices)) {
-    await env.DB.prepare(
-      `INSERT INTO product_sizes (product_id, size, price, stock_qty, sort_order) VALUES (?, ?, ?, ?, ?)`
-    ).bind(productId, size, price, stock, sortOrder++).run();
-    await env.DB.prepare(
-      `INSERT INTO inventory_movements (product_id, size, change_qty, reason, user_id, note)
-       VALUES (?, ?, ?, 'initial', ?, 'product created')`
-    ).bind(productId, size, stock, user.id).run();
+    statements.push(
+      env.DB.prepare(
+        `INSERT INTO product_sizes (product_id, size, price, stock_qty, sort_order) VALUES (?, ?, ?, ?, ?)`
+      ).bind(productId, size, price, stock, sortOrder++),
+      env.DB.prepare(
+        `INSERT INTO inventory_movements (product_id, size, change_qty, reason, user_id, note)
+         VALUES (?, ?, ?, 'initial', ?, 'product created')`
+      ).bind(productId, size, stock, user.id)
+    );
   }
-
   for (const alias of Array.isArray(aliases) ? aliases : []) {
-    await env.DB.prepare(`INSERT INTO product_aliases (product_id, alias) VALUES (?, ?)`).bind(productId, alias).run();
+    statements.push(
+      env.DB.prepare(`INSERT INTO product_aliases (product_id, alias) VALUES (?, ?)`).bind(productId, alias)
+    );
   }
+  if (statements.length) await env.DB.batch(statements);
 
   await enqueueSync(env, {
     sourceType: 'product_create',

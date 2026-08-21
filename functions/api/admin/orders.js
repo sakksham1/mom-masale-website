@@ -29,11 +29,21 @@ export async function onRequestGet(context) {
   const ordersResult = await env.DB.prepare(query).bind(...binds).all();
   const orders = ordersResult.results || [];
 
-  for (const order of orders) {
+  // Batched item fetch — one query for all matching orders' items instead
+  // of the old per-order loop. D1 doesn't do nested joins-to-array, but it
+  // does support IN (...), which is what actually kills the N+1.
+  if (orders.length) {
+    const ids = orders.map(o => o.id);
+    const placeholders = ids.map(() => '?').join(',');
     const itemsResult = await env.DB.prepare(
-      `SELECT product_slug, product_name, size, qty, unit_price FROM order_items WHERE order_id = ?`
-    ).bind(order.id).all();
-    order.items = itemsResult.results || [];
+      `SELECT order_id, product_slug, product_name, size, qty, unit_price
+       FROM order_items WHERE order_id IN (${placeholders})`
+    ).bind(...ids).all();
+    const itemsByOrder = {};
+    for (const row of itemsResult.results || []) {
+      (itemsByOrder[row.order_id] ||= []).push(row);
+    }
+    orders.forEach(o => { o.items = itemsByOrder[o.id] || []; });
   }
 
   return new Response(JSON.stringify({ orders }), {

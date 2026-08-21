@@ -1,0 +1,107 @@
+{
+  "lastUpdated": "2026-08-18",
+  "intro": "Mom Masale (a brand of Sakksham Enterprises) wants you to be genuinely happy with every order. Because we sell food products, this policy is written to keep that food safe-to-eat for everyone. Please read it before requesting a return, replacement, or refund.",
+  "sections": [
+    {
+      "id": "eligibility",
+      "title": "1. When a Return, Replacement, or Refund Applies",
+      "body": [
+        "Because our products are consumable food items, we do not accept returns of opened, used, or consumed packets under any circumstances, for hygiene and food-safety reasons.",
+        "We will replace the item or issue a refund only in the following cases, and only when reported within 48 hours of the delivery timestamp shown in your order tracking:"
+      ],
+      "list": [
+        "The product received is damaged, leaking, or spoiled on arrival",
+        "The product received is not what you ordered (wrong item or wrong size)",
+        "One or more items from your order are missing",
+        "The packaging has been tampered with or the safety seal is broken on arrival",
+        "The product was delivered with an expired or unreadable best-before date"
+      ]
+    },
+    {
+      "id": "non-returnable",
+      "title": "2. What Cannot Be Returned",
+      "body": [
+        "The following are never eligible for return, replacement, or refund, regardless of when the claim is raised:"
+      ],
+      "list": [
+        "Any packet that has been opened, used, or partially consumed",
+        "Claims raised more than 48 hours after the delivery timestamp",
+        "Claims made without the evidence described in Section 3 (photos/video)",
+        "Products damaged, spoiled, or contaminated due to improper storage after delivery (e.g. exposure to moisture, heat, or direct sunlight)",
+        "Change of mind, incorrect quantity ordered, or dissatisfaction with taste or spice level — these are subjective and not defects",
+        "Items purchased through a third-party marketplace (Amazon, Flipkart, Meesho, etc.) — please use that platform's own return process instead"
+      ]
+    },
+    {
+      "id": "how-to-request",
+      "title": "3. How to Raise a Claim",
+      "body": [
+        "To request a replacement or refund, contact us within 48 hours of delivery using the details in Section 9, and include all of the following:"
+      ],
+      "list": [
+        "Your order number",
+        "Clear photographs (or a short video) of the product, the packaging, and the shipping label, showing the issue",
+        "A brief description of what went wrong",
+        "We strongly recommend recording an unboxing video for every order. It is the fastest way to have a damaged, missing-item, or wrong-item claim approved, and we may request it before approving a claim."
+      ]
+    },
+    {
+      "id": "inspection",
+      "title": "4. Review and Approval",
+      "body": [
+        "Every claim is reviewed individually. We may ask you to courier the affected item back to us at our cost before a replacement or refund is issued, and we may decline a claim that does not meet the conditions in this policy or where the evidence provided is insufficient, inconsistent, or does not match the order.",
+        "Approval, rejection, and the choice between offering a replacement or a refund for a given claim are at our sole discretion, acting reasonably and in good faith."
+      ]
+    },
+    {
+      "id": "refunds",
+      "title": "5. Refunds",
+      "body": [
+        "Approved refunds are issued only to the original payment method used at checkout (via Razorpay) and are never paid out in cash. Please allow 7–10 business days for the refund to reflect in your account after approval, though the exact timing beyond that point depends on your bank or card network and is outside our control.",
+        "Shipping charges already paid are non-refundable, except where the issue was caused by our error (wrong item shipped, damaged in transit due to our packaging, etc.), in which case we will also refund the shipping fee for that order."
+      ]
+    },
+    {
+      "id": "replacements",
+      "title": "6. Replacements",
+      "body": [
+        "Where a replacement is approved, we will ship the correct or a fresh unit of the same product at no extra cost. If the exact size or variant is out of stock, we will offer either a substitute of equal or greater value or a full refund for that item, at your choice."
+      ]
+    },
+    {
+      "id": "cancellations",
+      "title": "7. Order Cancellations",
+      "body": [
+        "You may cancel an order free of charge only before it has been dispatched. To request a cancellation, contact us immediately using the details in Section 9 with your order number — we cannot guarantee cancellation if the order has already been packed or handed to a courier.",
+        "Once an order has been dispatched, it can no longer be cancelled and is instead handled under the return/replacement terms in Sections 1–6 once delivered."
+      ]
+    },
+    {
+      "id": "liability",
+      "title": "8. Limitation of Liability",
+      "body": [
+        "To the maximum extent permitted by applicable law, our total liability arising out of any single order — whether for a damaged, missing, wrong, or defective item, a delay, or any other issue — is limited to the amount actually paid for that order. We are not liable for any indirect, incidental, or consequential loss, including loss of time, inconvenience, or any loss arising from a delivery delay caused by the courier, weather, government action, strikes, or other events outside our reasonable control.",
+        "This policy does not affect any statutory rights you may have under the Consumer Protection Act, 2019, or other applicable Indian law that cannot be excluded by agreement."
+      ]
+    },
+    {
+      "id": "governing-law",
+      "title": "9. Governing Law & Jurisdiction",
+      "body": [
+        "This policy is governed by the laws of India. Any dispute arising out of an order or this policy is subject to the exclusive jurisdiction of the courts at Unnao, Uttar Pradesh."
+      ]
+    },
+    {
+      "id": "changes",
+      "title": "10. Changes to This Policy",
+      "body": [
+        "We may update this policy from time to time to reflect changes in our process or in applicable law. The version in effect at the time you placed your order will govern that order. The \"Last updated\" date at the top of this page reflects the most recent revision."
+      ]
+    }
+  ],
+  "contact": {
+    "note": "For any return, replacement, refund, or cancellation request, please reach out with your order number:",
+    "phone": "7905391434",
+    "email": "sakkshamenterprises@gmail.com"
+  }
+}

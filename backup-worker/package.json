@@ -1,0 +1,19 @@
+{
+  "name": "mom-masale-backup-worker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone Cloudflare Worker: weekly D1 backup to R2 + table pruning. Separate from the mom-masale-website Pages project because Pages (directory-Functions mode) doesn't invoke scheduled() handlers.",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test-scheduled": "wrangler dev --test-scheduled"
+  },
+  "devDependencies": {
+    "wrangler": "^4.110.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "workerd@1.20260820.1": true
+  }
+}

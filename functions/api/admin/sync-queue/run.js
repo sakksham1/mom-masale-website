@@ -47,6 +47,7 @@ export async function onRequestPost(context) {
       await publishStagedContent(env, 'recipes', 'data/recipes.json', `chore(publish): sync recipes`);
       await publishStagedContent(env, 'blog', 'data/blog.json', `chore(publish): sync blog`);
       await publishStagedContent(env, 'settings', 'data/settings.json', `chore(publish): sync site settings`);
+      await publishStagedContent(env, 'returnPolicy', 'data/return-policy.json', `chore(publish): sync return policy`);
 
       const placeholders = pendingIds.map(() => '?').join(',');
       await env.DB.prepare(

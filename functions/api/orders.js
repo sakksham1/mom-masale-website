@@ -27,14 +27,21 @@ export async function onRequestGet(context) {
 
   const orders = ordersResult.results || [];
 
-  // D1 doesn't do nested joins-to-array, so items are fetched per order.
-  // Fine at this scale (a customer has a handful of orders, not thousands).
-  for (const order of orders) {
+  // Batched item fetch — one query for every order instead of the old
+  // per-order loop. Was fine at "a handful of orders" scale but matches
+  // the same fix applied to admin/orders.js, and it's free.
+  if (orders.length) {
+    const ids = orders.map(o => o.id);
+    const placeholders = ids.map(() => '?').join(',');
     const itemsResult = await env.DB.prepare(
-      `SELECT product_slug, product_name, size, qty, unit_price
-       FROM order_items WHERE order_id = ?`
-    ).bind(order.id).all();
-    order.items = itemsResult.results || [];
+      `SELECT order_id, product_slug, product_name, size, qty, unit_price
+       FROM order_items WHERE order_id IN (${placeholders})`
+    ).bind(...ids).all();
+    const itemsByOrder = {};
+    for (const row of itemsResult.results || []) {
+      (itemsByOrder[row.order_id] ||= []).push(row);
+    }
+    orders.forEach(o => { o.items = itemsByOrder[o.id] || []; });
   }
 
   return new Response(JSON.stringify({ orders }), {
